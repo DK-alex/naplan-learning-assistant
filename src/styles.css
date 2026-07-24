@@ -385,7 +385,7 @@ html[lang^="zh"] .warm-shell .brand-copy small {
 .warm-grid {
   display: grid;
   grid-template-columns: minmax(350px, 1.18fr) minmax(280px, 0.88fr) minmax(330px, 1.03fr);
-  grid-template-rows: 344px 214px 245px;
+  grid-template-rows: 344px 214px minmax(245px, auto);
   gap: 16px;
 }
 
@@ -707,6 +707,8 @@ html[lang^="zh"] .warm-shell .brand-copy small {
 
 .news-card {
   grid-column: 1;
+  min-height: 245px;
+  height: max-content;
 }
 
 .news-card .card-title {
@@ -715,7 +717,7 @@ html[lang^="zh"] .warm-shell .brand-copy small {
 
 .news-list {
   display: grid;
-  padding: 0 12px 10px;
+  padding: 0 12px 14px;
 }
 
 .news-row {
@@ -762,6 +764,8 @@ html[lang^="zh"] .warm-shell .brand-copy small {
   margin-top: 3px;
   color: #777;
   font-size: 10px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .goal-card {
@@ -1899,6 +1903,7 @@ html[lang^="en"] .rubric-row span small {
   .pro-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto;
+    grid-auto-rows: auto;
   }
 
   .progress-card {
