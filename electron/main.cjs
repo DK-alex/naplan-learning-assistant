@@ -1,8 +1,16 @@
-const { app, BrowserWindow, dialog, ipcMain, Menu, shell } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, Menu, screen, shell } = require("electron");
 const { createReadStream, promises: fs } = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
+const {
+  APP_ASPECT_RATIO,
+  DEFAULT_WINDOW_HEIGHT,
+  DEFAULT_WINDOW_WIDTH,
+  MINIMUM_WINDOW_HEIGHT,
+  MINIMUM_WINDOW_WIDTH,
+  fitAspectRatioWithin,
+} = require("./window-layout.cjs");
 
 const APP_PORT = 37821;
 const APP_ORIGIN = `http://127.0.0.1:${APP_PORT}`;
@@ -27,6 +35,8 @@ const CONTENT_TYPES = {
 let mainWindow;
 let localServer;
 let aiHandlerPromise;
+let restoredMainWindowBounds;
+let isAspectMaximized = false;
 
 function getAiHandler() {
   if (!aiHandlerPromise) {
@@ -169,10 +179,10 @@ function startLocalServer() {
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    width: 1440,
-    height: 960,
-    minWidth: 1024,
-    minHeight: 700,
+    width: DEFAULT_WINDOW_WIDTH,
+    height: DEFAULT_WINDOW_HEIGHT,
+    minWidth: MINIMUM_WINDOW_WIDTH,
+    minHeight: MINIMUM_WINDOW_HEIGHT,
     show: false,
     frame: false,
     roundedCorners: false,
@@ -188,6 +198,7 @@ function createMainWindow() {
     },
   });
 
+  mainWindow.setAspectRatio(APP_ASPECT_RATIO);
   mainWindow.once("ready-to-show", () => mainWindow.show());
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith(APP_ORIGIN)) return { action: "allow" };
@@ -216,8 +227,17 @@ ipcMain.on("desktop-window:toggle-maximize", (event) => {
     targetWindow.setFullScreen(false);
     return;
   }
-  if (targetWindow.isMaximized()) targetWindow.unmaximize();
-  else targetWindow.maximize();
+  if (isAspectMaximized && restoredMainWindowBounds) {
+    targetWindow.setBounds(restoredMainWindowBounds, true);
+    restoredMainWindowBounds = undefined;
+    isAspectMaximized = false;
+    return;
+  }
+
+  restoredMainWindowBounds = targetWindow.getBounds();
+  const display = screen.getDisplayMatching(restoredMainWindowBounds);
+  targetWindow.setBounds(fitAspectRatioWithin(display.workArea), true);
+  isAspectMaximized = true;
 });
 
 ipcMain.on("desktop-window:set-exam-mode", (event, enabled) => {

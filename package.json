@@ -1,7 +1,7 @@
 {
   "name": "naplan-learning-assistant-ui",
   "productName": "NAPLAN Learning Assistant",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Offline-first NAPLAN practice and learning assistant for Windows.",
   "author": "NAPLAN Learning Assistant",
   "private": true,
@@ -18,7 +18,7 @@
     "sync:official-news": "node scripts/sync-official-updates.mjs && node scripts/translate-official-pages.mjs",
     "translate:official-news": "node scripts/translate-official-pages.mjs",
     "preview": "vite preview",
-    "test:sites": "node --test tests/sites-worker.test.mjs tests/official-updates.test.mjs tests/ai-review.test.mjs tests/exam-guide.test.mjs tests/writing-rubric-guide.test.mjs tests/learning-goals.test.mjs tests/writing-report-summary.test.mjs tests/naplan-schedule.test.mjs"
+    "test:sites": "node --test tests/sites-worker.test.mjs tests/official-updates.test.mjs tests/ai-review.test.mjs tests/exam-guide.test.mjs tests/writing-rubric-guide.test.mjs tests/learning-goals.test.mjs tests/writing-report-summary.test.mjs tests/naplan-schedule.test.mjs tests/window-layout.test.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
