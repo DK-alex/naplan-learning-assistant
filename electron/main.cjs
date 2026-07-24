@@ -212,8 +212,18 @@ ipcMain.on("desktop-window:minimize", (event) => {
 ipcMain.on("desktop-window:toggle-maximize", (event) => {
   const targetWindow = BrowserWindow.fromWebContents(event.sender);
   if (!targetWindow) return;
+  if (targetWindow.isFullScreen()) {
+    targetWindow.setFullScreen(false);
+    return;
+  }
   if (targetWindow.isMaximized()) targetWindow.unmaximize();
   else targetWindow.maximize();
+});
+
+ipcMain.on("desktop-window:set-exam-mode", (event, enabled) => {
+  const targetWindow = BrowserWindow.fromWebContents(event.sender);
+  if (!targetWindow || targetWindow.isFullScreen() === enabled) return;
+  targetWindow.setFullScreen(enabled);
 });
 
 ipcMain.on("desktop-window:close", (event) => {

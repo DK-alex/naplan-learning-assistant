@@ -4,6 +4,7 @@ import { DesktopWindowChrome } from "./DesktopWindowChrome.jsx";
 import "./desktop-window.css";
 
 const examMode = window.location.pathname.toLowerCase().startsWith("/exam");
+window.desktopWindow?.setExamMode(examMode);
 const appModules = Promise.all(
   examMode
     ? [
