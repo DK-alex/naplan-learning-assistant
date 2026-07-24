@@ -91,3 +91,45 @@ final result: passed
 3. Verification: compared the supplied source and rendered implementation side by side, then confirmed the relevant DOM rectangles do not intersect.
 
 Final result: passed
+
+---
+
+# Design QA — 作文摘要按钮裁切修复
+
+## Source and implementation
+
+- Source screenshot: `C:\Users\alex3\AppData\Local\Temp\codex-clipboard-d225fbf2-528a-4188-9e36-900b42c4c7e6.png`
+- Implementation URL: `http://127.0.0.1:5173/`
+- Focused implementation evidence: `artifacts/design-qa/ai-writing-summary-button-visible.png`
+- Combined before/after evidence: `artifacts/design-qa/ai-writing-summary-button-comparison.png`
+
+## Viewport and state
+
+- Source dimensions: 1002 × 1034 px, cropped from the populated warm-dashboard report card.
+- Implementation viewport: 1600 × 900 CSS px at device-pixel ratio 2.
+- Rendered card dimensions: 401 × 485.5 CSS px.
+- State: latest Year 3 OpenAI writing review, score 45/47, all six rubric rows and the report action present.
+
+## Findings
+
+- [P1] The source shows the “查看详细报告” button clipped by the card's lower boundary, leaving only the button's top edge visible.
+- The populated rubric list now uses a 13 px row gap and 4 px block padding, recovering 24 px of vertical room without removing content.
+- The report footer is fixed as a non-shrinking 90 px flex region.
+- Post-fix measurements:
+  - action bottom: 962.5 px
+  - card bottom: 977.5 px
+  - action-to-card bottom clearance: 15 px
+  - action fully inside card: yes
+  - final rubric row vs footer: no overlap
+  - final rubric row vs rabbit: no overlap
+  - note vs action: no overlap
+  - action vs rabbit: no overlap
+- Fonts, colors, border treatment, illustration asset, and app-specific copy remain unchanged.
+
+## Comparison history
+
+1. Pass 1 found the action clipped at the lower card boundary.
+2. The rubric rhythm was tightened and the footer was made non-shrinking.
+3. Pass 2 confirmed the complete action button is visible with 15 px bottom clearance and no P0/P1/P2 overlap regression.
+
+Final result: passed

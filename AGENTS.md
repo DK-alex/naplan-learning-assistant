@@ -32,7 +32,7 @@ Use `William` as the default student name for a fresh profile. Preserve a studen
 
 The five dashboard learning-progress bars must show real saved results, never fixed demo percentages. Reading and Numeracy use the latest submitted practice result, Spelling and Grammar & Punctuation use the latest saved conventions subdomain breakdown, and Writing uses the latest real AI rubric report. Show an em dash when no trustworthy result exists.
 
-In the warm dashboard's AI writing summary card, reserve a dedicated footer for the unofficial-score note and report action. The six rubric rows, footer controls, and rabbit decoration must occupy separate safe areas at the fixed 1600 x 900 canvas; never let the rabbit or footer overlap the final Spelling row.
+In the warm dashboard's AI writing summary card, reserve a dedicated footer for the unofficial-score note and report action. The six rubric rows, footer controls, and rabbit decoration must occupy separate safe areas at the fixed 1600 x 900 canvas; never let the rabbit or footer overlap the final Spelling row, and keep the complete report-action button inside the card boundary.
 
 AI writing reviews are an offline-first local archive: every review attempt must be stored as its own history record without a fixed recent-items cap, and the AI report workspace must show the full history list below the current report. Export complete review reports as editable A4 Word documents, never as browser-printed PDFs. Each review must support both the language chosen in Settings and an English version; translated versions must preserve scores, quoted student evidence, annotations, correction examples, exemplar text, and all other substantive report content.
 
