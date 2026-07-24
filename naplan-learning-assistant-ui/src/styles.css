@@ -972,6 +972,11 @@ html[lang^="zh"] .warm-shell .brand-copy small {
   padding: 6px 22px;
 }
 
+.report-card:not(.report-card-empty) .rubric-list {
+  gap: 13px;
+  padding-block: 4px;
+}
+
 .rubric-row {
   display: grid;
   grid-template-columns: minmax(140px, auto) minmax(62px, 1fr) 34px;
@@ -1022,6 +1027,7 @@ html[lang^="en"] .rubric-row span small {
 }
 
 .report-card-footer {
+  flex: 0 0 90px;
   min-height: 90px;
   margin-top: auto;
   padding: 10px 118px 14px 22px;
