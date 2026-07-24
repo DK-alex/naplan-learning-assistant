@@ -163,7 +163,7 @@ function readParentSettings() {
   try {
     const value = JSON.parse(window.localStorage.getItem("naplan-parent-settings") || "{}");
     return {
-      studentName: value.studentName || "Alex",
+      studentName: value.studentName || "William",
       yearLevel: value.yearLevel || "5",
       uiLanguage: value.uiLanguage || DEFAULT_UI_LANGUAGE,
       reportLanguage: value.reportLanguage || DEFAULT_REPORT_LANGUAGE,
@@ -173,7 +173,7 @@ function readParentSettings() {
     };
   } catch {
     return {
-      studentName: "Alex",
+      studentName: "William",
       yearLevel: "5",
       uiLanguage: DEFAULT_UI_LANGUAGE,
       reportLanguage: DEFAULT_REPORT_LANGUAGE,
