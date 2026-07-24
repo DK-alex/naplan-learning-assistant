@@ -1,0 +1,227 @@
+const { app, BrowserWindow, dialog, shell } = require("electron");
+const { createReadStream, promises: fs } = require("node:fs");
+const http = require("node:http");
+const path = require("node:path");
+const { pathToFileURL } = require("node:url");
+
+const APP_PORT = 37821;
+const APP_ORIGIN = `http://127.0.0.1:${APP_PORT}`;
+const CLIENT_ROOT = path.join(__dirname, "..", "dist", "client");
+const INDEX_FILE = path.join(CLIENT_ROOT, "index.html");
+const ICON_FILE = path.join(__dirname, "..", "packaging", "icons", "app-icon.ico");
+const MAX_API_BODY_BYTES = 150_000;
+
+const CONTENT_TYPES = {
+  ".css": "text/css; charset=utf-8",
+  ".html": "text/html; charset=utf-8",
+  ".ico": "image/x-icon",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".svg": "image/svg+xml; charset=utf-8",
+  ".webp": "image/webp",
+};
+
+let mainWindow;
+let localServer;
+let aiHandlerPromise;
+
+function getAiHandler() {
+  if (!aiHandlerPromise) {
+    const moduleUrl = pathToFileURL(path.join(__dirname, "..", "worker", "ai.js")).href;
+    aiHandlerPromise = import(moduleUrl).then((module) => module.handleAiReviewRequest);
+  }
+  return aiHandlerPromise;
+}
+
+function sendJson(response, status, payload) {
+  response.writeHead(status, {
+    "content-type": "application/json; charset=utf-8",
+    "cache-control": "no-store",
+  });
+  response.end(JSON.stringify(payload));
+}
+
+async function readRequestBody(request) {
+  const chunks = [];
+  let size = 0;
+  for await (const chunk of request) {
+    size += chunk.length;
+    if (size > MAX_API_BODY_BYTES) throw new Error("REQUEST_TOO_LARGE");
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+async function serveAiRequest(request, response) {
+  let body;
+  try {
+    body = await readRequestBody(request);
+  } catch {
+    sendJson(response, 413, {
+      error: { code: "REQUEST_TOO_LARGE", message: "The review request is too large." },
+    });
+    return;
+  }
+
+  const headers = new Headers();
+  for (const [name, value] of Object.entries(request.headers)) {
+    if (Array.isArray(value)) value.forEach((item) => headers.append(name, item));
+    else if (value !== undefined) headers.set(name, value);
+  }
+
+  const webRequest = new Request(`${APP_ORIGIN}${request.url}`, {
+    method: request.method,
+    headers,
+    body: request.method === "GET" || request.method === "HEAD" ? undefined : body,
+  });
+
+  try {
+    const handleAiReviewRequest = await getAiHandler();
+    const webResponse = await handleAiReviewRequest(webRequest);
+    const responseHeaders = {};
+    webResponse.headers.forEach((value, name) => {
+      responseHeaders[name] = value;
+    });
+    response.writeHead(webResponse.status, responseHeaders);
+    response.end(Buffer.from(await webResponse.arrayBuffer()));
+  } catch {
+    sendJson(response, 500, {
+      error: { code: "LOCAL_SERVICE_ERROR", message: "The local review service could not start." },
+    });
+  }
+}
+
+function resolveStaticFile(pathname) {
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(pathname);
+  } catch {
+    return null;
+  }
+
+  const relativePath = decodedPath === "/" ? "index.html" : decodedPath.replace(/^\/+/, "");
+  const candidate = path.resolve(CLIENT_ROOT, relativePath);
+  const allowedPrefix = `${path.resolve(CLIENT_ROOT)}${path.sep}`;
+  return candidate.startsWith(allowedPrefix) ? candidate : null;
+}
+
+async function serveStaticRequest(request, response, url) {
+  const candidate = resolveStaticFile(url.pathname);
+  const acceptsHtml = String(request.headers.accept || "").includes("text/html");
+  let filePath = candidate;
+
+  try {
+    if (!filePath || !(await fs.stat(filePath)).isFile()) {
+      if (!acceptsHtml || !["GET", "HEAD"].includes(request.method)) {
+        response.writeHead(404);
+        response.end("Not found");
+        return;
+      }
+      filePath = INDEX_FILE;
+    }
+  } catch {
+    if (!acceptsHtml || !["GET", "HEAD"].includes(request.method)) {
+      response.writeHead(404);
+      response.end("Not found");
+      return;
+    }
+    filePath = INDEX_FILE;
+  }
+
+  const extension = path.extname(filePath).toLowerCase();
+  const immutableAsset = filePath.includes(`${path.sep}assets${path.sep}`);
+  response.writeHead(200, {
+    "content-type": CONTENT_TYPES[extension] || "application/octet-stream",
+    "cache-control": immutableAsset ? "public, max-age=31536000, immutable" : "no-cache",
+  });
+
+  if (request.method === "HEAD") {
+    response.end();
+    return;
+  }
+  createReadStream(filePath).pipe(response);
+}
+
+async function handleLocalRequest(request, response) {
+  const url = new URL(request.url, APP_ORIGIN);
+  if (url.pathname === "/api/ai/review") {
+    await serveAiRequest(request, response);
+    return;
+  }
+  await serveStaticRequest(request, response, url);
+}
+
+function startLocalServer() {
+  return new Promise((resolve, reject) => {
+    localServer = http.createServer((request, response) => {
+      handleLocalRequest(request, response).catch(() => {
+        if (!response.headersSent) response.writeHead(500);
+        response.end("Local application error");
+      });
+    });
+    localServer.once("error", reject);
+    localServer.listen(APP_PORT, "127.0.0.1", resolve);
+  });
+}
+
+function createMainWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1440,
+    height: 960,
+    minWidth: 1024,
+    minHeight: 700,
+    show: false,
+    title: "NAPLAN Learning Assistant",
+    icon: ICON_FILE,
+    backgroundColor: "#f4f7fb",
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+
+  mainWindow.once("ready-to-show", () => mainWindow.show());
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith(APP_ORIGIN)) return { action: "allow" };
+    shell.openExternal(url);
+    return { action: "deny" };
+  });
+  mainWindow.webContents.on("will-navigate", (event, url) => {
+    if (!url.startsWith(APP_ORIGIN)) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
+  });
+  mainWindow.loadURL(APP_ORIGIN);
+}
+
+const hasSingleInstanceLock = app.requestSingleInstanceLock();
+if (!hasSingleInstanceLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    if (!mainWindow) return;
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  });
+
+  app.whenReady().then(async () => {
+    try {
+      await startLocalServer();
+      createMainWindow();
+    } catch {
+      dialog.showErrorBox(
+        "NAPLAN Learning Assistant",
+        "The local application service could not start. Please close other copies and try again.",
+      );
+      app.quit();
+    }
+  });
+
+  app.on("window-all-closed", () => app.quit());
+  app.on("before-quit", () => localServer?.close());
+}
