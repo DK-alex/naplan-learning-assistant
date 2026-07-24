@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, shell } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, Menu, shell } = require("electron");
 const { createReadStream, promises: fs } = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
@@ -174,6 +174,9 @@ function createMainWindow() {
     minWidth: 1024,
     minHeight: 700,
     show: false,
+    frame: false,
+    roundedCorners: false,
+    autoHideMenuBar: true,
     title: "NAPLAN Learning Assistant",
     icon: ICON_FILE,
     backgroundColor: "#f4f7fb",
@@ -181,6 +184,7 @@ function createMainWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      preload: path.join(__dirname, "preload.cjs"),
     },
   });
 
@@ -198,6 +202,23 @@ function createMainWindow() {
   });
   mainWindow.loadURL(APP_ORIGIN);
 }
+
+Menu.setApplicationMenu(null);
+
+ipcMain.on("desktop-window:minimize", (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.minimize();
+});
+
+ipcMain.on("desktop-window:toggle-maximize", (event) => {
+  const targetWindow = BrowserWindow.fromWebContents(event.sender);
+  if (!targetWindow) return;
+  if (targetWindow.isMaximized()) targetWindow.unmaximize();
+  else targetWindow.maximize();
+});
+
+ipcMain.on("desktop-window:close", (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.close();
+});
 
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 if (!hasSingleInstanceLock) {

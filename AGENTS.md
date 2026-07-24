@@ -22,6 +22,8 @@ Use `/assets/naplan-app-icon.png` as the learning assistant's favicon, touch ico
 
 Desktop packaging uses two distinct icon families under `packaging/icons/`: `app-icon.*` is the installed application/shortcut icon, while `installer-icon.*` is the installer and uninstaller artwork supplied by the user as `E:/ouyhkjhw.png`. Do not show the installer artwork inside the running application UI.
 
+The Windows desktop shell must stay frameless and edge-to-edge: do not show the native title bar, application menu, or an outer padded card/frame. Keep the custom minimise, maximise/restore, and close controls functional through the Electron preload/IPC bridge on both the learning dashboard and `/exam`, and preserve a draggable region that does not cover primary controls.
+
 Treat multilingual reflow as a release requirement: Simplified Chinese, English, Traditional Chinese, and Korean must have no uncontrolled page/card overflow at 1440 px, the medium desktop breakpoint, 390 px, or the 320 px minimum. Keep `/exam` English-only. Preserve safe wrapping for brand copy and quick actions, and keep mobile navigation scrolling inside its own strip rather than widening the page.
 
 Treat the “考试指南” / NAPLAN guide as the canonical parent-facing introduction and official-resource hub. Keep its test dates, official durations, tailored-test explanation, proficiency descriptions, and outbound links aligned with current NAP or ACARA sources in all four interface languages. Never present practice scores as official NAPLAN scaled scores.

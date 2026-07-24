@@ -30,7 +30,6 @@ import {
   Plus,
   Robot,
   Sparkle,
-  Square,
   Star,
   Target,
   Translate,
@@ -191,23 +190,6 @@ function formatCompletedAt(value, locale) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(value));
-}
-
-function WindowControls({ onAction }) {
-  const { t } = useI18n();
-  return (
-    <div className="window-controls" aria-label={t("窗口控制")}>
-      <button type="button" aria-label={t("最小化")} onClick={() => onAction(t("已最小化到任务栏（演示）"))}>
-        <Minus weight="bold" />
-      </button>
-      <button type="button" aria-label={t("最大化")} onClick={() => onAction(t("已切换窗口尺寸（演示）"))}>
-        <Square />
-      </button>
-      <button type="button" aria-label={t("关闭")} onClick={() => onAction(t("关闭前会自动保存学习进度"))}>
-        <X />
-      </button>
-    </div>
-  );
 }
 
 function Sidebar({ variant, active, onNavigate }) {
@@ -1783,7 +1765,6 @@ function LocalizedApp({ settings, onUpdateSettings }) {
   return (
     <main className={`app-stage ${variant}`}>
       <section className={`app-shell ${variant}-shell`}>
-        <WindowControls onAction={showToast} />
         <Sidebar variant={variant} active={active} onNavigate={handleNavigate} />
         {active !== "首页" ? (
           <FeatureWorkspace

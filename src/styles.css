@@ -34,7 +34,7 @@ button:focus-visible {
 
 .app-stage {
   min-height: 100vh;
-  padding: 10px;
+  padding: 0;
 }
 
 .app-stage.warm {
@@ -47,52 +47,24 @@ button:focus-visible {
 
 .app-shell {
   width: 100%;
-  min-height: calc(100vh - 20px);
+  min-height: 100vh;
   position: relative;
   display: grid;
   grid-template-columns: 286px minmax(0, 1fr);
   overflow: hidden;
   background: #fff;
-  border: 1px solid rgba(21, 37, 60, 0.14);
-  border-radius: 14px;
-  box-shadow: 0 3px 16px rgba(26, 43, 68, 0.13);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .professional-shell {
   grid-template-columns: 264px minmax(0, 1fr);
 }
 
-.window-controls {
-  position: absolute;
-  z-index: 20;
-  top: 10px;
-  right: 12px;
-  display: flex;
-  gap: 4px;
-}
-
-.window-controls button {
-  width: 42px;
-  height: 32px;
-  border: 0;
-  background: transparent;
-  display: grid;
-  place-items: center;
-  border-radius: 7px;
-  cursor: pointer;
-}
-
-.window-controls button:hover {
-  background: rgba(37, 45, 58, 0.07);
-}
-
-.window-controls svg {
-  width: 17px;
-}
-
 .sidebar {
   position: relative;
-  min-height: calc(100vh - 20px);
+  min-height: 100vh;
   padding: 28px 20px;
   border-right: 1px solid #e7e9ed;
   display: flex;
@@ -1981,10 +1953,6 @@ html[lang^="en"] .rubric-row span small {
 
   .professional-shell {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .window-controls {
-    display: none;
   }
 
   .sidebar {
@@ -5488,7 +5456,7 @@ html[lang^="en"] .rubric-row span small {
   }
 
   .sidebar,
-  .window-controls,
+  .desktop-window-chrome,
   .feature-header,
   .no-print {
     display: none !important;
