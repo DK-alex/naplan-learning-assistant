@@ -1,5 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { DesktopWindowChrome } from "./DesktopWindowChrome.jsx";
+import "./desktop-window.css";
 
 const examMode = window.location.pathname.toLowerCase().startsWith("/exam");
 const appModules = Promise.all(
@@ -17,6 +19,7 @@ const appModules = Promise.all(
 appModules.then(([{ App }]) => {
   createRoot(document.getElementById("root")).render(
     <React.StrictMode>
+      <DesktopWindowChrome />
       <App />
     </React.StrictMode>,
   );

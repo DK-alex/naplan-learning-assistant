@@ -1,0 +1,63 @@
+.desktop-window-chrome {
+  position: fixed;
+  z-index: 10000;
+  inset: 0 0 auto;
+  height: 44px;
+  pointer-events: none;
+}
+
+.desktop-window-drag-region {
+  position: absolute;
+  top: 0;
+  right: 142px;
+  left: 360px;
+  height: 42px;
+  pointer-events: auto;
+  -webkit-app-region: drag;
+}
+
+.desktop-window-actions {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: flex;
+  pointer-events: auto;
+  -webkit-app-region: no-drag;
+}
+
+.desktop-window-actions button {
+  width: 42px;
+  height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: #272b33;
+  background: transparent;
+  cursor: pointer;
+}
+
+.desktop-window-actions button:hover {
+  background: rgba(37, 45, 58, 0.08);
+}
+
+.desktop-window-actions .desktop-window-close:hover {
+  color: #fff;
+  background: #c42b1c;
+}
+
+.desktop-window-actions svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.15;
+  shape-rendering: geometricPrecision;
+}
+
+@media (max-width: 900px) {
+  .desktop-window-drag-region {
+    left: 180px;
+  }
+}
