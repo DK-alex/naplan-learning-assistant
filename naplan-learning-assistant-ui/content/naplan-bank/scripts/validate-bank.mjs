@@ -8,15 +8,15 @@ const REPORTS = path.join(ROOT, "reports");
 const YEARS = [3, 5, 7, 9];
 
 const EXPECTED = {
-  domain: { reading: 560, conventions_of_language: 600, numeracy: 800, writing: 40 },
+  domain: { reading: 560, conventions_of_language: 600, numeracy: 800, writing: 100 },
   conventions: { spelling: 288, grammar: 218, punctuation: 94 },
   readingYoung: { imaginative: 224, informative: 196, persuasive: 140 },
   readingSenior: { imaginative: 182, informative: 189, persuasive: 189 },
   difficulty: {
-    3: { easy: 772, medium: 870, hard: 318, not_applicable: 40 },
-    5: { easy: 608, medium: 884, hard: 468, not_applicable: 40 },
-    7: { easy: 458, medium: 884, hard: 618, not_applicable: 40 },
-    9: { easy: 388, medium: 790, hard: 782, not_applicable: 40 },
+    3: { easy: 772, medium: 870, hard: 318, not_applicable: 100 },
+    5: { easy: 608, medium: 884, hard: 468, not_applicable: 100 },
+    7: { easy: 458, medium: 884, hard: 618, not_applicable: 100 },
+    9: { easy: 388, medium: 790, hard: 782, not_applicable: 100 },
   },
   absoluteComplexity: {
     3: { easy: 1, medium: 2, hard: 3 },
@@ -193,6 +193,17 @@ for (const year of YEARS) {
       if (item.answer?.maximum_score !== expectedMax) report.errors.push(`${item.id}: writing maximum score must be ${expectedMax}`);
       if (item.answer?.rubric_ref !== "../writing-rubric-ai.md") report.errors.push(`${item.id}: writing rubric reference is missing or incorrect`);
       if (item.difficulty !== "not_applicable") report.errors.push(`${item.id}: writing prompts must not use easy/medium/hard`);
+      if ((item.prompt ?? "").length < 45) report.errors.push(`${item.id}: writing task is too brief`);
+      if ((item.stimulus?.context ?? "").length < 120) report.errors.push(`${item.id}: writing stimulus needs a substantial context`);
+      if ((item.stimulus?.instructions ?? "").length < 60) report.errors.push(`${item.id}: writing stimulus needs year-level instructions`);
+      if (item.stimulus?.idea_starters?.length !== 4) report.errors.push(`${item.id}: writing stimulus must provide 4 idea starters`);
+      if ((item.stimulus?.remember ?? []).length < 5) report.errors.push(`${item.id}: writing stimulus must provide an editing checklist`);
+      if (!item.stimulus?.image?.src?.endsWith(".webp")) report.errors.push(`${item.id}: writing stimulus image path is missing`);
+      if ((item.stimulus?.image?.alt_text ?? "").length < 40) report.errors.push(`${item.id}: writing stimulus image needs useful alt text`);
+      if ((item.stimulus?.image?.generation_prompt ?? "").length < 180) report.errors.push(`${item.id}: writing stimulus image-generation brief is incomplete`);
+      if (!item.media?.some((asset) => asset.kind === "illustration" && asset.asset_id === item.stimulus?.image?.asset_id)) {
+        report.errors.push(`${item.id}: writing stimulus illustration is not represented in media metadata`);
+      }
     }
 
     if (year <= 5 && item.domain === "numeracy" && item.calculator === "allowed") {
@@ -212,7 +223,7 @@ for (const year of YEARS) {
   const difficulty = countBy(items, "difficulty");
   const expectedReading = year <= 5 ? EXPECTED.readingYoung : EXPECTED.readingSenior;
 
-  if (items.length !== 2000) report.errors.push(`Year ${year}: expected 2000 items, found ${items.length}`);
+  if (items.length !== 2060) report.errors.push(`Year ${year}: expected 2060 items, found ${items.length}`);
   if (!sameCounts(byDomain, EXPECTED.domain)) report.errors.push(`Year ${year}: domain allocation mismatch`);
   if (!sameCounts(conventions, EXPECTED.conventions)) report.errors.push(`Year ${year}: conventions allocation mismatch`);
   if (!sameCounts(reading, expectedReading)) report.errors.push(`Year ${year}: reading text-type allocation mismatch`);
@@ -222,6 +233,11 @@ for (const year of YEARS) {
   const itemTypes = countBy(items, "item_type");
   for (const requiredType of REQUIRED_INTERACTIONS[year]) {
     if (!itemTypes[requiredType]) report.errors.push(`Year ${year}: missing required interaction ${requiredType}`);
+  }
+
+  const writingGenres = countBy(items.filter((item) => item.domain === "writing"), "subdomain");
+  if (!sameCounts(writingGenres, { narrative: 50, persuasive: 50 })) {
+    report.errors.push(`Year ${year}: writing allocation must be 50 narrative and 50 persuasive prompts`);
   }
 
   const spelling = items.filter((item) => item.subdomain === "spelling");

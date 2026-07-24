@@ -1,30 +1,30 @@
 {
   "3": {
     "file": "year-3.jsonl",
-    "total_items": 2000,
+    "total_items": 2060,
     "by_domain": {
       "reading": 560,
       "conventions_of_language": 600,
       "numeracy": 800,
-      "writing": 40
+      "writing": 100
     },
     "by_difficulty": {
       "easy": 772,
       "medium": 870,
       "hard": 318,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_absolute_complexity": {
       "1": 772,
       "2": 870,
       "3": 318,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_pathway_band": {
       "lower": 772,
       "average": 870,
       "higher": 318,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_item_type": {
       "multiple_choice": 1323,
@@ -35,7 +35,7 @@
       "text_entry": 288,
       "hotspot": 76,
       "matrix": 1,
-      "writing_prompt": 40
+      "writing_prompt": 100
     },
     "answer_critical_media_items": 391,
     "machine_scorable_items": 1960,
@@ -61,30 +61,30 @@
   },
   "5": {
     "file": "year-5.jsonl",
-    "total_items": 2000,
+    "total_items": 2060,
     "by_domain": {
       "reading": 560,
       "conventions_of_language": 600,
       "numeracy": 800,
-      "writing": 40
+      "writing": 100
     },
     "by_difficulty": {
       "easy": 608,
       "medium": 884,
       "hard": 468,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_absolute_complexity": {
       "3": 608,
       "4": 884,
       "5": 468,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_pathway_band": {
       "lower": 608,
       "average": 884,
       "higher": 468,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_item_type": {
       "multiple_choice": 1377,
@@ -95,7 +95,7 @@
       "text_entry": 288,
       "hotspot": 22,
       "matrix": 1,
-      "writing_prompt": 40
+      "writing_prompt": 100
     },
     "answer_critical_media_items": 319,
     "machine_scorable_items": 1960,
@@ -121,30 +121,30 @@
   },
   "7": {
     "file": "year-7.jsonl",
-    "total_items": 2000,
+    "total_items": 2060,
     "by_domain": {
       "reading": 560,
       "conventions_of_language": 600,
       "numeracy": 800,
-      "writing": 40
+      "writing": 100
     },
     "by_difficulty": {
       "easy": 458,
       "medium": 884,
       "hard": 618,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_absolute_complexity": {
       "5": 458,
       "6": 884,
       "7": 618,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_pathway_band": {
       "lower": 458,
       "average": 884,
       "higher": 618,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_item_type": {
       "multiple_choice": 1353,
@@ -155,7 +155,7 @@
       "text_entry": 331,
       "matrix": 1,
       "hotspot": 9,
-      "writing_prompt": 40
+      "writing_prompt": 100
     },
     "answer_critical_media_items": 313,
     "machine_scorable_items": 1960,
@@ -181,30 +181,30 @@
   },
   "9": {
     "file": "year-9.jsonl",
-    "total_items": 2000,
+    "total_items": 2060,
     "by_domain": {
       "reading": 560,
       "conventions_of_language": 600,
       "numeracy": 800,
-      "writing": 40
+      "writing": 100
     },
     "by_difficulty": {
       "easy": 388,
       "medium": 790,
       "hard": 782,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_absolute_complexity": {
       "7": 388,
       "8": 790,
       "9": 782,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_pathway_band": {
       "lower": 388,
       "average": 790,
       "higher": 782,
-      "not_applicable": 40
+      "not_applicable": 100
     },
     "by_item_type": {
       "multiple_choice": 1326,
@@ -215,7 +215,7 @@
       "text_entry": 352,
       "matrix": 1,
       "hotspot": 15,
-      "writing_prompt": 40
+      "writing_prompt": 100
     },
     "answer_critical_media_items": 340,
     "machine_scorable_items": 1960,

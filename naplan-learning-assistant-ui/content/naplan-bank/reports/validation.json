@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-24T04:23:39.091Z",
+  "generated_at": "2026-07-24T19:42:26.599Z",
   "result": "passed",
   "years": {
     "3": {
-      "total_items": 2000,
-      "unique_ids": 2000,
-      "unique_item_fingerprints": 2000,
+      "total_items": 2060,
+      "unique_ids": 2060,
+      "unique_item_fingerprints": 2060,
       "reading_passages": 80,
       "average_reading_words": 71.9,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 772,
         "medium": 870,
         "hard": 318,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1323,
@@ -29,7 +29,7 @@
         "text_entry": 288,
         "hotspot": 76,
         "matrix": 1,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "conventions_by_subdomain": {
         "spelling": 288,
@@ -48,22 +48,22 @@
       }
     },
     "5": {
-      "total_items": 2000,
-      "unique_ids": 2000,
-      "unique_item_fingerprints": 2000,
+      "total_items": 2060,
+      "unique_ids": 2060,
+      "unique_item_fingerprints": 2060,
       "reading_passages": 80,
       "average_reading_words": 128.5,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 608,
         "medium": 884,
         "hard": 468,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1377,
@@ -74,7 +74,7 @@
         "text_entry": 288,
         "hotspot": 22,
         "matrix": 1,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "conventions_by_subdomain": {
         "spelling": 288,
@@ -93,22 +93,22 @@
       }
     },
     "7": {
-      "total_items": 2000,
-      "unique_ids": 2000,
-      "unique_item_fingerprints": 2000,
+      "total_items": 2060,
+      "unique_ids": 2060,
+      "unique_item_fingerprints": 2060,
       "reading_passages": 80,
       "average_reading_words": 164.7,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 458,
         "medium": 884,
         "hard": 618,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1353,
@@ -119,7 +119,7 @@
         "text_entry": 331,
         "matrix": 1,
         "hotspot": 9,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "conventions_by_subdomain": {
         "spelling": 288,
@@ -138,22 +138,22 @@
       }
     },
     "9": {
-      "total_items": 2000,
-      "unique_ids": 2000,
-      "unique_item_fingerprints": 2000,
+      "total_items": 2060,
+      "unique_ids": 2060,
+      "unique_item_fingerprints": 2060,
       "reading_passages": 80,
       "average_reading_words": 186.3,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 388,
         "medium": 790,
         "hard": 782,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1326,
@@ -164,7 +164,7 @@
         "text_entry": 352,
         "matrix": 1,
         "hotspot": 15,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "conventions_by_subdomain": {
         "spelling": 288,

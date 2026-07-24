@@ -970,6 +970,17 @@ function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudi
 
 function WritingPrompt({ item, audioVisible, audioPlaying, toggleAudio, onStart, paperMode = false }) {
   const narrative = item.subdomain === 'narrative';
+  const ideaStarters = item.stimulus?.idea_starters ?? [
+    narrative ? 'the characters and setting' : 'your position and intended audience',
+    narrative ? 'the problem or complication' : 'reasons, examples and evidence',
+    narrative ? 'how the story will develop and end' : 'how to organise and conclude the argument',
+  ];
+  const reminders = item.stimulus?.remember ?? [
+    'plan before you start',
+    'choose your words carefully',
+    'check spelling, punctuation and paragraphs',
+  ];
+  const stimulusImage = item.stimulus?.image;
   return (
     <div className="writing-prompt-screen">
       {audioVisible && <AudioBar playing={audioPlaying} onToggle={toggleAudio} />}
@@ -981,24 +992,38 @@ function WritingPrompt({ item, audioVisible, audioPlaying, toggleAudio, onStart,
               <span><strong>Year 3 paper task · 40 minutes</strong><small>Read the prompt on screen, then write the response on paper.</small></span>
             </aside>
           )}
+          <span className={`writing-genre-badge ${narrative ? 'narrative' : 'persuasive'}`}>
+            {narrative ? 'Narrative writing' : 'Persuasive writing'}
+          </span>
           <h1>{item.stimulus.title}</h1>
-          <p>{item.prompt}</p>
-          <p>{item.stimulus.instructions}</p>
-          <p>You can use an idea on this page or your own idea.</p>
-          <strong>Think about:</strong>
-          <ul>
-            <li>{narrative ? 'the characters and setting' : 'your position and intended audience'}</li>
-            <li>{narrative ? 'the problem or complication' : 'reasons, examples and evidence'}</li>
-            <li>{narrative ? 'how the story will develop and end' : 'how to organise and conclude the argument'}</li>
-          </ul>
-          <strong>Remember to:</strong>
-          <ul>
-            <li>plan before you start</li>
-            <li>choose your words carefully</li>
-            <li>check spelling, punctuation and paragraphs</li>
-          </ul>
+          <p className="writing-task">{item.prompt}</p>
+          {item.stimulus?.context && <p className="writing-context">{item.stimulus.context}</p>}
+          <p className="writing-instructions">{item.stimulus.instructions}</p>
+          <p className="writing-choice-note">You can use an idea on this page or develop your own idea.</p>
+          <div className="writing-guidance">
+            <section>
+              <strong>Think about:</strong>
+              <ul>
+                {ideaStarters.map((starter) => <li key={starter}>{starter}</li>)}
+              </ul>
+            </section>
+            <section>
+              <strong>Remember to:</strong>
+              <ul>
+                {reminders.map((reminder) => <li key={reminder}>{reminder}</li>)}
+              </ul>
+            </section>
+          </div>
         </div>
-        <img src="/assets/reading-garden.png" alt="A child helping a bird in a community garden" />
+        <figure className={`writing-stimulus-art ${narrative ? 'narrative' : 'persuasive'}`}>
+          <img
+            src={stimulusImage?.src ?? '/assets/reading-garden.png'}
+            alt={stimulusImage?.alt_text ?? 'Open-ended visual stimulus for the writing task'}
+          />
+          <figcaption>
+            Image stimulus · Use any detail that helps your response, or create your own direction.
+          </figcaption>
+        </figure>
       </div>
       <PlayerFooter
         showBack={false}
@@ -1017,6 +1042,7 @@ function PaperWritingStage({ item, onPrompt, onComplete }) {
         <span className="paper-badge"><PenLine size={19} /> Student paper-writing time</span>
         <h1>{item.stimulus.title}</h1>
         <p>{item.prompt}</p>
+        {item.stimulus?.context && <p>{item.stimulus.context}</p>}
         <div className="paper-writing-reminders">
           <strong>Write the response on paper now.</strong>
           <span>The 40-minute practice timer continues at the top of the screen.</span>

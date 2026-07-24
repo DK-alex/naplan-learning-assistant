@@ -328,7 +328,17 @@ export function savePracticeSubmission({
           title: writingItem.stimulus?.title,
           genre: writingItem.subdomain,
           prompt: writingItem.prompt,
-          prompt_instructions: writingItem.stimulus?.instructions,
+          prompt_context: writingItem.stimulus?.context,
+          idea_starters: writingItem.stimulus?.idea_starters ?? [],
+          prompt_instructions: [
+            writingItem.prompt,
+            writingItem.stimulus?.context,
+            writingItem.stimulus?.instructions,
+            writingItem.stimulus?.idea_starters?.length
+              ? `Think about:\n${writingItem.stimulus.idea_starters.map((idea) => `- ${idea}`).join("\n")}`
+              : null,
+          ].filter(Boolean).join("\n\n"),
+          prompt_image: writingItem.stimulus?.image?.src ?? null,
           response: writingResponse,
           word_count: writingResponse.trim().split(/\s+/).filter(Boolean).length,
           maximum_score: writingItem.answer.maximum_score,

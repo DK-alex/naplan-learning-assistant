@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getWritingPromptCatalog, WRITING_PROMPT_RESEARCH } from "./writing-prompt-catalog.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "questions");
@@ -188,6 +189,16 @@ function interactionDefinition(itemType, answer, choices) {
 
 function inferMedia(stimulus, toolPolicy) {
   const media = [];
+  if (stimulus?.image) {
+    media.push({
+      asset_id: stimulus.image.asset_id,
+      kind: "illustration",
+      render_mode: "image",
+      answer_critical: false,
+      original: true,
+      alt_text: stimulus.image.alt_text,
+    });
+  }
   if (stimulus?.visual) {
     media.push({
       asset_id: stimulus.visual.asset_id,
@@ -1302,72 +1313,50 @@ function generateReading(year, rng) {
   return items;
 }
 
-const NARRATIVE_PROMPTS = [
-  "The Unexpected Map","A Sound Below","The Second Door","The Day the Signs Changed","The Borrowed Bicycle","A Message in the Rain","The Empty Seat","Before the Lights Returned","The Smallest Rescue","The Last Bus Home",
-  "A Package with No Name","The Hidden Garden","One Minute Too Late","The Photograph on the Floor","A Different Kind of Prize","When the River Rose","The Unfinished Model","The Visitor at Dawn","The Long Way Around","What the Telescope Found",
-];
-const PERSUASIVE_PROMPTS = [
-  "Every school should have a vegetable garden","Homework should be redesigned","Public parks need more shade","Students should help plan school events","Repairing is better than replacing","Community libraries should stay open later","School uniforms should include more choice","Young people should learn first aid",
-  "Local streets should have safer cycling routes","Every class should spend time outdoors","School canteens should reduce food waste","Students should have a voice in technology rules","Community events should include quiet spaces","Pets should be allowed in more public places","Museums should be free for students","Schools should teach practical money skills",
-  "Public transport should be easier to understand","Team projects are better than individual projects","Every neighbourhood needs a shared tool library","Advertising aimed at children needs stronger rules",
-];
-
 function generateWriting(year, rng) {
-  const items = [];
-  NARRATIVE_PROMPTS.forEach((title, index) => {
-    const younger = year <= 5;
-    items.push(baseItem({
-      id: makeId(year, "WRI", index),
-      year,
-      domain: "writing",
-      subdomain: "narrative",
-      skill: "independent construction of a narrative",
-      difficulty: "not_applicable",
-      itemType: "writing_prompt",
-      calculator: "not_applicable",
-      prompt: `Write a narrative titled “${title}”.`,
-      stimulus: {
-        type: "writing_prompt",
-        title,
-        instructions: younger
-          ? "Create characters and a setting. Build a problem or complication, then show what happens."
-          : "Craft an engaging narrative centred on the title. Develop tension or conflict and shape the resolution for effect.",
-        suggested_time_minutes: year === 3 ? 40 : 42,
-      },
-      choices: null,
-      answer: { type: "extended_response", rubric_ref: "../writing-rubric-ai.md", maximum_score: 47 },
-      explanation: "Narrative responses are assessed independently across the 10 narrative criteria; there is no single model answer.",
-      tags: ["orientation", "complication", "resolution"],
-    }));
-  });
-  PERSUASIVE_PROMPTS.forEach((title, localIndex) => {
-    const index = 20 + localIndex;
-    const younger = year <= 5;
-    items.push(baseItem({
-      id: makeId(year, "WRI", index),
-      year,
-      domain: "writing",
-      subdomain: "persuasive",
-      skill: "independent construction of a persuasive text",
-      difficulty: "not_applicable",
-      itemType: "writing_prompt",
-      calculator: "not_applicable",
-      prompt: `Write a persuasive text about this statement: “${title}.”`,
-      stimulus: {
-        type: "writing_prompt",
-        title,
-        instructions: younger
-          ? "State your opinion, give clear reasons and finish with a conclusion that supports your view."
-          : "Develop a sustained position with relevant evidence, persuasive devices, a coherent structure and a purposeful conclusion.",
-        suggested_time_minutes: year === 3 ? 40 : 42,
-      },
-      choices: null,
-      answer: { type: "extended_response", rubric_ref: "../writing-rubric-ai.md", maximum_score: 48 },
-      explanation: "Persuasive responses are assessed independently across the 10 persuasive criteria; there is no single model answer.",
-      tags: ["introduction", "body", "conclusion", "position"],
-    }));
-  });
-  return items;
+  return getWritingPromptCatalog(year)
+    .map((writingPrompt, index) => {
+      const isNarrative = writingPrompt.genre === "narrative";
+      return baseItem({
+        id: makeId(year, "WRI", index),
+        year,
+        domain: "writing",
+        subdomain: writingPrompt.genre,
+        skill: isNarrative
+          ? "independent construction of a narrative"
+          : "independent construction of a persuasive text",
+        difficulty: "not_applicable",
+        itemType: "writing_prompt",
+        calculator: "not_applicable",
+        prompt: writingPrompt.task,
+        stimulus: {
+          type: "writing_prompt",
+          catalog_id: writingPrompt.catalog_id,
+          title: writingPrompt.title,
+          statement: writingPrompt.statement ?? null,
+          context: writingPrompt.context,
+          instructions: writingPrompt.instructions,
+          idea_starters: writingPrompt.idea_starters,
+          remember: writingPrompt.remember,
+          image: writingPrompt.image,
+          suggested_time_minutes: year === 3 ? 40 : 42,
+          research_source: WRITING_PROMPT_RESEARCH.official_source,
+          originality_note: "Original practice prompt inspired by the structural features of public ACARA writing stimuli; no official wording or artwork is reproduced.",
+        },
+        choices: null,
+        answer: {
+          type: "extended_response",
+          rubric_ref: "../writing-rubric-ai.md",
+          maximum_score: isNarrative ? 47 : 48,
+        },
+        explanation: isNarrative
+          ? "Narrative responses are assessed independently across the 10 narrative criteria; there is no single model answer."
+          : "Persuasive responses are assessed independently across the 10 persuasive criteria; there is no single model answer.",
+        tags: isNarrative
+          ? ["orientation", "complication", "resolution", "complete_stimulus", `year_${year}_demand`]
+          : ["introduction", "body", "conclusion", "position", "complete_stimulus", `year_${year}_demand`],
+      });
+    });
 }
 
 function countBy(items, key) {
@@ -1388,6 +1377,7 @@ async function main() {
     licence_note: "All questions are original practice materials. They are not official NAPLAN items and are not endorsed by ACARA.",
     difficulty_note: "Difficulty is a year-relative design estimate plus an uncalibrated cross-year absolute complexity index. It is not an official NAPLAN scale score or proficiency level.",
     official_alignment: OFFICIAL_ALIGNMENT,
+    writing_prompt_research: WRITING_PROMPT_RESEARCH,
     year_profiles: YEAR_PROFILES,
     year_levels: {},
   };

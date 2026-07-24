@@ -31,17 +31,17 @@ Year 7 和 Year 9 Numeracy 先完成较短的 non-calculator section，再进入
 | Reading | 560 | 80 篇原创文本 × 每篇 7 题 |
 | Conventions of language | 600 | Spelling 288；Grammar 218；Punctuation 94 |
 | Numeracy | 800 | 按年级数学内容比例分配 |
-| Writing | 40 | Narrative 20；Persuasive 20 |
-| 合计 | 2,000 | 详见下方年级难度表 |
+| Writing | 100 | Narrative 50；Persuasive 50 |
+| 合计 | 2,060 | 详见下方年级难度表 |
 
 | 年级 | Easy | Medium | Hard | Writing N/A |
 |---|---:|---:|---:|---:|
-| Year 3 | 772 | 870 | 318 | 40 |
-| Year 5 | 608 | 884 | 468 | 40 |
-| Year 7 | 458 | 884 | 618 | 40 |
-| Year 9 | 388 | 790 | 782 | 40 |
+| Year 3 | 772 | 870 | 318 | 100 |
+| Year 5 | 608 | 884 | 468 | 100 |
+| Year 7 | 458 | 884 | 618 | 100 |
+| Year 9 | 388 | 790 | 782 | 100 |
 
-Writing 是共同写作任务，不设置 easy/medium/hard。
+Writing 不设置 easy/medium/hard，但题面支架按年级递进：Year 3 使用具体情境、事件顺序和基础理由；Year 5 加入人物动机、反方关注点与实例；Year 7 强调视角、节奏、证据和反驳；Year 9 强调结构控制、价值冲突、限定性主张和多方影响。每道题必须包含完整情境、4 个构思提示、检查清单和一张只提供开放式线索的原创相关配图。
 
 ## 4. Reading
 

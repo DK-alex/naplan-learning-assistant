@@ -1645,35 +1645,132 @@ select:focus-visible,
 .writing-prompt-body {
   position: absolute;
   inset: 54px 0 61px;
-  padding: 28px 62px;
+  padding: 12px 44px 14px;
   display: grid;
-  grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
-  gap: 24px;
-  overflow: auto;
+  grid-template-columns: minmax(0, 58fr) minmax(360px, 42fr);
+  align-items: start;
+  gap: 28px;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
-.writing-prompt-body > img {
+.writing-prompt-body::-webkit-scrollbar {
+  display: none;
+}
+
+.writing-stimulus-art {
+  position: sticky;
+  top: 0;
   width: 100%;
-  height: 100%;
-  max-height: 520px;
+  margin: 0;
+  overflow: hidden;
+  color: #35546a;
+  background: #fff;
+  border: 10px solid #92262a;
+  box-shadow: 0 7px 22px rgba(24, 55, 72, 0.18);
+}
+
+.writing-stimulus-art.persuasive {
+  border-color: #147894;
+}
+
+.writing-stimulus-art img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
-  border: 16px solid #801317;
+  background: #eaf2f5;
+}
+
+.writing-stimulus-art figcaption {
+  padding: 11px 13px 12px;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .writing-copy {
-  padding-top: 42px;
+  padding: 2px 0 10px;
   color: #111;
-  font-size: 15px;
+  font-size: 13.5px;
+  line-height: 1.4;
 }
 
 .writing-copy h1 {
-  font-size: 24px;
+  margin: 5px 0 7px;
+  font-size: 25px;
+  line-height: 1.18;
   text-decoration: underline;
 }
 
+.writing-genre-badge {
+  display: inline-flex;
+  min-height: 23px;
+  padding: 3px 9px;
+  align-items: center;
+  color: #7d161a;
+  background: #f8e8e8;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.writing-genre-badge.persuasive {
+  color: #075f7f;
+  background: #e2f2f7;
+}
+
+.writing-task {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.writing-context {
+  margin: 0 0 8px;
+  color: #273b47;
+  font-size: 14px;
+}
+
+.writing-instructions {
+  margin: 0 0 6px;
+  color: #2f4858;
+}
+
+.writing-choice-note {
+  margin: 0 0 9px;
+  color: #075f87;
+  font-weight: 750;
+}
+
+.writing-guidance {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(210px, 0.82fr);
+  gap: 10px;
+}
+
+.writing-guidance section {
+  min-width: 0;
+  padding: 9px 11px 8px;
+  background: #f4f7f9;
+  border-left: 4px solid #8aa9b8;
+}
+
+.writing-guidance section:first-child {
+  border-left-color: #92262a;
+}
+
+.writing-prompt-screen:has(.writing-genre-badge.persuasive) .writing-guidance section:first-child {
+  border-left-color: #147894;
+}
+
 .writing-copy ul {
-  margin-top: 6px;
-  padding-left: 26px;
+  margin: 4px 0 0;
+  padding-left: 20px;
+}
+
+.writing-copy li + li {
+  margin-top: 2px;
 }
 
 .paper-mode-inline {
