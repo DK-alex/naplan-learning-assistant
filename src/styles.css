@@ -877,6 +877,11 @@ html[lang^="zh"] .warm-shell .brand-copy small {
   overflow: hidden;
 }
 
+.report-card:not(.report-card-empty) {
+  display: flex;
+  flex-direction: column;
+}
+
 .fresh-pill {
   margin-left: auto;
   padding: 6px 13px;
@@ -1016,6 +1021,27 @@ html[lang^="en"] .rubric-row span small {
   font-size: 9px;
 }
 
+.report-card-footer {
+  min-height: 90px;
+  margin-top: auto;
+  padding: 10px 118px 14px 22px;
+  display: grid;
+  align-content: end;
+  justify-items: start;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.report-card-footer .report-boundary,
+.report-card-footer .report-action {
+  position: static;
+}
+
+.report-card-footer .report-boundary {
+  margin: 0;
+}
+
 .report-empty-state {
   min-height: 285px;
   padding: 34px 48px 80px 22px;
@@ -1076,6 +1102,13 @@ html[lang^="en"] .rubric-row span small {
   object-position: 76% 72%;
   mix-blend-mode: multiply;
   pointer-events: none;
+}
+
+.report-card:not(.report-card-empty) .report-character {
+  right: -10px;
+  bottom: -8px;
+  width: 100px;
+  height: 100px;
 }
 
 .warm-footer {
