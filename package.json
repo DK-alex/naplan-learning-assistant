@@ -1,0 +1,24 @@
+{
+  "name": "naplan-learning-assistant-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/prepare-sites-build.mjs",
+    "generate:bank": "node content/naplan-bank/scripts/generate-bank.mjs",
+    "validate:bank": "node content/naplan-bank/scripts/validate-bank.mjs",
+    "sync:official-news": "node scripts/sync-official-updates.mjs && node scripts/translate-official-pages.mjs",
+    "translate:official-news": "node scripts/translate-official-pages.mjs",
+    "preview": "vite preview",
+    "test:sites": "node --test tests/sites-worker.test.mjs tests/official-updates.test.mjs tests/ai-review.test.mjs tests/exam-guide.test.mjs tests/writing-rubric-guide.test.mjs tests/learning-goals.test.mjs tests/writing-report-summary.test.mjs tests/naplan-schedule.test.mjs"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@vitejs/plugin-react": "5.0.4",
+    "lucide-react": "^1.26.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "vite": "6.4.2"
+  }
+}

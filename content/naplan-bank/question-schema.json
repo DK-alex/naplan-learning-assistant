@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/naplan-practice-question-v2.schema.json",
+  "title": "NAPLAN original practice question v2",
+  "type": "object",
+  "required": [
+    "id",
+    "bank_version",
+    "year_level",
+    "year_profile",
+    "domain",
+    "subdomain",
+    "skill",
+    "difficulty",
+    "difficulty_model",
+    "pathway_band",
+    "curriculum",
+    "testlet",
+    "item_type",
+    "calculator",
+    "tool_policy",
+    "prompt",
+    "answer",
+    "scoring",
+    "interaction",
+    "media",
+    "accessibility",
+    "explanation",
+    "provenance",
+    "review"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^Y(3|5|7|9)-(REA|COL|NUM|WRI)-[0-9]{4}$"
+    },
+    "bank_version": {
+      "const": "2026.2"
+    },
+    "year_level": {
+      "enum": [3, 5, 7, 9]
+    },
+    "year_profile": {
+      "type": "object",
+      "required": ["age_band", "curriculum_band"],
+      "properties": {
+        "age_band": { "type": "string" },
+        "curriculum_band": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "domain": {
+      "enum": ["reading", "conventions_of_language", "numeracy", "writing"]
+    },
+    "subdomain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skill": {
+      "type": "string",
+      "minLength": 1
+    },
+    "difficulty": {
+      "enum": ["easy", "medium", "hard", "not_applicable"]
+    },
+    "difficulty_model": {
+      "type": "object",
+      "required": ["relative_band", "absolute_complexity", "status"],
+      "properties": {
+        "relative_band": {
+          "enum": ["easy", "medium", "hard", "not_applicable"]
+        },
+        "absolute_complexity": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 9
+        },
+        "cognitive_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "curriculum_band": {
+          "type": "string"
+        },
+        "design_estimate": {
+          "type": "string"
+        },
+        "status": {
+          "enum": ["design_estimate_uncalibrated", "not_applicable"]
+        },
+        "calibration_version": {
+          "type": ["string", "null"]
+        },
+        "domain": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "pathway_band": {
+      "enum": ["lower", "average", "higher", "not_applicable"]
+    },
+    "curriculum": {
+      "type": "object",
+      "required": ["framework", "code", "descriptor", "year_band"],
+      "properties": {
+        "framework": { "type": "string" },
+        "code": { "type": ["string", "null"] },
+        "descriptor": { "type": "string" },
+        "year_band": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "testlet": {
+      "type": "object",
+      "required": ["adaptive_design", "eligible_nodes", "parameters_status"],
+      "properties": {
+        "adaptive_design": {
+          "enum": ["multistage_testlet", "none"]
+        },
+        "eligible_nodes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "parameters_status": {
+          "enum": ["provisional_uncalibrated"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "item_type": {
+      "enum": [
+        "multiple_choice",
+        "multiple_select",
+        "hot_text",
+        "inline_choice",
+        "drag_and_drop",
+        "matrix",
+        "hotspot",
+        "text_entry",
+        "writing_prompt"
+      ]
+    },
+    "calculator": {
+      "enum": ["not_allowed", "allowed", "neutral", "not_applicable"]
+    },
+    "tool_policy": {
+      "type": "object",
+      "required": ["calculator", "ruler", "protractor"],
+      "properties": {
+        "calculator": { "type": "boolean" },
+        "ruler": { "type": "boolean" },
+        "protractor": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stimulus": {
+      "type": ["object", "null"]
+    },
+    "options": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "answer": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": ["single_choice", "multiple_select", "drag_drop", "matrix", "text", "extended_response"]
+        },
+        "value": {
+          "type": ["string", "number"]
+        },
+        "values": {
+          "type": ["array", "object"],
+          "items": { "type": "string" },
+          "additionalProperties": { "type": "string" }
+        },
+        "placements": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "targets": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "rows": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "columns": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "display": {
+          "type": ["string", "number"]
+        },
+        "accepted": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rubric_ref": {
+          "type": "string"
+        },
+        "maximum_score": {
+          "type": "integer"
+        },
+        "partial_credit": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "scoring": {
+      "type": "object",
+      "required": ["method", "max_score", "partial_credit", "status"],
+      "properties": {
+        "method": { "type": "string" },
+        "max_score": { "type": "number", "minimum": 1 },
+        "partial_credit": { "type": "boolean" },
+        "status": { "enum": ["machine_scorable", "practice_rubric"] }
+      },
+      "additionalProperties": false
+    },
+    "interaction": {
+      "type": "object",
+      "required": ["renderer", "keyboard_complete", "response_required"],
+      "properties": {
+        "renderer": { "type": "string" },
+        "keyboard_complete": { "const": true },
+        "response_required": { "type": "boolean" },
+        "min_selections": { "type": "integer" },
+        "max_selections": { "type": "integer" },
+        "draggable_option_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "targets": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "rows": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "columns": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "one_response_per_row": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["asset_id", "kind", "render_mode", "answer_critical", "original", "alt_text"],
+        "properties": {
+          "asset_id": { "type": "string" },
+          "kind": { "type": "string" },
+          "render_mode": { "type": "string" },
+          "answer_critical": { "type": "boolean" },
+          "original": { "const": true },
+          "alt_text": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "required": [
+        "keyboard_complete",
+        "zoom_200_percent",
+        "visual_alternative_required",
+        "audio_alternative_required"
+      ],
+      "properties": {
+        "keyboard_complete": { "const": true },
+        "zoom_200_percent": { "const": true },
+        "visual_alternative_required": { "type": "boolean" },
+        "audio_alternative_required": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["original_item", "official_item", "source_mode", "alignment_basis"],
+      "properties": {
+        "original_item": { "const": true },
+        "official_item": { "const": false },
+        "source_mode": { "const": "public_spec_reference" },
+        "alignment_basis": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": ["curriculum", "editorial", "accessibility", "copyright", "psychometric"],
+      "properties": {
+        "curriculum": { "type": "string" },
+        "editorial": { "type": "string" },
+        "accessibility": { "type": "string" },
+        "copyright": { "type": "string" },
+        "psychometric": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

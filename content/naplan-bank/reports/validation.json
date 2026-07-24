@@ -1,0 +1,190 @@
+{
+  "generated_at": "2026-07-24T04:23:39.091Z",
+  "result": "passed",
+  "years": {
+    "3": {
+      "total_items": 2000,
+      "unique_ids": 2000,
+      "unique_item_fingerprints": 2000,
+      "reading_passages": 80,
+      "average_reading_words": 71.9,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 772,
+        "medium": 870,
+        "hard": 318,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1323,
+        "hot_text": 32,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "text_entry": 288,
+        "hotspot": 76,
+        "matrix": 1,
+        "writing_prompt": 40
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "imaginative": 224,
+        "informative": 196,
+        "persuasive": 140
+      },
+      "spelling_by_item_type": {
+        "audio_dictation": 173,
+        "mistake_identified": 58,
+        "mistake_not_identified": 57
+      }
+    },
+    "5": {
+      "total_items": 2000,
+      "unique_ids": 2000,
+      "unique_item_fingerprints": 2000,
+      "reading_passages": 80,
+      "average_reading_words": 128.5,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 608,
+        "medium": 884,
+        "hard": 468,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1377,
+        "hot_text": 32,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "text_entry": 288,
+        "hotspot": 22,
+        "matrix": 1,
+        "writing_prompt": 40
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "imaginative": 224,
+        "persuasive": 140,
+        "informative": 196
+      },
+      "spelling_by_item_type": {
+        "audio_dictation": 173,
+        "mistake_not_identified": 57,
+        "mistake_identified": 58
+      }
+    },
+    "7": {
+      "total_items": 2000,
+      "unique_ids": 2000,
+      "unique_item_fingerprints": 2000,
+      "reading_passages": 80,
+      "average_reading_words": 164.7,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 458,
+        "medium": 884,
+        "hard": 618,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1353,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "hot_text": 26,
+        "text_entry": 331,
+        "matrix": 1,
+        "hotspot": 9,
+        "writing_prompt": 40
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "persuasive": 189,
+        "informative": 189,
+        "imaginative": 182
+      },
+      "spelling_by_item_type": {
+        "mistake_identified": 58,
+        "audio_dictation": 173,
+        "mistake_not_identified": 57
+      }
+    },
+    "9": {
+      "total_items": 2000,
+      "unique_ids": 2000,
+      "unique_item_fingerprints": 2000,
+      "reading_passages": 80,
+      "average_reading_words": 186.3,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 388,
+        "medium": 790,
+        "hard": 782,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1326,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "hot_text": 26,
+        "text_entry": 352,
+        "matrix": 1,
+        "hotspot": 15,
+        "writing_prompt": 40
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "punctuation": 94,
+        "grammar": 218
+      },
+      "reading_by_text_type": {
+        "persuasive": 189,
+        "informative": 189,
+        "imaginative": 182
+      },
+      "spelling_by_item_type": {
+        "audio_dictation": 173,
+        "mistake_identified": 58,
+        "mistake_not_identified": 57
+      }
+    }
+  },
+  "errors": [],
+  "warnings": [
+    "All difficulty parameters are design estimates. Psychometric calibration and DIF review are still required before scaled reporting."
+  ]
+}
