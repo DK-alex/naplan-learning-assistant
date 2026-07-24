@@ -24,7 +24,7 @@ Desktop packaging uses two distinct icon families under `packaging/icons/`: `app
 
 The Windows desktop shell must stay frameless and edge-to-edge: do not show the native title bar, application menu, or an outer padded card/frame. Keep the custom minimise, maximise/restore, and close controls functional through the Electron preload/IPC bridge on both the learning dashboard and `/exam`, and preserve a draggable region that does not cover primary controls.
 
-The Windows learning-assistant shell must render inside a fixed 1600 x 900 (16:9) application canvas that scales uniformly and stays centred in the available window. Do not let desktop breakpoints reflow dashboard cards into a webpage-like vertical document, and do not show browser-style scrollbars. Feature workspaces may still scroll with the mouse or keyboard inside the fixed canvas, but their scrollbars must remain hidden.
+The Windows learning-assistant shell must render inside a fixed 1600 x 900 (16:9) application canvas that scales uniformly and stays centred in the available window. The desktop window itself must keep the same 16:9 ratio so no letterbox or pillarbox frame appears around that canvas. Default to 1440 x 810, constrain manual resizing to 16:9, and make the maximise control fit the largest centred 16:9 window inside the current display's work area instead of using native maximise. Do not let desktop breakpoints reflow dashboard cards into a webpage-like vertical document, and do not show browser-style scrollbars. Feature workspaces may still scroll with the mouse or keyboard inside the fixed canvas, but their scrollbars must remain hidden.
 
 Use `William` as the default student name for a fresh profile. Preserve a student name that the user has explicitly saved in settings.
 
