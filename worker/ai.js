@@ -4,8 +4,11 @@ import {
   normaliseBaseUrl,
 } from "../shared/ai-config.js";
 import {
+  buildWritingReportTranslationSystemPrompt,
+  buildWritingReportTranslationUserPrompt,
   buildWritingReviewSystemPrompt,
   buildWritingReviewUserPrompt,
+  validateTranslatedWritingReport,
   validateWritingInput,
   validateWritingReport,
   WRITING_REPORT_SCHEMA,
@@ -176,8 +179,31 @@ export async function handleAiReviewRequest(request, { fetchImpl = fetch } = {})
     return jsonResponse({ error: { code: "INVALID_INPUT", message: inputErrors.join("; ") } }, 400);
   }
 
-  const systemPrompt = buildWritingReviewSystemPrompt(input.report_language);
-  const userPrompt = buildWritingReviewUserPrompt(input);
+  const mode = body.mode || "review";
+  if (!["review", "translate_report"].includes(mode)) {
+    return jsonResponse({ error: { code: "INVALID_MODE", message: "Unsupported review mode." } }, 400);
+  }
+
+  const sourceReport = mode === "translate_report" ? body.source_report : null;
+  if (mode === "translate_report") {
+    const sourceErrors = validateWritingReport(sourceReport, {
+      ...input,
+      report_language: sourceReport?.report_language,
+    });
+    if (sourceErrors.length) {
+      return jsonResponse(
+        { error: { code: "INVALID_SOURCE_REPORT", message: sourceErrors.join("; ") } },
+        400,
+      );
+    }
+  }
+
+  const systemPrompt = mode === "translate_report"
+    ? buildWritingReportTranslationSystemPrompt(input.report_language)
+    : buildWritingReviewSystemPrompt(input.report_language);
+  const userPrompt = mode === "translate_report"
+    ? buildWritingReportTranslationUserPrompt(input, sourceReport)
+    : buildWritingReviewUserPrompt(input);
   const providerRequest = createProviderRequest({
     providerId,
     baseUrl,
@@ -229,7 +255,9 @@ export async function handleAiReviewRequest(request, { fetchImpl = fetch } = {})
     );
   }
 
-  const reportErrors = validateWritingReport(report, input);
+  const reportErrors = mode === "translate_report"
+    ? validateTranslatedWritingReport(report, sourceReport, input)
+    : validateWritingReport(report, input);
   if (reportErrors.length) {
     return jsonResponse(
       {
@@ -252,4 +280,3 @@ export async function handleAiReviewRequest(request, { fetchImpl = fetch } = {})
     },
   });
 }
-

@@ -1,13 +1,14 @@
 import {
   ArrowClockwise,
   CheckCircle,
+  DownloadSimple,
   Flag,
-  Printer,
+  ListBullets,
   Sparkle,
   WarningCircle,
 } from "@phosphor-icons/react";
 import { getAiProvider } from "../shared/ai-config.js";
-import { useI18n } from "./i18n.jsx";
+import { getLanguageLabel, useI18n } from "./i18n.jsx";
 
 function renderAnnotatedText(text, annotations) {
   const placements = [];
@@ -60,7 +61,16 @@ function ReportPageHeading({ eyebrow, title, number }) {
   );
 }
 
-export function WritingReport({ reportRecord, studentName, onRegenerate }) {
+export function WritingReport({
+  reportRecord,
+  studentName,
+  onRegenerate,
+  onExportLanguage,
+  preferredLanguage,
+  exportingLanguage,
+  onShowHistory,
+  historyCount,
+}) {
   const { t, locale } = useI18n();
   const { report } = reportRecord;
   const provider = getAiProvider(reportRecord.provider);
@@ -86,21 +96,34 @@ export function WritingReport({ reportRecord, studentName, onRegenerate }) {
           <strong>{t("作文批改报告")}</strong>
           <span>{provider.name} · {reportRecord.model} · {generatedAt}</span>
         </div>
+        <button type="button" className="feature-secondary" onClick={onShowHistory}>
+          <ListBullets />{t("历史批改")} ({historyCount})
+        </button>
         <button type="button" className="feature-secondary" onClick={onRegenerate}>
           <ArrowClockwise />{t("重新批改")}
         </button>
-        <button type="button" className="feature-primary" onClick={() => window.print()}>
-          <Printer />{t("打印 / 导出 PDF")}
+        <button
+          type="button"
+          className="feature-primary"
+          disabled={Boolean(exportingLanguage)}
+          onClick={() => onExportLanguage(preferredLanguage)}
+        >
+          <DownloadSimple />
+          {exportingLanguage === preferredLanguage
+            ? t("正在准备 Word…")
+            : t("导出{language} Word", { language: getLanguageLabel(preferredLanguage) })}
         </button>
-      </div>
-
-      <div className="print-report-header">
-        <img src="/assets/naplan-app-icon.png" alt="" />
-        <span>NAPLAN Learning Assistant · {t("形成性写作报告")}</span>
-      </div>
-      <div className="print-report-footer">
-        <span>{t("练习用途 · 非官方 NAPLAN 成绩")}</span>
-        <span>{generatedAt}</span>
+        {preferredLanguage !== "en" && (
+          <button
+            type="button"
+            className="feature-primary english-word-export"
+            disabled={Boolean(exportingLanguage)}
+            onClick={() => onExportLanguage("en")}
+          >
+            <DownloadSimple />
+            {exportingLanguage === "en" ? t("正在准备 Word…") : t("导出英文 Word")}
+          </button>
+        )}
       </div>
 
       <ReportPage className="report-cover">
