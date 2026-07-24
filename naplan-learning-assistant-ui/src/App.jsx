@@ -572,10 +572,12 @@ function ReportCard({ onOpen }) {
           );
         })}
       </div>
-      <p className="report-boundary">{t("练习评分 · 非官方 NAPLAN 成绩")}</p>
-      <button type="button" className="report-action" onClick={() => onOpen("AI 作文详细报告")}>
-        {t("查看详细报告")} <ArrowRight size={16} />
-      </button>
+      <div className="report-card-footer">
+        <p className="report-boundary">{t("练习评分 · 非官方 NAPLAN 成绩")}</p>
+        <button type="button" className="report-action" onClick={() => onOpen("AI 作文详细报告")}>
+          {t("查看详细报告")} <ArrowRight size={16} />
+        </button>
+      </div>
       <img className="report-character" src="/assets/warm-rabbit.png" alt="" />
     </section>
   );

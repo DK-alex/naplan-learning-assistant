@@ -46,3 +46,48 @@
 - Confirmed the local browser build exposes accessible progressbar values and produces no test or build failure.
 
 final result: passed
+
+---
+
+# Design QA — AI 作文批改摘要卡片
+
+## Source and implementation
+
+- Source screenshot: `C:\Users\alex3\AppData\Local\Temp\codex-clipboard-04e074dd-af97-46b5-8bed-6ef71eda7496.png`
+- Implementation URL: `http://127.0.0.1:5173/`
+- Full implementation evidence: `artifacts/design-qa/ai-writing-summary-full.png`
+- Focused implementation evidence: `artifacts/design-qa/ai-writing-summary-card.png`
+- Combined before/after evidence: `artifacts/design-qa/ai-writing-summary-comparison.png`
+
+## Viewport and state
+
+- Source dimensions: 784 × 810 px, cropped from the populated warm-dashboard report card.
+- Implementation viewport: 1600 × 900 CSS px at device-pixel ratio 2.
+- Focused card dimensions: 401 × 486 CSS px.
+- State: latest Year 3 OpenAI writing review, score 45/47, all six dashboard rubric rows visible.
+
+## Findings
+
+- The source had a P1 collision: the sixth “拼写 (Spelling)” row, the unofficial-score note, the action button, and the rabbit illustration occupied the same bottom area.
+- The implementation now uses a dedicated 90 px report-card footer for the note and action.
+- The populated-state rabbit is constrained to 100 × 100 px and placed inside the footer decoration area.
+- Measured geometry:
+  - final rubric row bottom: 854 px
+  - footer top: 886.5 px
+  - rabbit top: 884.5 px
+  - rubric-to-footer clearance: 32.5 px
+  - rubric-to-rabbit clearance: 30.5 px
+- Automated intersection checks:
+  - final rubric row vs footer: no overlap
+  - final rubric row vs rabbit: no overlap
+  - action vs rabbit: no overlap
+  - note vs action: no overlap
+- No new P0, P1, or P2 visual issues were found in the focused comparison.
+
+## Iteration history
+
+1. Baseline: footer controls and the 174 px rabbit were absolutely positioned over the rubric list.
+2. Revision: grouped the note and action into a footer flow, made the populated card a vertical flex layout, and reduced only the populated-state rabbit to fit the reserved decoration area.
+3. Verification: compared the supplied source and rendered implementation side by side, then confirmed the relevant DOM rectangles do not intersect.
+
+Final result: passed
