@@ -1,0 +1,5 @@
+**/node_modules/
+**/dist/
+naplan-ui-clone/qa-*.png
+*.tar.gz
+*.tgz

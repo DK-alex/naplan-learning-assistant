@@ -1,0 +1,570 @@
+{
+  "schema_version": 1,
+  "synced_at": "2026-07-23T14:05:58.905Z",
+  "sources": [
+    "https://www.nap.edu.au/naplan",
+    "https://www.acara.edu.au/news-and-media"
+  ],
+  "items": [
+    {
+      "id": "acara-2026-testing-concludes",
+      "date": "2026-03-27",
+      "category": "news",
+      "source": "ACARA",
+      "url": "https://www.acara.edu.au/news-and-media/news-details?section=202603120213",
+      "featured": true,
+      "title": {
+        "zh-CN": "2026 NAPLAN 测试已经结束",
+        "en": "NAPLAN testing concludes for 2026",
+        "zh-TW": "2026 NAPLAN 測試已經結束",
+        "ko": "2026 NAPLAN 시험 종료"
+      },
+      "summary": {
+        "zh-CN": "ACARA 表示，约 130 万名学生在 9,300 多所学校和校区完成了约 450 万次在线测试。学校已完成本年度测试工作。",
+        "en": "ACARA reports that about 1.3 million students completed around 4.5 million online tests across more than 9,300 schools and campuses.",
+        "zh-TW": "ACARA 表示，約 130 萬名學生在 9,300 多所學校和校區完成了約 450 萬次線上測試。學校已完成本年度測試工作。",
+        "ko": "ACARA에 따르면 9,300개 이상의 학교와 캠퍼스에서 약 130만 명의 학생이 약 450만 건의 온라인 시험을 완료했습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "ACARA news, March 2026",
+        "fetched_at": "2026-07-23T14:05:57.087Z",
+        "last_modified": null,
+        "content_hash": "feac4c3a2777b1eb9966e38318670c22380fd3f401400f13a4b120c852e87ae5",
+        "character_count": 6726
+      }
+    },
+    {
+      "id": "nap-2026-results-update",
+      "date": "2026-07-23",
+      "category": "results",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/results-and-reports",
+      "featured": true,
+      "title": {
+        "zh-CN": "2026 全国结果预计 8 月上旬发布",
+        "en": "2026 national results expected in early August",
+        "zh-TW": "2026 全國結果預計 8 月上旬發布",
+        "ko": "2026 국가 결과는 8월 초 발표 예정"
+      },
+      "summary": {
+        "zh-CN": "NAP 官网说明，2026 全国结果预计在 8 月上旬发布。学校结果照常报告；Year 5、7、9 的个人报告会提示首日在线写作中断需要谨慎解读。",
+        "en": "The NAP website says 2026 national results are expected in early August. School reporting continues as usual, while Years 5, 7 and 9 individual reports include a caution about the day-one writing disruption.",
+        "zh-TW": "NAP 官網說明，2026 全國結果預計在 8 月上旬發布。學校結果照常報告；Year 5、7、9 的個人報告會提示首日線上寫作中斷需要謹慎解讀。",
+        "ko": "NAP 웹사이트에 따르면 2026 국가 결과는 8월 초 발표될 예정입니다. 학교 보고는 정상적으로 진행되며 Year 5, 7, 9 개인 보고서에는 첫날 쓰기 시험 중단에 관한 주의 문구가 포함됩니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Results and reports",
+        "fetched_at": "2026-07-23T14:05:57.210Z",
+        "last_modified": null,
+        "content_hash": "845bc48ae69cb877e66a938f2402ac7adba926efee7a58f09d988df053b0ab3a",
+        "character_count": 11331
+      }
+    },
+    {
+      "id": "acara-2026-update-12-march",
+      "date": "2026-03-12",
+      "category": "news",
+      "source": "ACARA",
+      "url": "https://www.acara.edu.au/news-and-media/news-details?section=202603120213",
+      "featured": true,
+      "title": {
+        "zh-CN": "NAPLAN 2026：3 月 12 日运行更新",
+        "en": "NAPLAN 2026 update — 12 March",
+        "zh-TW": "NAPLAN 2026：3 月 12 日運行更新",
+        "ko": "NAPLAN 2026: 3월 12일 운영 업데이트"
+      },
+      "summary": {
+        "zh-CN": "ACARA 表示首日登录问题已在 3 月 11 日上午解决，测试平台随后恢复正常运行，并由技术供应商开展完整调查。",
+        "en": "ACARA said the day-one login issue was resolved late on the morning of 11 March, testing resumed, and the technology provider began a full investigation.",
+        "zh-TW": "ACARA 表示首日登入問題已在 3 月 11 日上午解決，測試平台隨後恢復正常運行，並由技術供應商展開完整調查。",
+        "ko": "ACARA는 첫날 로그인 문제가 3월 11일 오전에 해결되어 시험이 재개되었으며 기술 제공업체가 전체 조사를 시작했다고 밝혔습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "ACARA news, March 2026",
+        "fetched_at": "2026-07-23T14:05:57.087Z",
+        "last_modified": null,
+        "content_hash": "feac4c3a2777b1eb9966e38318670c22380fd3f401400f13a4b120c852e87ae5",
+        "character_count": 6726
+      }
+    },
+    {
+      "id": "acara-2026-incident-statement",
+      "date": "2026-03-11",
+      "category": "news",
+      "source": "ACARA",
+      "url": "https://www.acara.edu.au/news-and-media/news-details?section=202603120213",
+      "featured": true,
+      "title": {
+        "zh-CN": "ACARA 就 2026 首日平台故障发布说明",
+        "en": "ACARA statement on the 2026 day-one platform incident",
+        "zh-TW": "ACARA 就 2026 首日平台故障發布說明",
+        "ko": "ACARA, 2026 첫날 플랫폼 장애 관련 성명"
+      },
+      "summary": {
+        "zh-CN": "3 月 11 日约 9:20 AEDT 出现登录故障，影响部分 Year 5、7、9 在线写作测试；问题约两小时内解决。Year 3 纸笔写作不受影响。",
+        "en": "A login outage began at about 9:20 am AEDT on 11 March and affected some online writing tests in Years 5, 7 and 9. It was resolved within about two hours; Year 3 paper writing was unaffected.",
+        "zh-TW": "3 月 11 日約 9:20 AEDT 出現登入故障，影響部分 Year 5、7、9 線上寫作測試；問題約兩小時內解決。Year 3 紙筆寫作不受影響。",
+        "ko": "3월 11일 오전 9시 20분경 AEDT 로그인 장애가 발생해 일부 Year 5, 7, 9 온라인 쓰기 시험에 영향을 주었습니다. 약 2시간 내 해결되었고 Year 3 종이 쓰기 시험은 영향을 받지 않았습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "ACARA news, March 2026",
+        "fetched_at": "2026-07-23T14:05:57.087Z",
+        "last_modified": null,
+        "content_hash": "feac4c3a2777b1eb9966e38318670c22380fd3f401400f13a4b120c852e87ae5",
+        "character_count": 6726
+      }
+    },
+    {
+      "id": "acara-schools-ready-2026",
+      "date": "2026-03-10",
+      "category": "news",
+      "source": "ACARA",
+      "url": "https://www.acara.edu.au/docs/default-source/media-releases/media-release-schools-and-students-set-for-2026-naplan-tests.pdf",
+      "featured": false,
+      "title": {
+        "zh-CN": "学校和学生准备参加 2026 NAPLAN",
+        "en": "Schools and students set for 2026 NAPLAN tests",
+        "zh-TW": "學校和學生準備參加 2026 NAPLAN",
+        "ko": "학교와 학생, 2026 NAPLAN 시험 준비"
+      },
+      "summary": {
+        "zh-CN": "ACARA 在开考前预计约 140 万名学生、9,400 多所学校和校区参加。官方再次强调 NAPLAN 不是及格或不及格考试，不需要过度备考。",
+        "en": "Before testing, ACARA expected about 1.4 million students across more than 9,400 schools and campuses. It reiterated that NAPLAN is not pass/fail and does not require excessive preparation.",
+        "zh-TW": "ACARA 在開考前預計約 140 萬名學生、9,400 多所學校和校區參加。官方再次強調 NAPLAN 不是及格或不及格考試，不需要過度備考。",
+        "ko": "시험 전 ACARA는 9,400개 이상의 학교와 캠퍼스에서 약 140만 명의 학생이 참여할 것으로 예상했습니다. NAPLAN은 합격·불합격 시험이 아니며 과도한 준비가 필요하지 않다고 강조했습니다."
+      },
+      "source_snapshot": {
+        "status": "linked-not-mirrored",
+        "title_en": null,
+        "fetched_at": "2026-07-23T14:05:58.905Z",
+        "last_modified": null,
+        "content_hash": null,
+        "character_count": null
+      }
+    },
+    {
+      "id": "nap-key-dates",
+      "date": "2026-07-23",
+      "category": "dates",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/key-dates",
+      "featured": true,
+      "title": {
+        "zh-CN": "2027–2029 NAPLAN 考试窗口已公布",
+        "en": "NAPLAN test windows published for 2027–2029",
+        "zh-TW": "2027–2029 NAPLAN 考試期間已公布",
+        "ko": "2027–2029 NAPLAN 시험 기간 발표"
+      },
+      "summary": {
+        "zh-CN": "官网列出的窗口为：2027 年 3 月 10–22 日、2028 年 3 月 15–27 日、2029 年 3 月 14–26 日。学校的具体日程仍由学校安排。",
+        "en": "The official windows are 10–22 March 2027, 15–27 March 2028 and 14–26 March 2029. Schools still determine their detailed schedules.",
+        "zh-TW": "官網列出的期間為：2027 年 3 月 10–22 日、2028 年 3 月 15–27 日、2029 年 3 月 14–26 日。學校的具體日程仍由學校安排。",
+        "ko": "공식 시험 기간은 2027년 3월 10–22일, 2028년 3월 15–27일, 2029년 3월 14–26일입니다. 세부 일정은 학교가 정합니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Key dates",
+        "fetched_at": "2026-07-23T14:05:57.321Z",
+        "last_modified": null,
+        "content_hash": "5403e265132d6c0d59d774dcb5880abb272c67d8ecc92e8a907368e3a27eead7",
+        "character_count": 914
+      }
+    },
+    {
+      "id": "nap-test-window",
+      "date": "2026-07-23",
+      "category": "dates",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/key-dates/naplan-test-window",
+      "featured": false,
+      "title": {
+        "zh-CN": "NAPLAN 采用 9 天测试窗口",
+        "en": "NAPLAN uses a nine-day test window",
+        "zh-TW": "NAPLAN 採用 9 天測試期間",
+        "ko": "NAPLAN은 9일간의 시험 기간을 운영"
+      },
+      "summary": {
+        "zh-CN": "学校应尽早安排测试并优先上午时段；同一天参加两场以上测试时，场次之间至少休息 20 分钟。缺席学生可在窗口期内补测。",
+        "en": "Schools should schedule tests as early as possible and prioritise mornings. Students taking more than one test in a day must have at least a 20-minute break; catch-ups can occur within the window.",
+        "zh-TW": "學校應儘早安排測試並優先上午時段；同一天參加兩場以上測試時，場次之間至少休息 20 分鐘。缺席學生可在期間內補測。",
+        "ko": "학교는 가능한 한 이른 시기에 오전 시험을 우선 편성해야 합니다. 하루에 두 개 이상의 시험을 치르면 최소 20분의 휴식이 필요하며 결석 학생은 시험 기간 안에 보충 시험을 볼 수 있습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "NAPLAN test window",
+        "fetched_at": "2026-07-23T14:05:57.433Z",
+        "last_modified": null,
+        "content_hash": "a017bf69fbd30233b798b6878fdb5ca91a536a8ffd472f2657f84df676e92251",
+        "character_count": 2366
+      }
+    },
+    {
+      "id": "nap-whats-in-tests",
+      "date": "2026-07-23",
+      "category": "tests",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/whats-in-the-tests",
+      "featured": true,
+      "title": {
+        "zh-CN": "官方考试范围与四个测试领域",
+        "en": "Official test coverage and the four domains",
+        "zh-TW": "官方考試範圍與四個測試領域",
+        "ko": "공식 시험 범위와 네 가지 영역"
+      },
+      "summary": {
+        "zh-CN": "NAPLAN 覆盖阅读、写作、语言规范和数学，内容与 Australian Curriculum 的英语和数学对齐。Year 7、9 数学包含短暂的无计算器部分。",
+        "en": "NAPLAN covers reading, writing, conventions of language and numeracy, aligned with Australian Curriculum English and Mathematics. Years 7 and 9 numeracy include a short non-calculator section.",
+        "zh-TW": "NAPLAN 涵蓋閱讀、寫作、語言規範和數學，內容與 Australian Curriculum 的英語和數學對齊。Year 7、9 數學包含短暫的無計算機部分。",
+        "ko": "NAPLAN은 Australian Curriculum 영어와 수학에 맞춰 읽기, 쓰기, 언어 규칙, 수리 영역을 평가합니다. Year 7과 9 수리에는 짧은 계산기 미사용 구간이 있습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "What’s in the tests",
+        "fetched_at": "2026-07-23T14:05:57.572Z",
+        "last_modified": null,
+        "content_hash": "250c026d1f2dc2f3581c75a0ebfcee29c75f44161606d7be1944fe75de580978",
+        "character_count": 7520
+      }
+    },
+    {
+      "id": "nap-writing-faq",
+      "date": "2026-07-23",
+      "category": "tests",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/faqs/naplan--writing-test",
+      "featured": true,
+      "title": {
+        "zh-CN": "写作测试：文体、提示与评分方式",
+        "en": "Writing test: text type, prompts and marking",
+        "zh-TW": "寫作測試：文體、提示與評分方式",
+        "ko": "쓰기 시험: 글 유형, 제시문 및 채점"
+      },
+      "summary": {
+        "zh-CN": "考试当天才公布 narrative 或 persuasive，学生不能自行选择。Years 3/5 与 Years 7/9 使用不同提示，但采用共同量表；Year 3 写作仍为纸笔测试。",
+        "en": "The narrative or persuasive text type is revealed on test day and students do not choose. Years 3/5 and Years 7/9 receive different prompts but use common scales; Year 3 writing remains on paper.",
+        "zh-TW": "考試當天才公布 narrative 或 persuasive，學生不能自行選擇。Years 3/5 與 Years 7/9 使用不同提示，但採用共同量表；Year 3 寫作仍為紙筆測試。",
+        "ko": "narrative 또는 persuasive 유형은 시험 당일 공개되며 학생이 선택하지 않습니다. Years 3/5와 Years 7/9는 다른 제시문을 받지만 공통 척도로 채점되며 Year 3 쓰기는 종이로 진행됩니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "NAPLAN – writing test",
+        "fetched_at": "2026-07-23T14:05:57.678Z",
+        "last_modified": null,
+        "content_hash": "9a4021f8de75bb1035800b07bf0dbf53ef7b2317843175166dc2ffaa0c85c09a",
+        "character_count": 6537
+      }
+    },
+    {
+      "id": "nap-online-assessment",
+      "date": "2026-07-23",
+      "category": "tests",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/understanding-online-assessment",
+      "featured": false,
+      "title": {
+        "zh-CN": "在线测试的题型与操作",
+        "en": "Online question types and test controls",
+        "zh-TW": "線上測試的題型與操作",
+        "ko": "온라인 문항 유형과 시험 도구"
+      },
+      "summary": {
+        "zh-CN": "在线考试包含点击、输入、拖放、音频和互动工具。学生可以检查、标记并返回题目；正式考试前可使用公开演示站熟悉操作。",
+        "en": "Online tests include clicking, typing, dragging, audio and interactive tools. Students can review, flag and return to questions, and can use the public demonstration site for familiarisation.",
+        "zh-TW": "線上考試包含點擊、輸入、拖放、音訊和互動工具。學生可以檢查、標記並返回題目；正式考試前可使用公開示範站熟悉操作。",
+        "ko": "온라인 시험에는 클릭, 입력, 드래그, 오디오 및 상호작용 도구가 포함됩니다. 학생은 문항을 검토·표시하고 다시 돌아갈 수 있으며 공개 데모 사이트에서 미리 익힐 수 있습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Understanding online assessment",
+        "fetched_at": "2026-07-23T14:05:57.801Z",
+        "last_modified": null,
+        "content_hash": "82c995f083de9c047a71c7029f588a28ad4a6ab4566bae129b1811a6b56b66bd",
+        "character_count": 5022
+      }
+    },
+    {
+      "id": "nap-tailored-tests",
+      "date": "2026-07-23",
+      "category": "tests",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/understanding-online-assessment/tailored-tests",
+      "featured": false,
+      "title": {
+        "zh-CN": "自适应测试如何改变题目路径",
+        "en": "How tailored testing changes question pathways",
+        "zh-TW": "自適應測試如何改變題目路徑",
+        "ko": "맞춤형 시험이 문항 경로를 조정하는 방식"
+      },
+      "summary": {
+        "zh-CN": "阅读、数学和语言规范采用 tailored test。学生先完成共同 testlet，后续题组根据此前表现进入较低、平均或较高复杂度路径。",
+        "en": "Reading, numeracy and conventions of language use tailored testing. Students begin with a common testlet, then move to lower, average or higher-complexity pathways based on earlier responses.",
+        "zh-TW": "閱讀、數學和語言規範採用 tailored test。學生先完成共同 testlet，後續題組根據先前表現進入較低、平均或較高複雜度路徑。",
+        "ko": "읽기, 수리 및 언어 규칙 시험은 맞춤형 방식입니다. 공통 testlet으로 시작한 뒤 이전 응답에 따라 낮음, 평균 또는 높은 복잡도 경로로 이동합니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Tailored tests",
+        "fetched_at": "2026-07-23T14:05:57.930Z",
+        "last_modified": null,
+        "content_hash": "37aade1526fb1c41beb5222b99bb9dcfca5e23125838012768564746de2c8e14",
+        "character_count": 3654
+      }
+    },
+    {
+      "id": "nap-parents-carers",
+      "date": "2026-07-23",
+      "category": "parents",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/for-parents-carers",
+      "featured": true,
+      "title": {
+        "zh-CN": "家长与照护者官方指南",
+        "en": "Official guide for parents and carers",
+        "zh-TW": "家長與照護者官方指南",
+        "ko": "학부모와 보호자를 위한 공식 안내"
+      },
+      "summary": {
+        "zh-CN": "官方建议家长帮助孩子了解考试形式并保持平常心，不建议过度备考或依赖补习机构。学生报告由学校发放，个人结果应与课堂评估一起理解。",
+        "en": "Parents can help children understand the format and stay calm; ACARA does not recommend excessive preparation or coaching services. Schools distribute individual reports, which should be considered alongside classroom assessment.",
+        "zh-TW": "官方建議家長幫助孩子了解考試形式並保持平常心，不建議過度備考或依賴補習機構。學生報告由學校發放，個人結果應與課堂評估一起理解。",
+        "ko": "학부모는 시험 형식을 이해하고 편안한 마음을 유지하도록 도울 수 있습니다. ACARA는 과도한 준비나 사교육 서비스를 권장하지 않습니다. 개인 보고서는 학교가 배포하며 교실 평가와 함께 해석해야 합니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "For parents and carers",
+        "fetched_at": "2026-07-23T14:05:58.048Z",
+        "last_modified": null,
+        "content_hash": "dcb2527590bd72cdec67e581a184b78f789af1985062960d73dad53bc88ca843",
+        "character_count": 7537
+      }
+    },
+    {
+      "id": "nap-results-reports",
+      "date": "2026-07-23",
+      "category": "results",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/results-and-reports",
+      "featured": false,
+      "title": {
+        "zh-CN": "如何阅读个人学生报告",
+        "en": "How to read an individual student report",
+        "zh-TW": "如何閱讀個人學生報告",
+        "ko": "개인 학생 보고서 읽는 방법"
+      },
+      "summary": {
+        "zh-CN": "报告用黑点表示学生结果、黑色三角表示全国平均，浅色区域表示中间 60% 学生范围。NAPLAN 不是及格或不及格考试。",
+        "en": "Reports use a black dot for the student result, a black triangle for the national average and a shaded box for the middle 60% of students. NAPLAN is not pass/fail.",
+        "zh-TW": "報告用黑點表示學生結果、黑色三角表示全國平均，淺色區域表示中間 60% 學生範圍。NAPLAN 不是及格或不及格考試。",
+        "ko": "보고서에서 검은 점은 학생 결과, 검은 삼각형은 국가 평균, 음영 상자는 중간 60% 학생 범위를 나타냅니다. NAPLAN은 합격·불합격 시험이 아닙니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Results and reports",
+        "fetched_at": "2026-07-23T14:05:57.210Z",
+        "last_modified": null,
+        "content_hash": "845bc48ae69cb877e66a938f2402ac7adba926efee7a58f09d988df053b0ab3a",
+        "character_count": 11331
+      }
+    },
+    {
+      "id": "nap-proficiency-levels",
+      "date": "2026-07-23",
+      "category": "results",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/results-and-reports/proficiency-level-descriptions",
+      "featured": true,
+      "title": {
+        "zh-CN": "四个熟练度等级的官方说明",
+        "en": "Official descriptions of the four proficiency levels",
+        "zh-TW": "四個熟練度等級的官方說明",
+        "ko": "네 가지 성취 수준 공식 설명"
+      },
+      "summary": {
+        "zh-CN": "从 2023 年起使用 Exceeding、Strong、Developing、Needs additional support 四级标准。不同年级、领域和自适应路径达到各等级所需的正确题数并不固定。",
+        "en": "Since 2023, results use Exceeding, Strong, Developing and Needs additional support. The number of correct answers needed for a level is not fixed across domains, year levels or tailored pathways.",
+        "zh-TW": "從 2023 年起使用 Exceeding、Strong、Developing、Needs additional support 四級標準。不同年級、領域和自適應路徑達到各等級所需的正確題數並不固定。",
+        "ko": "2023년부터 Exceeding, Strong, Developing, Needs additional support의 네 수준을 사용합니다. 수준에 필요한 정답 수는 영역, 학년, 맞춤형 경로에 따라 고정되어 있지 않습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Proficiency level descriptions",
+        "fetched_at": "2026-07-23T14:05:58.214Z",
+        "last_modified": null,
+        "content_hash": "e2c9e7d1ef9ff23b4c44f380371c2b4b991e85776d4843cdf94b88c676c48830",
+        "character_count": 67173
+      }
+    },
+    {
+      "id": "nap-accessibility",
+      "date": "2026-07-23",
+      "category": "accessibility",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/accessibility",
+      "featured": false,
+      "title": {
+        "zh-CN": "NAPLAN 无障碍功能与合理调整",
+        "en": "NAPLAN accessibility and reasonable adjustments",
+        "zh-TW": "NAPLAN 無障礙功能與合理調整",
+        "ko": "NAPLAN 접근성 및 합리적 조정"
+      },
+      "summary": {
+        "zh-CN": "在线平台包含无障碍功能，符合条件的学生可使用音频/视觉替代题、辅助技术、额外时间、休息或特殊纸本。具体安排由学校与家庭协商。",
+        "en": "The online platform includes accessibility features. Eligible students may use audio or visual alternatives, assistive technology, extra time, breaks or special-format paper tests, arranged with the school.",
+        "zh-TW": "線上平台包含無障礙功能，符合條件的學生可使用音訊／視覺替代題、輔助技術、額外時間、休息或特殊紙本。具體安排由學校與家庭協商。",
+        "ko": "온라인 플랫폼에는 접근성 기능이 포함됩니다. 대상 학생은 학교와 협의해 오디오·시각 대체 문항, 보조 기술, 추가 시간, 휴식 또는 특수 형식 종이 시험을 사용할 수 있습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Accessibility",
+        "fetched_at": "2026-07-23T14:05:58.310Z",
+        "last_modified": null,
+        "content_hash": "022bca0cc57dd1e804070891c4330022c56211112efdc82ed9eacd4412965010",
+        "character_count": 2209
+      }
+    },
+    {
+      "id": "nap-adjustments",
+      "date": "2026-07-23",
+      "category": "accessibility",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/accessibility/adjustments-for-students-with-disability",
+      "featured": false,
+      "title": {
+        "zh-CN": "残障学生可使用的测试调整",
+        "en": "Test adjustments available to students with disability",
+        "zh-TW": "身心障礙學生可使用的測試調整",
+        "ko": "장애 학생을 위한 시험 조정"
+      },
+      "summary": {
+        "zh-CN": "调整应与学生日常课堂支持一致，同时保持测试所测能力不变。部分辅助技术、抄写员和特殊格式需要测试管理机构批准。",
+        "en": "Adjustments should reflect the student's usual classroom support while preserving the test construct. Some assistive technologies, scribes and special formats require approval from the test administration authority.",
+        "zh-TW": "調整應與學生日常課堂支援一致，同時保持測試所測能力不變。部分輔助技術、抄寫員和特殊格式需要測試管理機構批准。",
+        "ko": "조정은 학생이 교실에서 평소 받는 지원과 일치하면서 시험에서 측정하는 능력을 유지해야 합니다. 일부 보조 기술, 대필자 및 특수 형식은 시험 관리 기관의 승인이 필요합니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Adjustments for students with disability",
+        "fetched_at": "2026-07-23T14:05:58.414Z",
+        "last_modified": null,
+        "content_hash": "7361ca2f77df6d02f4cbc073afdf4e0a9198e4381c99dcd5bac39c8c0b6daaf1",
+        "character_count": 12415
+      }
+    },
+    {
+      "id": "nap-public-demo",
+      "date": "2026-07-23",
+      "category": "parents",
+      "source": "NAP",
+      "url": "https://nap.edu.au/naplan/public-demonstration-site",
+      "featured": false,
+      "title": {
+        "zh-CN": "公开演示站全年开放",
+        "en": "The public demonstration site is available year-round",
+        "zh-TW": "公開示範站全年開放",
+        "ko": "공개 데모 사이트 연중 이용 가능"
+      },
+      "summary": {
+        "zh-CN": "学生可按年级熟悉题型、考试工具和无障碍设置。它用于操作熟悉，不是正式成绩预测工具。",
+        "en": "Students can explore year-level question formats, test tools and accessibility settings. It is for familiarisation, not a predictor of official results.",
+        "zh-TW": "學生可按年級熟悉題型、考試工具和無障礙設定。它用於操作熟悉，不是正式成績預測工具。",
+        "ko": "학생은 학년별 문항 형식, 시험 도구 및 접근성 설정을 익힐 수 있습니다. 이는 사용법 숙지를 위한 것이며 공식 성적 예측 도구가 아닙니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Public demonstration site",
+        "fetched_at": "2026-07-23T14:05:58.547Z",
+        "last_modified": null,
+        "content_hash": "8ff4a12cdca2bb54efde646f72b312c907a1f68710009c3ca8c150a834b458f7",
+        "character_count": 2995
+      }
+    },
+    {
+      "id": "nap-national-protocols",
+      "date": "2026-07-23",
+      "category": "administration",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/for-schools/national-protocols-for-test-administration",
+      "featured": false,
+      "title": {
+        "zh-CN": "2026 全国测试管理规程",
+        "en": "2026 national test administration protocols",
+        "zh-TW": "2026 全國測試管理規程",
+        "ko": "2026 국가 시험 운영 지침"
+      },
+      "summary": {
+        "zh-CN": "全国规程涵盖测试安全、学生参与、监督、时间、缺席、特殊调整和突发情况。学校遇到具体问题应联系本州或领地测试管理机构。",
+        "en": "The national protocols cover security, participation, supervision, timing, absence, adjustments and incidents. Schools should contact their state or territory test administration authority for specific guidance.",
+        "zh-TW": "全國規程涵蓋測試安全、學生參與、監督、時間、缺席、特殊調整和突發情況。學校遇到具體問題應聯絡本州或領地測試管理機構。",
+        "ko": "국가 지침은 시험 보안, 참여, 감독, 시간, 결석, 조정 및 사고 대응을 다룹니다. 구체적인 안내는 주·준주 시험 관리 기관에 문의해야 합니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "National protocols for test administration",
+        "fetched_at": "2026-07-23T14:05:58.694Z",
+        "last_modified": null,
+        "content_hash": "ece7b24dcda39110ba54508bda647be405fa0e665b86f3734b966f1b07b96dc7",
+        "character_count": 3744
+      }
+    },
+    {
+      "id": "nap-catch-ups",
+      "date": "2026-07-23",
+      "category": "administration",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan/key-dates/catch-up-sessions",
+      "featured": false,
+      "title": {
+        "zh-CN": "缺席学生的补测与重新安排",
+        "en": "Catch-up and rescheduling sessions for absent students",
+        "zh-TW": "缺席學生的補測與重新安排",
+        "ko": "결석 학생 보충 시험 및 일정 변경"
+      },
+      "summary": {
+        "zh-CN": "因缺席错过原定测试的学生，可在学校计划和全国测试窗口允许的范围内安排补测。家长应直接与学校确认。",
+        "en": "Students who miss a scheduled test because of absence may complete a catch-up within the school's plan and the national test window. Parents should confirm arrangements with the school.",
+        "zh-TW": "因缺席錯過原定測試的學生，可在學校計畫和全國測試期間允許的範圍內安排補測。家長應直接與學校確認。",
+        "ko": "결석으로 예정된 시험을 놓친 학생은 학교 계획과 국가 시험 기간 안에서 보충 시험을 볼 수 있습니다. 학부모는 학교에 직접 확인해야 합니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "Catch-ups and rescheduling test sessions",
+        "fetched_at": "2026-07-23T14:05:58.804Z",
+        "last_modified": null,
+        "content_hash": "04a78995c09af25306eaf57e708ba06a0bfc8d4151c6156aece209da7772ae8a",
+        "character_count": 1214
+      }
+    },
+    {
+      "id": "nap-overview",
+      "date": "2026-07-23",
+      "category": "parents",
+      "source": "NAP",
+      "url": "https://www.nap.edu.au/naplan",
+      "featured": false,
+      "title": {
+        "zh-CN": "NAPLAN 的用途与结果边界",
+        "en": "What NAPLAN is for — and what it does not measure",
+        "zh-TW": "NAPLAN 的用途與結果界線",
+        "ko": "NAPLAN의 목적과 결과의 한계"
+      },
+      "summary": {
+        "zh-CN": "NAPLAN 是 Years 3、5、7、9 的全国读写与数学评估，为家庭和学校提供进展信息。它只是学校评估的一部分，不衡量学校整体质量，也不能替代教师判断。",
+        "en": "NAPLAN is the national literacy and numeracy assessment for Years 3, 5, 7 and 9. It is one part of school assessment, does not measure overall school quality and does not replace teacher judgement.",
+        "zh-TW": "NAPLAN 是 Years 3、5、7、9 的全國讀寫與數學評估，為家庭和學校提供進展資訊。它只是學校評估的一部分，不衡量學校整體品質，也不能取代教師判斷。",
+        "ko": "NAPLAN은 Years 3, 5, 7, 9를 위한 국가 문해력·수리력 평가입니다. 학교 평가의 한 부분이며 학교 전체의 질을 측정하거나 교사의 판단을 대체하지 않습니다."
+      },
+      "source_snapshot": {
+        "status": "stored",
+        "title_en": "NAPLAN",
+        "fetched_at": "2026-07-23T14:05:58.905Z",
+        "last_modified": null,
+        "content_hash": "31d0467d5b7246b34c4e4eac425db64e3c085e7e7ce3553539d599dcc6189962",
+        "character_count": 2498
+      }
+    }
+  ]
+}

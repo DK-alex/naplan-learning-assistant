@@ -1,0 +1,365 @@
+{
+  "bank_version": "2026.2",
+  "schema_version": "2.0",
+  "generated_at": "2026-07-24T04:23:38.634Z",
+  "licence_note": "All questions are original practice materials. They are not official NAPLAN items and are not endorsed by ACARA.",
+  "difficulty_note": "Difficulty is a year-relative design estimate plus an uncalibrated cross-year absolute complexity index. It is not an official NAPLAN scale score or proficiency level.",
+  "official_alignment": {
+    "framework": "https://nap.edu.au/docs/default-source/naplan/naplan-assessment-framework.pdf",
+    "tests": "https://www.nap.edu.au/naplan/whats-in-the-tests",
+    "demo": "https://www.nap.edu.au/naplan/public-demonstration-site",
+    "proficiency": "https://nap.edu.au/naplan/results-and-reports/proficiency-level-descriptions"
+  },
+  "year_profiles": {
+    "3": {
+      "age_band": "8–9",
+      "curriculum_band": "Foundation–Year 3 consolidation",
+      "reading_passage_word_target": [
+        65,
+        90
+      ],
+      "sentence_word_target": [
+        6,
+        14
+      ],
+      "absolute_complexity": {
+        "easy": 1,
+        "medium": 2,
+        "hard": 3
+      },
+      "difficulty_mix": {
+        "easy": 0.38,
+        "medium": 0.45,
+        "hard": 0.17
+      },
+      "design_focus": {
+        "easy": "one explicit step with familiar language and representations",
+        "medium": "one or two connected steps with a clearly signposted inference",
+        "hard": "two connected steps or one less-explicit inference using Year 3 content"
+      }
+    },
+    "5": {
+      "age_band": "10–11",
+      "curriculum_band": "Years 3–5 consolidation",
+      "reading_passage_word_target": [
+        110,
+        150
+      ],
+      "sentence_word_target": [
+        8,
+        18
+      ],
+      "absolute_complexity": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 5
+      },
+      "difficulty_mix": {
+        "easy": 0.32,
+        "medium": 0.46,
+        "hard": 0.22
+      },
+      "design_focus": {
+        "easy": "one step with familiar content and an explicit representation",
+        "medium": "two connected steps or a comparison across nearby information",
+        "hard": "multi-step reasoning, representation change or an implicit relationship"
+      }
+    },
+    "7": {
+      "age_band": "12–13",
+      "curriculum_band": "Years 5–7 consolidation",
+      "reading_passage_word_target": [
+        145,
+        190
+      ],
+      "sentence_word_target": [
+        11,
+        22
+      ],
+      "absolute_complexity": {
+        "easy": 5,
+        "medium": 6,
+        "hard": 7
+      },
+      "difficulty_mix": {
+        "easy": 0.27,
+        "medium": 0.46,
+        "hard": 0.27
+      },
+      "design_focus": {
+        "easy": "direct application of Year 7 content with limited competing information",
+        "medium": "two or three steps, proportional reasoning or evidence integration",
+        "hard": "multi-step modelling, qualification of evidence or a non-routine representation"
+      }
+    },
+    "9": {
+      "age_band": "14–15",
+      "curriculum_band": "Years 7–9 consolidation",
+      "reading_passage_word_target": [
+        170,
+        220
+      ],
+      "sentence_word_target": [
+        14,
+        26
+      ],
+      "absolute_complexity": {
+        "easy": 7,
+        "medium": 8,
+        "hard": 9
+      },
+      "difficulty_mix": {
+        "easy": 0.22,
+        "medium": 0.45,
+        "hard": 0.33
+      },
+      "design_focus": {
+        "easy": "direct use of Year 9 content with an explicit model or data source",
+        "medium": "multi-step reasoning across representations, evidence or constraints",
+        "hard": "non-routine modelling, competing interpretations or evaluation of limitations"
+      }
+    }
+  },
+  "year_levels": {
+    "3": {
+      "file": "year-3.jsonl",
+      "total_items": 2000,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 772,
+        "medium": 870,
+        "hard": 318,
+        "not_applicable": 40
+      },
+      "by_absolute_complexity": {
+        "1": 772,
+        "2": 870,
+        "3": 318,
+        "not_applicable": 40
+      },
+      "by_pathway_band": {
+        "lower": 772,
+        "average": 870,
+        "higher": 318,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1323,
+        "hot_text": 32,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "text_entry": 288,
+        "hotspot": 76,
+        "matrix": 1,
+        "writing_prompt": 40
+      },
+      "answer_critical_media_items": 391,
+      "machine_scorable_items": 1960,
+      "psychometric_status": "uncalibrated",
+      "numeracy_by_strand": {
+        "number": 320,
+        "probability": 40,
+        "algebra": 80,
+        "measurement": 184,
+        "statistics": 64,
+        "space": 112
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "imaginative": 224,
+        "informative": 196,
+        "persuasive": 140
+      }
+    },
+    "5": {
+      "file": "year-5.jsonl",
+      "total_items": 2000,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 608,
+        "medium": 884,
+        "hard": 468,
+        "not_applicable": 40
+      },
+      "by_absolute_complexity": {
+        "3": 608,
+        "4": 884,
+        "5": 468,
+        "not_applicable": 40
+      },
+      "by_pathway_band": {
+        "lower": 608,
+        "average": 884,
+        "higher": 468,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1377,
+        "hot_text": 32,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "text_entry": 288,
+        "hotspot": 22,
+        "matrix": 1,
+        "writing_prompt": 40
+      },
+      "answer_critical_media_items": 319,
+      "machine_scorable_items": 1960,
+      "psychometric_status": "uncalibrated",
+      "numeracy_by_strand": {
+        "space": 112,
+        "statistics": 88,
+        "number": 320,
+        "algebra": 80,
+        "measurement": 160,
+        "probability": 40
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "imaginative": 224,
+        "persuasive": 140,
+        "informative": 196
+      }
+    },
+    "7": {
+      "file": "year-7.jsonl",
+      "total_items": 2000,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 458,
+        "medium": 884,
+        "hard": 618,
+        "not_applicable": 40
+      },
+      "by_absolute_complexity": {
+        "5": 458,
+        "6": 884,
+        "7": 618,
+        "not_applicable": 40
+      },
+      "by_pathway_band": {
+        "lower": 458,
+        "average": 884,
+        "higher": 618,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1353,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "hot_text": 26,
+        "text_entry": 331,
+        "matrix": 1,
+        "hotspot": 9,
+        "writing_prompt": 40
+      },
+      "answer_critical_media_items": 313,
+      "machine_scorable_items": 1960,
+      "psychometric_status": "uncalibrated",
+      "numeracy_by_strand": {
+        "probability": 40,
+        "number": 320,
+        "algebra": 80,
+        "statistics": 88,
+        "space": 112,
+        "measurement": 160
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "persuasive": 189,
+        "informative": 189,
+        "imaginative": 182
+      }
+    },
+    "9": {
+      "file": "year-9.jsonl",
+      "total_items": 2000,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 800,
+        "writing": 40
+      },
+      "by_difficulty": {
+        "easy": 388,
+        "medium": 790,
+        "hard": 782,
+        "not_applicable": 40
+      },
+      "by_absolute_complexity": {
+        "7": 388,
+        "8": 790,
+        "9": 782,
+        "not_applicable": 40
+      },
+      "by_pathway_band": {
+        "lower": 388,
+        "average": 790,
+        "higher": 782,
+        "not_applicable": 40
+      },
+      "by_item_type": {
+        "multiple_choice": 1326,
+        "inline_choice": 80,
+        "multiple_select": 80,
+        "drag_and_drop": 80,
+        "hot_text": 26,
+        "text_entry": 352,
+        "matrix": 1,
+        "hotspot": 15,
+        "writing_prompt": 40
+      },
+      "answer_critical_media_items": 340,
+      "machine_scorable_items": 1960,
+      "psychometric_status": "uncalibrated",
+      "numeracy_by_strand": {
+        "algebra": 120,
+        "space": 112,
+        "statistics": 88,
+        "number": 280,
+        "measurement": 160,
+        "probability": 40
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "punctuation": 94,
+        "grammar": 218
+      },
+      "reading_by_text_type": {
+        "persuasive": 189,
+        "informative": 189,
+        "imaginative": 182
+      }
+    }
+  }
+}
