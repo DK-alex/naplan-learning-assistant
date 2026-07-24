@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,12 +17,15 @@ for (const file of [index, worker, workerAi, sharedAiConfig, sharedWritingContra
 }
 
 mkdirSync(path.join(dist, "server"), { recursive: true });
-mkdirSync(path.join(dist, "shared"), { recursive: true });
+mkdirSync(path.join(dist, "server", "shared"), { recursive: true });
 mkdirSync(path.join(dist, ".openai"), { recursive: true });
 copyFileSync(worker, path.join(dist, "server", "index.js"));
-copyFileSync(workerAi, path.join(dist, "server", "ai.js"));
-copyFileSync(sharedAiConfig, path.join(dist, "shared", "ai-config.js"));
-copyFileSync(sharedWritingContract, path.join(dist, "shared", "writing-review-contract.js"));
+writeFileSync(
+  path.join(dist, "server", "ai.js"),
+  readFileSync(workerAi, "utf8").replaceAll("../shared/", "./shared/"),
+);
+copyFileSync(sharedAiConfig, path.join(dist, "server", "shared", "ai-config.js"));
+copyFileSync(sharedWritingContract, path.join(dist, "server", "shared", "writing-review-contract.js"));
 copyFileSync(hosting, path.join(dist, ".openai", "hosting.json"));
 
 console.log("Prepared Sites build: dist/server/index.js and dist/.openai/hosting.json");
