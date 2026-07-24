@@ -62,8 +62,9 @@ select:focus-visible,
 .prototype-viewport {
   width: 100vw;
   height: 100vh;
+  position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   background: #b8c4d0;
   overflow: auto;
@@ -2154,12 +2155,15 @@ select:focus-visible,
 
 .exam-side-controls {
   width: 208px;
-  margin: 38px 12px 20px;
+  position: absolute;
+  z-index: 120;
+  top: 50%;
+  right: 12px;
+  margin: 0;
   padding: 14px;
-  flex: 0 0 208px;
-  align-self: flex-start;
   display: grid;
   gap: 10px;
+  transform: translateY(-50%);
   color: #243b4a;
   background: rgba(244, 248, 251, 0.94);
   border: 1px solid rgba(90, 116, 135, 0.28);
@@ -2575,10 +2579,12 @@ select:focus-visible,
   line-height: 1.5;
 }
 
-@media (max-width: 1239px) {
+@media (max-width: 1439px) {
   .exam-side-controls {
     position: fixed;
     z-index: 120;
+    top: auto;
+    right: auto;
     left: 50%;
     bottom: 10px;
     width: min(680px, calc(100vw - 20px));

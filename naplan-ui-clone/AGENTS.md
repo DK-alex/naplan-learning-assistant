@@ -10,6 +10,8 @@ Year 3 writing is a paper test. Keep a Year 3 Writing entry in the practice flow
 
 Keep a persistent, unfinished practice-session bookmark. Leaving for the main app must save the current question, mode, answers, flags, section state, writing response and elapsed time, and the next visit to the mock-test route must resume that session. Objective responses are graded immediately and regraded whenever changed; only attempted incorrect answers belong in the live mistake book. Keep the app-level Home, Restart and End controls outside the scaled official-style exam canvas. Ending early requires confirmation and the result screen reviews completed answers only.
 
+In the Windows desktop build, `/exam` runs in true full-screen mode. Keep the scaled fixed-ratio exam stage centred horizontally and vertically; on wide screens reserve equal space on both sides before scaling so the separate right-side practice controls never push the answer stage off centre.
+
 When implementing from a selected generated mock, treat that image as the source of truth for layout, component anatomy, density, spacing, color, typography, visible content, and hierarchy.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.

@@ -1897,8 +1897,8 @@ export function App() {
   };
 
   const stageClass = `exam-stage theme-${theme} ui-zoom-${zoomLabel.replace('%', '').toLowerCase()}`;
-  const sideRailWidth = viewport.width >= 1240 ? 232 : 0;
-  const availableViewportWidth = Math.max(320, viewport.width - sideRailWidth);
+  const sideRailWidth = viewport.width >= 1440 ? 232 : 0;
+  const availableViewportWidth = Math.max(320, viewport.width - (sideRailWidth * 2));
   const normalHeightScale = Math.min(viewport.height / 768, 1);
   const baseWidth = Math.max(1024, Math.min(1280, availableViewportWidth / normalHeightScale));
   const baseHeight = 768;
