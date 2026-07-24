@@ -76,7 +76,10 @@ import {
 import {
   getSessionApiKey,
   getWritingReport,
+  getWritingReportById,
+  getWritingReportVersion,
   readWritingReports,
+  requestWritingReportTranslation,
   requestWritingReview,
   saveWritingReport,
   setSessionApiKey,
@@ -1274,39 +1277,125 @@ function MistakesWorkspace({ history, onStartPractice }) {
   );
 }
 
+function WritingReportHistory({ reports, currentReportId, onOpen }) {
+  const { t, locale } = useI18n();
+  return (
+    <section className="feature-card writing-report-history" id="writing-report-history">
+      <div className="workspace-title-row">
+        <div>
+          <span className="feature-kicker">{t("仅保存在本机")}</span>
+          <h2>{t("历史批改记录")}</h2>
+        </div>
+        <span className="history-count">{t("共 {count} 份", { count: reports.length })}</span>
+      </div>
+      {reports.length === 0 ? (
+        <div className="empty-workspace compact">
+          <FileText size={42} />
+          <strong>{t("还没有历史批改")}</strong>
+          <p>{t("完成第一次 AI 批改后，报告会自动保存在这台设备上。")}</p>
+        </div>
+      ) : (
+        <div className="writing-report-history-list">
+          {reports.map((record) => {
+            const report = record.report;
+            const languages = Object.keys(record.report_versions || {});
+            const generatedAt = new Intl.DateTimeFormat(locale, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            }).format(new Date(record.generated_at));
+            return (
+              <article className={record.id === currentReportId ? "active" : ""} key={record.id}>
+                <div className="history-report-score">
+                  <strong>{report.total_score ?? "—"}</strong>
+                  <span>/{report.maximum_score}</span>
+                </div>
+                <div className="history-report-copy">
+                  <strong>{record.prompt_title}</strong>
+                  <span>Year {record.year_level} · {report.genre} · {generatedAt}</span>
+                  <small>{record.provider} · {record.model}</small>
+                </div>
+                <div className="history-report-languages">
+                  {languages.map((language) => <span key={language}>{getLanguageLabel(language)}</span>)}
+                </div>
+                <button type="button" className="feature-secondary" onClick={() => onOpen(record.id)}>
+                  {t("打开报告")} <ArrowRight size={15} />
+                </button>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function AiReportWorkspace({ history, onStartWriting, onNavigate, settings }) {
   const writingRecords = history.filter((record) => record.writing);
-  const latestSavedReport = getLatestWritingReportSummary(readWritingReports())?.record;
+  const initialReports = readWritingReports();
+  const latestSavedReport = initialReports[0] || null;
   const initialWritingId = writingRecords.some((record) => record.id === latestSavedReport?.practice_id)
     ? latestSavedReport.practice_id
     : writingRecords[0]?.id || "";
   const [selectedId, setSelectedId] = useState(initialWritingId);
   const writingRecord = writingRecords.find((record) => record.id === selectedId) || writingRecords[0];
-  const [reportRecord, setReportRecord] = useState(() => writingRecord ? getWritingReport(writingRecord.id) : null);
+  const [savedReports, setSavedReports] = useState(initialReports);
+  const [reportRecord, setReportRecord] = useState(latestSavedReport || null);
   const [generating, setGenerating] = useState(false);
+  const [exportingLanguage, setExportingLanguage] = useState("");
   const [error, setError] = useState("");
   const { t } = useI18n();
   const isYear3 = String(settings.yearLevel) === "3";
 
-  useEffect(() => {
-    setReportRecord(writingRecord ? getWritingReport(writingRecord.id) : null);
-    setError("");
-  }, [writingRecord?.id]);
-
   const provider = getAiProvider(settings.aiProvider);
   const apiKeyReady = Boolean(getSessionApiKey(settings.aiProvider));
-  const generateReport = async () => {
-    if (!writingRecord || !apiKeyReady) return;
+  const refreshSavedReports = () => {
+    const nextReports = readWritingReports();
+    setSavedReports(nextReports);
+    return nextReports;
+  };
+  const generateReport = async (sourceWritingRecord = writingRecord) => {
+    if (!sourceWritingRecord || !apiKeyReady) return;
     setGenerating(true);
     setError("");
     try {
-      const nextReport = await requestWritingReview({
+      let nextReport = await requestWritingReview({
         settings,
-        practiceRecord: writingRecord,
+        practiceRecord: sourceWritingRecord,
         apiKey: getSessionApiKey(settings.aiProvider),
       });
-      saveWritingReport(nextReport);
+      nextReport = saveWritingReport({
+        ...nextReport,
+        student_name: settings.studentName,
+      });
       setReportRecord(nextReport);
+      refreshSavedReports();
+
+      if (settings.reportLanguage !== "en") {
+        try {
+          const englishVersion = await requestWritingReportTranslation({
+            settings,
+            reportRecord: nextReport,
+            targetLanguage: "en",
+            apiKey: getSessionApiKey(settings.aiProvider),
+          });
+          nextReport = saveWritingReport({
+            ...nextReport,
+            report_versions: {
+              ...nextReport.report_versions,
+              en: englishVersion.report,
+            },
+          });
+          setReportRecord(nextReport);
+          refreshSavedReports();
+        } catch (translationError) {
+          setError(t("已保存主要语言报告，但英文版本生成失败：{message}", {
+            message: translationError.message,
+          }));
+        }
+      }
     } catch (requestError) {
       setError(requestError.message);
     } finally {
@@ -1314,83 +1403,170 @@ function AiReportWorkspace({ history, onStartWriting, onNavigate, settings }) {
     }
   };
 
+  const ensureReportLanguage = async (record, reportLanguage) => {
+    const existing = getWritingReportVersion(record, reportLanguage);
+    if (existing) return { record, report: existing };
+    if (!apiKeyReady) throw new Error(t("需要在设置中输入 API Key"));
+
+    const translated = await requestWritingReportTranslation({
+      settings,
+      reportRecord: record,
+      targetLanguage: reportLanguage,
+      apiKey: getSessionApiKey(settings.aiProvider),
+    });
+    const updated = saveWritingReport({
+      ...record,
+      report_versions: {
+        ...record.report_versions,
+        [reportLanguage]: translated.report,
+      },
+    });
+    setReportRecord(updated);
+    refreshSavedReports();
+    return { record: updated, report: translated.report };
+  };
+
+  const exportReport = async (reportLanguage) => {
+    if (!reportRecord || exportingLanguage) return;
+    setExportingLanguage(reportLanguage);
+    setError("");
+    try {
+      const version = await ensureReportLanguage(reportRecord, reportLanguage);
+      const { downloadWritingReportWord } = await import("./word-export.js");
+      await downloadWritingReportWord({
+        reportRecord: version.record,
+        report: version.report,
+        studentName: version.record.student_name || settings.studentName,
+        language: reportLanguage,
+      });
+    } catch (exportError) {
+      setError(t("Word 导出失败：{message}", { message: exportError.message }));
+    } finally {
+      setExportingLanguage("");
+    }
+  };
+
+  const openHistoricalReport = (reportId) => {
+    const selected = getWritingReportById(reportId);
+    if (!selected) return;
+    setReportRecord(selected);
+    if (writingRecords.some((record) => record.id === selected.practice_id)) {
+      setSelectedId(selected.practice_id);
+    }
+    setError("");
+    document.querySelector(".feature-workspace")?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   if (reportRecord) {
+    const displayReport = getWritingReportVersion(reportRecord, settings.reportLanguage)
+      || reportRecord.report;
+    const sourceWritingRecord = writingRecords.find((record) => record.id === reportRecord.practice_id);
     return (
-      <WritingReport
-        reportRecord={reportRecord}
-        studentName={settings.studentName}
-        onRegenerate={() => {
-          setReportRecord(null);
-          window.setTimeout(generateReport, 0);
-        }}
-      />
+      <div className="ai-report-workspace">
+        <WritingReport
+          reportRecord={{ ...reportRecord, report: displayReport }}
+          studentName={reportRecord.student_name || settings.studentName}
+          preferredLanguage={settings.reportLanguage}
+          exportingLanguage={exportingLanguage}
+          historyCount={savedReports.length}
+          onExportLanguage={exportReport}
+          onShowHistory={() => document.getElementById("writing-report-history")?.scrollIntoView({ behavior: "smooth" })}
+          onRegenerate={() => {
+            if (!sourceWritingRecord) {
+              setError(t("原作文记录已不存在，无法重新批改。"));
+              return;
+            }
+            generateReport(sourceWritingRecord);
+          }}
+        />
+        {generating && <div className="report-generation-status"><Clock />{t("正在生成主要语言和英文两个版本…")}</div>}
+        {error && <div className="ai-request-error report-error"><X weight="bold" />{error}</div>}
+        <WritingReportHistory
+          reports={savedReports}
+          currentReportId={reportRecord.id}
+          onOpen={openHistoricalReport}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="feature-grid report-layout">
-      <section className="feature-card">
-        <span className="feature-kicker">AI writing review</span>
-        <h2>{t("作文批改与报告")}</h2>
-        {isYear3 && (
-          <aside className="year3-writing-assistant-note">
-            <FileText size={27} weight="duotone" />
-            <div>
-              <strong>{t("Year 3 写作说明")}</strong>
-              <p>{t("NAPLAN Year 3 写作在纸上完成。本软件目前不使用手写 OCR；孩子写完后，请家长将原文逐字输入，不要修正拼写、标点、分段或措辞，以免影响 AI 评分。")}</p>
-              <span>
-                <button type="button" onClick={onStartWriting}>{t("进入 Year 3 纸笔写作练习")}<ArrowRight size={15} /></button>
-                <a href="https://www.nap.edu.au/naplan/whats-in-the-tests" target="_blank" rel="noreferrer">{t("查看官方说明")}</a>
-              </span>
-            </div>
-          </aside>
-        )}
-        {writingRecord ? (
-          <>
-            <div className="writing-record-summary">
-              <strong>{writingRecord.writing.title}</strong>
-              <span>Year {writingRecord.year_level} · {writingRecord.writing.genre}</span>
-              <b>{writingRecord.writing.word_count} words</b>
-              {writingRecord.writing.entry_method === "parent_transcription" && <em>{t("家长录入纸笔原文")}</em>}
-            </div>
-            {writingRecords.length > 1 && (
-              <label className="writing-record-picker">
-                {t("选择作文")}
-                <select value={writingRecord.id} onChange={(event) => setSelectedId(event.target.value)}>
-                  {writingRecords.map((record) => (
-                    <option value={record.id} key={record.id}>
-                      Year {record.year_level} · {record.writing.title} · {formatCompletedAt(record.completed_at, "en-AU")}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-            <p>{t("作文已经从模拟考试同步。模型会按照 10 项 rubric 生成逐项证据、原文批注、改进计划和同题满分范本。")}</p>
-          </>
-        ) : (
-          <div className="empty-workspace compact"><Robot size={42} /><strong>{t("还没有作文作答")}</strong><p>{t("先完成一篇 Writing 模拟题。")}</p></div>
-        )}
-        <div className="ai-report-actions">
-          <button type="button" className="feature-primary" onClick={writingRecord ? generateReport : onStartWriting} disabled={generating || (writingRecord && !apiKeyReady)}>
-            {generating ? t("正在生成完整报告…") : t(writingRecord ? "生成批改报告" : "开始 Writing 模拟")}
-          </button>
-          {writingRecord && <button type="button" className="feature-secondary" onClick={onStartWriting}>{t("再写一篇")}</button>}
-        </div>
-        {!apiKeyReady && writingRecord && (
-          <button type="button" className="inline-settings-link" onClick={() => onNavigate("设置")}>
-            <Key />{t("先到设置输入 API Key")}
-          </button>
-        )}
-        {error && <div className="ai-request-error"><X weight="bold" />{error}</div>}
-      </section>
-      <section className="feature-card ai-status-card">
-        <h2>{t("批改链路状态")}</h2>
-        <div><CheckCircle size={22} weight="fill" /><span><strong>{t("评分标准")}</strong><small>Narrative /47 · Persuasive /48</small></span></div>
-        <div><CheckCircle size={22} weight="fill" /><span><strong>{t("作文同步")}</strong><small>{t(writingRecord ? "最近一篇已就绪" : "等待作文提交")}</small></span></div>
-        <div><CheckCircle size={22} weight="fill" /><span><strong>{t("报告输出语言")}</strong><small>{t("作文报告将使用：{language}", { language: getLanguageLabel(settings.reportLanguage) })}</small></span></div>
-        <div className={apiKeyReady ? "" : "pending"}>{apiKeyReady ? <CheckCircle size={22} weight="fill" /> : <Clock size={22} weight="fill" />}<span><strong>{provider.name} · {settings.aiModel}</strong><small>{t(apiKeyReady ? "API Key 已在当前会话中配置" : "需要在设置中输入 API Key")}</small></span></div>
-        <p>{t("当前不会伪造 AI 分数，也不会把练习结果标记为官方 NAPLAN 成绩。")}</p>
-      </section>
+    <div className="ai-report-workspace">
+      <div className="feature-grid report-layout">
+        <section className="feature-card">
+          <span className="feature-kicker">AI writing review</span>
+          <h2>{t("作文批改与报告")}</h2>
+          {isYear3 && (
+            <aside className="year3-writing-assistant-note">
+              <FileText size={27} weight="duotone" />
+              <div>
+                <strong>{t("Year 3 写作说明")}</strong>
+                <p>{t("NAPLAN Year 3 写作在纸上完成。本软件目前不使用手写 OCR；孩子写完后，请家长将原文逐字输入，不要修正拼写、标点、分段或措辞，以免影响 AI 评分。")}</p>
+                <span>
+                  <button type="button" onClick={onStartWriting}>{t("进入 Year 3 纸笔写作练习")}<ArrowRight size={15} /></button>
+                  <a href="https://www.nap.edu.au/naplan/whats-in-the-tests" target="_blank" rel="noreferrer">{t("查看官方说明")}</a>
+                </span>
+              </div>
+            </aside>
+          )}
+          {writingRecord ? (
+            <>
+              <div className="writing-record-summary">
+                <strong>{writingRecord.writing.title}</strong>
+                <span>Year {writingRecord.year_level} · {writingRecord.writing.genre}</span>
+                <b>{writingRecord.writing.word_count} words</b>
+                {writingRecord.writing.entry_method === "parent_transcription" && <em>{t("家长录入纸笔原文")}</em>}
+              </div>
+              {writingRecords.length > 1 && (
+                <label className="writing-record-picker">
+                  {t("选择作文")}
+                  <select
+                    value={writingRecord.id}
+                    onChange={(event) => {
+                      setSelectedId(event.target.value);
+                      setReportRecord(getWritingReport(event.target.value));
+                    }}
+                  >
+                    {writingRecords.map((record) => (
+                      <option value={record.id} key={record.id}>
+                        Year {record.year_level} · {record.writing.title} · {formatCompletedAt(record.completed_at, "en-AU")}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              <p>{t("作文已经从模拟考试同步。模型会按照 10 项 rubric 生成逐项证据、原文批注、改进计划和同题满分范本。")}</p>
+            </>
+          ) : (
+            <div className="empty-workspace compact"><Robot size={42} /><strong>{t("还没有作文作答")}</strong><p>{t("先完成一篇 Writing 模拟题。")}</p></div>
+          )}
+          <div className="ai-report-actions">
+            <button type="button" className="feature-primary" onClick={writingRecord ? () => generateReport(writingRecord) : onStartWriting} disabled={generating || (writingRecord && !apiKeyReady)}>
+              {generating ? t("正在生成主要语言和英文两个版本…") : t(writingRecord ? "生成双语批改报告" : "开始 Writing 模拟")}
+            </button>
+            {writingRecord && <button type="button" className="feature-secondary" onClick={onStartWriting}>{t("再写一篇")}</button>}
+          </div>
+          {!apiKeyReady && writingRecord && (
+            <button type="button" className="inline-settings-link" onClick={() => onNavigate("设置")}>
+              <Key />{t("先到设置输入 API Key")}
+            </button>
+          )}
+          {error && <div className="ai-request-error"><X weight="bold" />{error}</div>}
+        </section>
+        <section className="feature-card ai-status-card">
+          <h2>{t("批改链路状态")}</h2>
+          <div><CheckCircle size={22} weight="fill" /><span><strong>{t("评分标准")}</strong><small>Narrative /47 · Persuasive /48</small></span></div>
+          <div><CheckCircle size={22} weight="fill" /><span><strong>{t("作文同步")}</strong><small>{t(writingRecord ? "最近一篇已就绪" : "等待作文提交")}</small></span></div>
+          <div><CheckCircle size={22} weight="fill" /><span><strong>{t("报告输出语言")}</strong><small>{t("同时保存：{language} + English", { language: getLanguageLabel(settings.reportLanguage) })}</small></span></div>
+          <div className={apiKeyReady ? "" : "pending"}>{apiKeyReady ? <CheckCircle size={22} weight="fill" /> : <Clock size={22} weight="fill" />}<span><strong>{provider.name} · {settings.aiModel}</strong><small>{t(apiKeyReady ? "API Key 已在当前会话中配置" : "需要在设置中输入 API Key")}</small></span></div>
+          <p>{t("所有批改历史保存在当前设备，可随时打开并导出 Word。")}</p>
+        </section>
+      </div>
+      <WritingReportHistory
+        reports={savedReports}
+        currentReportId=""
+        onOpen={openHistoricalReport}
+      />
     </div>
   );
 }

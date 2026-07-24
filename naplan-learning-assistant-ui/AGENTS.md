@@ -32,6 +32,8 @@ Use `William` as the default student name for a fresh profile. Preserve a studen
 
 The five dashboard learning-progress bars must show real saved results, never fixed demo percentages. Reading and Numeracy use the latest submitted practice result, Spelling and Grammar & Punctuation use the latest saved conventions subdomain breakdown, and Writing uses the latest real AI rubric report. Show an em dash when no trustworthy result exists.
 
+AI writing reviews are an offline-first local archive: every review attempt must be stored as its own history record without a fixed recent-items cap, and the AI report workspace must show the full history list below the current report. Export complete review reports as editable A4 Word documents, never as browser-printed PDFs. Each review must support both the language chosen in Settings and an English version; translated versions must preserve scores, quoted student evidence, annotations, correction examples, exemplar text, and all other substantive report content.
+
 Entering `/exam` in the Windows desktop app must automatically enable true full-screen mode, and returning to `/` must exit it. The fixed-ratio exam stage must remain centred on both axes; wide-screen practice controls may sit at the right edge but must not shift the answer stage away from screen centre.
 
 Treat multilingual reflow as a release requirement: Simplified Chinese, English, Traditional Chinese, and Korean must have no uncontrolled page/card overflow at 1440 px, the medium desktop breakpoint, 390 px, or the 320 px minimum. Keep `/exam` English-only. Preserve safe wrapping for brand copy and quick actions, and keep mobile navigation scrolling inside its own strip rather than widening the page.

@@ -26,23 +26,51 @@ export function setSessionApiKey(provider, apiKey) {
 export function readWritingReports() {
   if (typeof window === "undefined") return [];
   const reports = readJson(window.localStorage, REPORT_STORAGE_KEY, []);
-  return Array.isArray(reports) ? reports : [];
+  return (Array.isArray(reports) ? reports : [])
+    .map(normaliseWritingReportRecord)
+    .sort((left, right) => (
+      new Date(right.generated_at).getTime() - new Date(left.generated_at).getTime()
+    ));
+}
+
+export function normaliseWritingReportRecord(reportRecord) {
+  if (!reportRecord || typeof reportRecord !== "object") return reportRecord;
+  const primaryLanguage = reportRecord.report?.report_language || "en";
+  const reportVersions = {
+    ...(reportRecord.report_versions || {}),
+    ...(reportRecord.report ? { [primaryLanguage]: reportRecord.report } : {}),
+  };
+  return {
+    ...reportRecord,
+    id: reportRecord.id || `${reportRecord.practice_id}:${reportRecord.generated_at}`,
+    report_versions: reportVersions,
+  };
 }
 
 export function saveWritingReport(reportRecord) {
-  const reports = readWritingReports().filter((item) => item.practice_id !== reportRecord.practice_id);
+  const normalised = normaliseWritingReportRecord(reportRecord);
+  const reports = readWritingReports().filter((item) => item.id !== normalised.id);
   window.localStorage.setItem(
     REPORT_STORAGE_KEY,
-    JSON.stringify([reportRecord, ...reports].slice(0, 20)),
+    JSON.stringify([normalised, ...reports]),
   );
+  return normalised;
 }
 
 export function getWritingReport(practiceId) {
   return readWritingReports().find((item) => item.practice_id === practiceId) || null;
 }
 
-export async function requestWritingReview({ settings, practiceRecord, apiKey }) {
-  const writing = practiceRecord.writing;
+export function getWritingReportById(reportId) {
+  return readWritingReports().find((item) => item.id === reportId) || null;
+}
+
+export function getWritingReportVersion(reportRecord, reportLanguage) {
+  const normalised = normaliseWritingReportRecord(reportRecord);
+  return normalised?.report_versions?.[reportLanguage] || null;
+}
+
+async function sendReviewRequest({ settings, input, apiKey, mode = "review", sourceReport = null }) {
   const response = await fetch("/api/ai/review", {
     method: "POST",
     headers: {
@@ -53,15 +81,9 @@ export async function requestWritingReview({ settings, practiceRecord, apiKey })
       provider: settings.aiProvider,
       model: settings.aiModel,
       baseUrl: settings.aiBaseUrl,
-      input: {
-        year_level: Number(practiceRecord.year_level),
-        genre: String(writing.genre || "").toLowerCase(),
-        prompt_title: writing.title || "Writing task",
-        prompt_instructions: writing.prompt_instructions || writing.prompt || "",
-        student_text: writing.response || "",
-        response_entry_method: writing.entry_method || "student_typed",
-        report_language: settings.reportLanguage,
-      },
+      mode,
+      input,
+      ...(sourceReport ? { source_report: sourceReport } : {}),
     }),
   });
 
@@ -77,7 +99,34 @@ export async function requestWritingReview({ settings, practiceRecord, apiKey })
     error.code = payload?.error?.code;
     throw error;
   }
+  return payload;
+}
+
+function createWritingInput(practiceRecord, reportLanguage) {
+  const writing = practiceRecord.writing;
   return {
+    year_level: Number(practiceRecord.year_level),
+    genre: String(writing.genre || "").toLowerCase(),
+    prompt_title: writing.title || "Writing task",
+    prompt_instructions: writing.prompt_instructions || writing.prompt || "",
+    student_text: writing.response || "",
+    response_entry_method: writing.entry_method || "student_typed",
+    report_language: reportLanguage,
+  };
+}
+
+export async function requestWritingReview({ settings, practiceRecord, apiKey }) {
+  const writing = practiceRecord.writing;
+  const payload = await sendReviewRequest({
+    settings,
+    input: createWritingInput(practiceRecord, settings.reportLanguage),
+    apiKey,
+  });
+  const generatedAt = payload.meta.generated_at;
+  const reportId = globalThis.crypto?.randomUUID?.()
+    || `${practiceRecord.id}:${generatedAt}:${Math.random().toString(36).slice(2, 10)}`;
+  return {
+    id: reportId,
     practice_id: practiceRecord.id,
     prompt_title: writing.title || "Writing task",
     prompt_instructions: writing.prompt_instructions || writing.prompt || "",
@@ -87,7 +136,39 @@ export async function requestWritingReview({ settings, practiceRecord, apiKey })
     year_level: practiceRecord.year_level,
     provider: payload.meta.provider,
     model: payload.meta.model,
-    generated_at: payload.meta.generated_at,
+    generated_at: generatedAt,
     report: payload.report,
+    report_versions: {
+      [payload.report.report_language]: payload.report,
+    },
+  };
+}
+
+export async function requestWritingReportTranslation({
+  settings,
+  reportRecord,
+  targetLanguage,
+  apiKey,
+}) {
+  const sourceReport = reportRecord.report;
+  const input = {
+    year_level: Number(reportRecord.year_level),
+    genre: String(sourceReport.genre || "").toLowerCase(),
+    prompt_title: reportRecord.prompt_title || "Writing task",
+    prompt_instructions: reportRecord.prompt_instructions || "",
+    student_text: reportRecord.student_text || "",
+    response_entry_method: reportRecord.response_entry_method || "student_typed",
+    report_language: targetLanguage,
+  };
+  const payload = await sendReviewRequest({
+    settings,
+    input,
+    apiKey,
+    mode: "translate_report",
+    sourceReport,
+  });
+  return {
+    report: payload.report,
+    generated_at: payload.meta.generated_at,
   };
 }

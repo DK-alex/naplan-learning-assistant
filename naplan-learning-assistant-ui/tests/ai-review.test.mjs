@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { handleAiReviewRequest } from "../worker/ai.js";
 import {
+  buildWritingReportTranslationSystemPrompt,
   buildWritingReviewUserPrompt,
   RUBRIC_VERSION,
   RUBRICS,
+  validateTranslatedWritingReport,
   validateWritingInput,
 } from "../shared/writing-review-contract.js";
 
@@ -69,14 +71,14 @@ function createValidReport() {
   };
 }
 
-function reviewRequest(provider, model, baseUrl, withKey = true) {
+function reviewRequest(provider, model, baseUrl, withKey = true, bodyOverrides = {}) {
   return new Request("https://example.test/api/ai/review", {
     method: "POST",
     headers: {
       "content-type": "application/json",
       ...(withKey ? { "x-ai-api-key": "test-key-not-secret" } : {}),
     },
-    body: JSON.stringify({ provider, model, baseUrl, input }),
+    body: JSON.stringify({ provider, model, baseUrl, input, ...bodyOverrides }),
   });
 }
 
@@ -180,4 +182,62 @@ test("rejects a model report whose total does not equal the criterion sum", asyn
   );
   assert.equal(response.status, 422);
   assert.equal((await response.json()).error.code, "REPORT_VALIDATION_FAILED");
+});
+
+test("accepts a translated report only when scores and student evidence are unchanged", () => {
+  const source = createValidReport();
+  const translated = structuredClone(source);
+  translated.report_language = "en";
+  translated.overall_summary = "The writing is clear and engages the reader.";
+  translated.parent_summary = "The student opens clearly and should now develop the plot.";
+  translated.student_message = "Keep the clear opening and add more detail.";
+  translated.criteria = translated.criteria.map((criterion) => ({
+    ...criterion,
+    rationale: "The quoted evidence meets this criterion.",
+    next_step: "Maintain this control across the whole response.",
+  }));
+  const translationInput = { ...input, report_language: "en" };
+
+  assert.match(buildWritingReportTranslationSystemPrompt("en"), /translate/i);
+  assert.deepEqual(validateTranslatedWritingReport(translated, source, translationInput), []);
+
+  translated.criteria[0].score -= 1;
+  assert.ok(
+    validateTranslatedWritingReport(translated, source, translationInput)
+      .some((message) => message.includes("changed during translation")),
+  );
+});
+
+test("translation mode returns the validated English version through the same provider route", async () => {
+  const source = createValidReport();
+  const translated = structuredClone(source);
+  translated.report_language = "en";
+  translated.overall_summary = "The writing is clear and engages the reader.";
+
+  let outboundBody;
+  const response = await handleAiReviewRequest(
+    reviewRequest(
+      "openai",
+      "gpt-5.6-sol",
+      "https://api.openai.com/v1",
+      true,
+      {
+        mode: "translate_report",
+        input: { ...input, report_language: "en" },
+        source_report: source,
+      },
+    ),
+    {
+      fetchImpl: async (_url, init) => {
+        outboundBody = JSON.parse(init.body);
+        return Response.json({
+          output: [{ content: [{ type: "output_text", text: JSON.stringify(translated) }] }],
+        });
+      },
+    },
+  );
+
+  assert.equal(response.status, 200);
+  assert.match(outboundBody.instructions, /translate/i);
+  assert.equal((await response.json()).report.report_language, "en");
 });

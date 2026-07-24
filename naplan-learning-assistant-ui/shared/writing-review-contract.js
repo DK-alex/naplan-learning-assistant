@@ -281,6 +281,27 @@ export function buildWritingReviewUserPrompt(input) {
   });
 }
 
+export function buildWritingReportTranslationSystemPrompt(reportLanguage) {
+  const languageName = REPORT_LANGUAGE_NAMES[reportLanguage] || REPORT_LANGUAGE_NAMES.en;
+  return `You translate an already validated NAPLAN-style formative writing report.
+Translate every explanatory field into ${languageName} without reassessing the student's
+writing. Preserve the rubric version, status, year level, genre, score type, all criterion
+keys, all scores and maxima, confidence, exact student quotations, annotation targets and
+tones, revision step numbers and minutes, error originals and suggestions, and the exemplar
+text. Do not add or remove criteria, strengths, priorities, annotations, error items,
+revision steps, limitations or exemplar reasons. Set report_language to "${reportLanguage}".
+Return JSON only, with no Markdown fences or commentary. Follow the supplied JSON schema exactly.`;
+}
+
+export function buildWritingReportTranslationUserPrompt(input, sourceReport) {
+  return JSON.stringify({
+    task: "Translate this validated report without changing any assessment result or evidence.",
+    target_report_language: input.report_language,
+    student_text: input.student_text || "",
+    source_report: sourceReport,
+  });
+}
+
 export function validateWritingInput(input) {
   const errors = [];
   if (![3, 5, 7, 9].includes(Number(input?.year_level))) errors.push("year_level must be 3, 5, 7 or 9");
@@ -293,6 +314,90 @@ export function validateWritingInput(input) {
     errors.push("response_entry_method is invalid");
   }
   if (!REPORT_LANGUAGE_NAMES[input?.report_language]) errors.push("report_language is invalid");
+  return errors;
+}
+
+function sameJson(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+export function validateTranslatedWritingReport(report, sourceReport, input) {
+  const errors = validateWritingReport(report, input);
+  if (!sourceReport || typeof sourceReport !== "object") return [...errors, "source_report is required"];
+
+  const invariantPairs = [
+    ["rubric_version", report.rubric_version, sourceReport.rubric_version],
+    ["status", report.status, sourceReport.status],
+    ["year_level", report.year_level, sourceReport.year_level],
+    ["genre", report.genre, sourceReport.genre],
+    ["score_type", report.score_type, sourceReport.score_type],
+    ["total_score", report.total_score, sourceReport.total_score],
+    ["maximum_score", report.maximum_score, sourceReport.maximum_score],
+    ["confidence", report.confidence, sourceReport.confidence],
+  ];
+  for (const [field, translated, source] of invariantPairs) {
+    if (translated !== source) errors.push(`${field} changed during translation`);
+  }
+
+  const translatedCriteria = (report.criteria || []).map(({ key, score, max_score, evidence }) => ({
+    key,
+    score,
+    max_score,
+    evidence,
+  }));
+  const sourceCriteria = (sourceReport.criteria || []).map(({ key, score, max_score, evidence }) => ({
+    key,
+    score,
+    max_score,
+    evidence,
+  }));
+  if (!sameJson(translatedCriteria, sourceCriteria)) errors.push("criteria scores or evidence changed during translation");
+
+  const translatedAnnotations = (report.annotations || []).map(({ quote, criterion, tone }) => ({
+    quote,
+    criterion,
+    tone,
+  }));
+  const sourceAnnotations = (sourceReport.annotations || []).map(({ quote, criterion, tone }) => ({
+    quote,
+    criterion,
+    tone,
+  }));
+  if (!sameJson(translatedAnnotations, sourceAnnotations)) errors.push("annotation targets changed during translation");
+
+  const translatedErrors = Object.fromEntries(
+    Object.entries(report.error_patterns || {}).map(([category, items]) => [
+      category,
+      (items || []).map(({ original, suggestion }) => ({ original, suggestion })),
+    ]),
+  );
+  const sourceErrors = Object.fromEntries(
+    Object.entries(sourceReport.error_patterns || {}).map(([category, items]) => [
+      category,
+      (items || []).map(({ original, suggestion }) => ({ original, suggestion })),
+    ]),
+  );
+  if (!sameJson(translatedErrors, sourceErrors)) errors.push("error examples changed during translation");
+
+  const translatedRevision = (report.revision_plan || []).map(({ step, minutes }) => ({ step, minutes }));
+  const sourceRevision = (sourceReport.revision_plan || []).map(({ step, minutes }) => ({ step, minutes }));
+  if (!sameJson(translatedRevision, sourceRevision)) errors.push("revision timing changed during translation");
+
+  if ((report.strengths || []).length !== (sourceReport.strengths || []).length) {
+    errors.push("strength count changed during translation");
+  }
+  if ((report.priorities || []).length !== (sourceReport.priorities || []).length) {
+    errors.push("priority count changed during translation");
+  }
+  if ((report.limitations || []).length !== (sourceReport.limitations || []).length) {
+    errors.push("limitation count changed during translation");
+  }
+  if ((report.exemplar?.why_full_mark || []).length !== (sourceReport.exemplar?.why_full_mark || []).length) {
+    errors.push("exemplar reason count changed during translation");
+  }
+  if (report.exemplar?.text !== sourceReport.exemplar?.text) {
+    errors.push("exemplar text changed during translation");
+  }
   return errors;
 }
 
