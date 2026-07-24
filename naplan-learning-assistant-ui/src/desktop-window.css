@@ -56,6 +56,267 @@
   shape-rendering: geometricPrecision;
 }
 
+.desktop-fixed-canvas,
+.desktop-fixed-canvas body,
+.desktop-fixed-canvas #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.desktop-fixed-canvas * {
+  scrollbar-width: none;
+}
+
+.desktop-fixed-canvas *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.desktop-app-viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #edf1f5;
+}
+
+.desktop-app-frame {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: #fff;
+}
+
+.desktop-app-canvas {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: hidden;
+  transform-origin: top left;
+  background: #fff;
+}
+
+.desktop-app-canvas .app-stage,
+.desktop-app-canvas .app-shell {
+  width: 1600px;
+  height: 900px;
+  min-height: 0;
+}
+
+.desktop-app-canvas .app-shell {
+  grid-template-columns: 266px minmax(0, 1fr);
+}
+
+.desktop-app-canvas .professional-shell {
+  grid-template-columns: 264px minmax(0, 1fr);
+}
+
+.desktop-app-canvas .sidebar {
+  min-width: 0;
+  height: 900px;
+  min-height: 0;
+  padding: 28px 20px;
+  overflow: hidden;
+}
+
+.desktop-app-canvas .warm-shell .brand-copy {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 7px;
+  line-height: normal;
+}
+
+.desktop-app-canvas .brand-copy strong {
+  font-size: 25px;
+}
+
+.desktop-app-canvas .brand-copy small {
+  font-size: 17px;
+}
+
+.desktop-app-canvas .professional-shell .brand-copy {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.desktop-app-canvas .professional-shell .brand-copy strong {
+  font-size: 28px;
+}
+
+.desktop-app-canvas .professional-shell .brand-copy small {
+  font-size: 16px;
+}
+
+.desktop-app-canvas .side-nav button {
+  gap: 18px;
+  padding-inline: 18px;
+  font-size: 18px;
+}
+
+.desktop-app-canvas .dashboard {
+  width: auto;
+  height: 900px;
+  padding: 20px 24px 12px;
+  overflow: hidden;
+}
+
+.desktop-app-canvas .warm-header {
+  height: 76px;
+}
+
+.desktop-app-canvas .warm-header img {
+  width: 156px;
+  height: 76px;
+  margin-right: 10px;
+}
+
+.desktop-app-canvas .warm-grid {
+  grid-template-columns: minmax(350px, 1.18fr) minmax(280px, 0.88fr) minmax(330px, 1.03fr);
+  grid-template-rows: 296px 190px 216px;
+  grid-auto-rows: auto;
+  gap: 14px;
+}
+
+.desktop-app-canvas .warm-grid .progress-card {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.desktop-app-canvas .warm-grid .progress-list {
+  gap: 9px;
+  padding: 2px 20px 10px;
+}
+
+.desktop-app-canvas .warm-grid .quick-card {
+  grid-column: 1 / 3;
+  grid-row: 2;
+}
+
+.desktop-app-canvas .warm-grid .quick-grid {
+  padding-bottom: 10px;
+}
+
+.desktop-app-canvas .warm-grid .quick-item {
+  min-height: 124px;
+  padding-block: 8px;
+}
+
+.desktop-app-canvas .warm-grid .quick-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.desktop-app-canvas .warm-grid .news-card {
+  grid-column: 1;
+  grid-row: 3;
+  height: 216px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.desktop-app-canvas .warm-grid .news-list {
+  padding-bottom: 8px;
+}
+
+.desktop-app-canvas .warm-grid .news-row {
+  height: 50px;
+  min-height: 0;
+  padding-block: 4px;
+}
+
+.desktop-app-canvas .warm-grid .news-row small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktop-app-canvas .warm-grid .goal-card {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.desktop-app-canvas .warm-grid .report-card {
+  grid-column: 3;
+  grid-row: 2 / 4;
+  min-height: 0;
+}
+
+.desktop-app-canvas .goal-body {
+  padding-right: 80px;
+}
+
+.desktop-app-canvas .pro-dashboard {
+  width: auto;
+  height: 900px;
+  padding: 20px 24px;
+  overflow: hidden;
+}
+
+.desktop-app-canvas .pro-header {
+  min-height: 120px;
+  padding-bottom: 12px;
+}
+
+.desktop-app-canvas .pro-grid {
+  grid-template-columns: minmax(330px, 1.05fr) minmax(300px, 0.94fr) minmax(345px, 1.12fr);
+  grid-template-rows: 296px 210px 146px;
+  grid-auto-rows: auto;
+  gap: 16px;
+}
+
+.desktop-app-canvas .pro-grid .progress-card {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.desktop-app-canvas .pro-grid .quick-card {
+  grid-column: 1 / 3;
+  grid-row: 2;
+}
+
+.desktop-app-canvas .pro-grid .quick-item {
+  min-height: 139px;
+}
+
+.desktop-app-canvas .pro-grid .news-card {
+  grid-column: 3;
+  grid-row: 2;
+  height: 210px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.desktop-app-canvas .pro-grid .news-list {
+  padding-bottom: 6px;
+}
+
+.desktop-app-canvas .pro-grid .news-row {
+  height: 46px;
+  min-height: 0;
+}
+
+.desktop-app-canvas .pro-grid .advice-card {
+  grid-column: 1 / 4;
+  grid-row: 3;
+  grid-template-columns: minmax(380px, 1fr) 270px 280px;
+  padding-block: 12px;
+}
+
+.desktop-app-canvas .pro-grid .advice-card > button {
+  height: 112px;
+}
+
+.desktop-app-canvas .feature-workspace {
+  width: 100%;
+  height: 900px;
+  min-height: 0;
+  overflow: auto;
+}
+
 @media (max-width: 900px) {
   .desktop-window-drag-region {
     left: 180px;

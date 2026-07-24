@@ -1,7 +1,7 @@
 {
   "name": "naplan-learning-assistant-ui",
   "productName": "NAPLAN Learning Assistant",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Offline-first NAPLAN practice and learning assistant for Windows.",
   "author": "NAPLAN Learning Assistant",
   "private": true,
