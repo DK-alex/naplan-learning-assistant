@@ -1131,48 +1131,6 @@ select:focus-visible,
   box-shadow: 0 0 0 3px rgba(8, 127, 169, 0.18);
 }
 
-.live-feedback {
-  width: min(100%, 620px);
-  margin: 17px 0 8px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border: 1px solid;
-  border-left-width: 5px;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(27, 58, 75, 0.08);
-}
-
-.live-feedback.is-correct {
-  color: #155f3d;
-  border-color: #55ae83;
-  background: #eff9f3;
-}
-
-.live-feedback.is-incorrect {
-  color: #812f27;
-  border-color: #dd796d;
-  background: #fff3f1;
-}
-
-.live-feedback-icon {
-  flex: 0 0 auto;
-  padding-top: 1px;
-}
-
-.live-feedback strong {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 17px;
-}
-
-.live-feedback p {
-  margin: 3px 0;
-  font-size: 14px;
-  line-height: 1.35;
-}
-
 .inline-choice-passage {
   font-size: 18px;
   line-height: 2.65;

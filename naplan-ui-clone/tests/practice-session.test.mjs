@@ -1,14 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { scorePracticeTest } from "../src/questionBank.js";
+import { savePracticeSubmission, scorePracticeTest } from "../src/questionBank.js";
 import {
   clearActivePracticeSession,
   practiceProgressKey,
-  practiceSessionId,
   readActivePracticeSession,
-  readLivePracticeMistakes,
-  replaceLivePracticeMistakes,
   saveActivePracticeSession,
 } from "../src/practiceSession.js";
 
@@ -44,17 +41,7 @@ test("unfinished practice sessions can be bookmarked and cleared", () => {
   assert.equal(readActivePracticeSession(storage), null);
 });
 
-test("live mistake replacement removes a question after it is corrected", () => {
-  const storage = memoryStorage();
-  const sessionId = practiceSessionId(3, "Numeracy");
-  replaceLivePracticeMistakes(sessionId, [{ id: "n-1", response: "B", correct: false }], storage);
-  assert.equal(readLivePracticeMistakes(storage).length, 1);
-
-  replaceLivePracticeMistakes(sessionId, [], storage);
-  assert.deepEqual(readLivePracticeMistakes(storage), []);
-});
-
-test("scoring immediately reflects answer changes", () => {
+test("submission grading uses the latest saved answer", () => {
   const questions = [{
     id: "read-1",
     prompt: "Choose the answer.",
@@ -69,6 +56,42 @@ test("scoring immediately reflects answer changes", () => {
 
   assert.equal(scorePracticeTest(questions, { 1: "A" }).correct, 0);
   assert.equal(scorePracticeTest(questions, { 1: "B" }).correct, 1);
+});
+
+test("results and mistakes are persisted only when the test is submitted", () => {
+  const storage = memoryStorage();
+  globalThis.window = { localStorage: storage };
+  const questions = [{
+    id: "read-1",
+    prompt: "Choose the answer.",
+    subdomain: "reading",
+    item_type: "multiple_choice",
+    options: [{ id: "A", text: "First" }, { id: "B", text: "Second" }],
+    answer: { type: "single_choice", value: "B", display: "Second" },
+    explanation: "B is supported by the text.",
+    difficulty: "easy",
+    skill: "literal comprehension",
+  }];
+  const result = scorePracticeTest(questions, { 1: "A" });
+
+  assert.equal(storage.getItem("naplan-practice-history"), null);
+  assert.equal(storage.getItem("naplan-practice-latest"), null);
+
+  const record = savePracticeSubmission({
+    year: 3,
+    domain: "Reading",
+    questions,
+    result,
+    writingResponse: "",
+  });
+
+  assert.equal(record.correct, 0);
+  assert.equal(record.mistakes.length, 1);
+  assert.equal(record.mistakes[0].responseDisplay, "First");
+  assert.equal(record.mistakes[0].answer, "Second");
+  assert.equal(JSON.parse(storage.getItem("naplan-practice-history")).length, 1);
+
+  delete globalThis.window;
 });
 
 test("scoring supports the rebuilt interactive response types", () => {

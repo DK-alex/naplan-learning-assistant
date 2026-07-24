@@ -47,7 +47,6 @@ import {
   practiceProgressKey,
   practiceSessionId,
   readActivePracticeSession,
-  replaceLivePracticeMistakes,
   saveActivePracticeSession,
 } from './practiceSession.js';
 
@@ -873,26 +872,7 @@ function hasResponse(value) {
   return String(value).trim() !== '';
 }
 
-function LiveFeedback({ feedback }) {
-  if (!feedback || !hasResponse(feedback.response)) return null;
-  return (
-    <aside
-      className={`live-feedback ${feedback.correct ? 'is-correct' : 'is-incorrect'}`}
-      aria-live="polite"
-    >
-      <span className="live-feedback-icon">
-        {feedback.correct ? <CheckCircle2 size={25} /> : <XCircle size={25} />}
-      </span>
-      <div>
-        <strong>{feedback.correct ? 'Correct' : 'Not quite'}</strong>
-        {!feedback.correct && <p><b>Correct answer:</b> {feedback.answer}</p>}
-        <p>{feedback.explanation}</p>
-      </div>
-    </aside>
-  );
-}
-
-function ReadingQuestion({ item, answer, setAnswer, audioPlaying, toggleAudio, feedback }) {
+function ReadingQuestion({ item, answer, setAnswer, audioPlaying, toggleAudio }) {
   const paragraphs = item.stimulus?.text?.split(/\n\n+/) ?? [];
   const [stimulusOnly, setStimulusOnly] = useState(false);
 
@@ -923,7 +903,6 @@ function ReadingQuestion({ item, answer, setAnswer, audioPlaying, toggleAudio, f
         </button>
         <p className="question-text">{item.prompt}</p>
         <ResponseControl item={item} answer={answer} setAnswer={setAnswer} />
-        <LiveFeedback feedback={feedback} />
         {audioPlaying && <span className="sr-status">Question audio is playing.</span>}
       </section>
     </div>
@@ -945,7 +924,7 @@ function StimulusTable({ stimulus }) {
   );
 }
 
-function NumeracyQuestion({ item, answer, setAnswer, feedback }) {
+function NumeracyQuestion({ item, answer, setAnswer }) {
   return (
     <section className="single-question numeracy-question">
       <button className="speak-question" aria-label="Read question aloud"><Volume2 size={20} /></button>
@@ -953,12 +932,11 @@ function NumeracyQuestion({ item, answer, setAnswer, feedback }) {
       <MeasurementVisual stimulus={item.stimulus} />
       <p className="question-text">{item.prompt}</p>
       <ResponseControl item={item} answer={answer} setAnswer={setAnswer} />
-      <LiveFeedback feedback={feedback} />
     </section>
   );
 }
 
-function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudio, feedback }) {
+function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudio }) {
   const spelling = item.item_type === 'text_entry';
   const displayText = item.stimulus?.display_text ?? item.stimulus?.text;
   return (
@@ -986,7 +964,6 @@ function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudi
           <ResponseControl item={item} answer={answer} setAnswer={setAnswer} />
         </>
       )}
-      <LiveFeedback feedback={feedback} />
     </section>
   );
 }
@@ -1447,8 +1424,6 @@ function Player({
     calculator: domain === 'Numeracy' && calculatorSection && Boolean(currentItem?.tool_policy?.calculator),
   };
   const result = domain === 'Writing' ? null : scorePracticeTest(questions, answers);
-  const currentResultRow = result?.rows[question - 1] ?? null;
-  const currentFeedback = currentResultRow?.complete ? currentResultRow : null;
   const answeredCount = domain === 'Writing'
     ? (writingResponse.trim() ? 1 : 0)
     : result.rows.filter((row) => row.complete).length;
@@ -1489,19 +1464,6 @@ function Player({
     }));
     saveActivePracticeSession({ year: grade, domain, writingTask, formSeed });
   }, [answers, calculatorSection, domain, flagged, formSeed, grade, mode, progressKey, question, visited, writingResponse, writingTask]);
-
-  useEffect(() => {
-    if (!result || mode === 'submitted') return;
-    const liveMistakes = result.rows
-      .filter((row) => row.complete && !row.correct)
-      .map((row) => ({
-        ...row,
-        year_level: grade,
-        domain,
-      }));
-    replaceLivePracticeMistakes(sessionId, liveMistakes);
-    notifyLiveMistakesChanged();
-  }, [answers, domain, grade, mode, sessionId]);
 
   useEffect(() => {
     if (endRequestId > 0 && mode !== 'submitted') setEndDialogOpen(true);
@@ -1683,7 +1645,6 @@ function Player({
                   setAnswer={setCurrentAnswer}
                   audioPlaying={audioPlaying}
                   toggleAudio={toggleAudio}
-                  feedback={currentFeedback}
                 />
               )}
               {domain === 'Numeracy' && (
@@ -1691,7 +1652,6 @@ function Player({
                   item={currentItem}
                   answer={currentAnswer}
                   setAnswer={setCurrentAnswer}
-                  feedback={currentFeedback}
                 />
               )}
               {domain === 'Conventions of language' && (
@@ -1701,7 +1661,6 @@ function Player({
                   setAnswer={setCurrentAnswer}
                   audioPlaying={audioPlaying}
                   toggleAudio={toggleAudio}
-                  feedback={currentFeedback}
                 />
               )}
             </div>
