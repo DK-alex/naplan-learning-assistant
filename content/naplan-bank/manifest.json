@@ -1,7 +1,7 @@
 {
   "bank_version": "2026.2",
   "schema_version": "2.0",
-  "generated_at": "2026-07-24T04:23:38.634Z",
+  "generated_at": "2026-07-24T19:31:33.079Z",
   "licence_note": "All questions are original practice materials. They are not official NAPLAN items and are not endorsed by ACARA.",
   "difficulty_note": "Difficulty is a year-relative design estimate plus an uncalibrated cross-year absolute complexity index. It is not an official NAPLAN scale score or proficiency level.",
   "official_alignment": {
@@ -9,6 +9,24 @@
     "tests": "https://www.nap.edu.au/naplan/whats-in-the-tests",
     "demo": "https://www.nap.edu.au/naplan/public-demonstration-site",
     "proficiency": "https://nap.edu.au/naplan/results-and-reports/proficiency-level-descriptions"
+  },
+  "writing_prompt_research": {
+    "official_source": "https://www.acara.edu.au/assessment/naplan/naplan-2012-2016-test-papers",
+    "reviewed_prompt_sets": [
+      "2012 persuasive prompt for all year levels",
+      "2013 Hero Award persuasive prompt",
+      "2014 Change a rule or law persuasive prompt",
+      "2015 Try this activity persuasive prompt for Years 3 and 5",
+      "2015 Simply the best persuasive prompt for Years 7 and 9",
+      "2016 Imagine narrative prompt for Years 3 and 5",
+      "2016 Sign said narrative prompt for Years 7 and 9"
+    ],
+    "design_principles": [
+      "A complete stimulus includes a context, explicit text type and purpose, optional idea cues, structural support and an editing reminder.",
+      "Illustrations provide open-ended idea cues and are not answer-critical.",
+      "Prompts are original practice materials and do not reproduce ACARA wording or artwork.",
+      "Year-level demand increases through abstraction, competing perspectives, structural control and expected use of evidence."
+    ]
   },
   "year_profiles": {
     "3": {
@@ -123,30 +141,30 @@
   "year_levels": {
     "3": {
       "file": "year-3.jsonl",
-      "total_items": 2000,
+      "total_items": 2060,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 772,
         "medium": 870,
         "hard": 318,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_absolute_complexity": {
         "1": 772,
         "2": 870,
         "3": 318,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_pathway_band": {
         "lower": 772,
         "average": 870,
         "higher": 318,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1323,
@@ -157,7 +175,7 @@
         "text_entry": 288,
         "hotspot": 76,
         "matrix": 1,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "answer_critical_media_items": 391,
       "machine_scorable_items": 1960,
@@ -183,30 +201,30 @@
     },
     "5": {
       "file": "year-5.jsonl",
-      "total_items": 2000,
+      "total_items": 2060,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 608,
         "medium": 884,
         "hard": 468,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_absolute_complexity": {
         "3": 608,
         "4": 884,
         "5": 468,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_pathway_band": {
         "lower": 608,
         "average": 884,
         "higher": 468,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1377,
@@ -217,7 +235,7 @@
         "text_entry": 288,
         "hotspot": 22,
         "matrix": 1,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "answer_critical_media_items": 319,
       "machine_scorable_items": 1960,
@@ -243,30 +261,30 @@
     },
     "7": {
       "file": "year-7.jsonl",
-      "total_items": 2000,
+      "total_items": 2060,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 458,
         "medium": 884,
         "hard": 618,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_absolute_complexity": {
         "5": 458,
         "6": 884,
         "7": 618,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_pathway_band": {
         "lower": 458,
         "average": 884,
         "higher": 618,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1353,
@@ -277,7 +295,7 @@
         "text_entry": 331,
         "matrix": 1,
         "hotspot": 9,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "answer_critical_media_items": 313,
       "machine_scorable_items": 1960,
@@ -303,30 +321,30 @@
     },
     "9": {
       "file": "year-9.jsonl",
-      "total_items": 2000,
+      "total_items": 2060,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
         "numeracy": 800,
-        "writing": 40
+        "writing": 100
       },
       "by_difficulty": {
         "easy": 388,
         "medium": 790,
         "hard": 782,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_absolute_complexity": {
         "7": 388,
         "8": 790,
         "9": 782,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_pathway_band": {
         "lower": 388,
         "average": 790,
         "higher": 782,
-        "not_applicable": 40
+        "not_applicable": 100
       },
       "by_item_type": {
         "multiple_choice": 1326,
@@ -337,7 +355,7 @@
         "text_entry": 352,
         "matrix": 1,
         "hotspot": 15,
-        "writing_prompt": 40
+        "writing_prompt": 100
       },
       "answer_critical_media_items": 340,
       "machine_scorable_items": 1960,

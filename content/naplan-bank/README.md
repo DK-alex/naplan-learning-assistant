@@ -1,15 +1,15 @@
 # NAPLAN 模拟题库
 
-本目录包含 Year 3、5、7、9 四个年级的原创 NAPLAN 风格练习题，共 8,000 道。题库依据 ACARA/NAP 官方公开资料中的考试范围、题型、时长、内容比例与写作评分维度设计，但不是官方试题，也不代表 ACARA/NAP 的认可或预测。
+本目录包含 Year 3、5、7、9 四个年级的原创 NAPLAN 风格练习题，共 8,240 道。题库依据 ACARA/NAP 官方公开资料中的考试范围、题型、时长、内容比例与写作评分维度设计，但不是官方试题，也不代表 ACARA/NAP 的认可或预测。
 
 当前版本为 `2026.2`。这一版不再把同一套 easy/medium/hard 标签随机复制到四个年级，而是同时保存年级内难度、1–9 的跨年级设计复杂度、testlet 候选节点和未校准状态。
 
 ## 文件
 
-- `questions/year-3.jsonl`：Year 3，2,000 道
-- `questions/year-5.jsonl`：Year 5，2,000 道
-- `questions/year-7.jsonl`：Year 7，2,000 道
-- `questions/year-9.jsonl`：Year 9，2,000 道
+- `questions/year-3.jsonl`：Year 3，2,060 道
+- `questions/year-5.jsonl`：Year 5，2,060 道
+- `questions/year-7.jsonl`：Year 7，2,060 道
+- `questions/year-9.jsonl`：Year 9，2,060 道
 - `manifest.json`：版本、来源、各年级数量及分布
 - `blueprint.md`：出题范围、考试结构和题库配额
 - `writing-rubric-ai.md`：可直接作为作文批改 AI 的 system/developer prompt
@@ -27,17 +27,17 @@
 | Reading | 560 |
 | Conventions of language | 600 |
 | Numeracy | 800 |
-| Writing prompts | 40 |
-| 合计 | 2,000 |
+| Writing prompts | 100 |
+| 合计 | 2,060 |
 
 ## 年级难度
 
 | 年级 | Easy | Medium | Hard | Writing N/A | 跨年级复杂度 |
 |---|---:|---:|---:|---:|---|
-| Year 3 | 772 | 870 | 318 | 40 | 1 / 2 / 3 |
-| Year 5 | 608 | 884 | 468 | 40 | 3 / 4 / 5 |
-| Year 7 | 458 | 884 | 618 | 40 | 5 / 6 / 7 |
-| Year 9 | 388 | 790 | 782 | 40 | 7 / 8 / 9 |
+| Year 3 | 772 | 870 | 318 | 100 | 1 / 2 / 3 |
+| Year 5 | 608 | 884 | 468 | 100 | 3 / 4 / 5 |
+| Year 7 | 458 | 884 | 618 | 100 | 5 / 6 / 7 |
+| Year 9 | 388 | 790 | 782 | 100 | 7 / 8 / 9 |
 
 `difficulty` 是题目在本年级内部的设计带，`difficulty_model.absolute_complexity` 用于区分不同年级的绝对内容复杂度。相邻年级允许重叠，但 Year 3 hard 不等同于 Year 9 hard。Writing 是共同写作任务，不再标 easy/medium/hard。
 
@@ -52,6 +52,8 @@
 `drag_and_drop` 是三步排序题，保存多个目标和完整 placement map；`multiple_select` 保存多个正确 option id；`matrix` 保存逐行 response map；`hot_text` 以可点击文本片段作答。它们不再只是改名后的单选题。
 
 答案关键型图形使用 `stimulus.visual` 保存可重复生成的 SVG 参数。图片、表格、音频和数学工具统一进入 `media`、`tool_policy` 与 `accessibility` 字段。生成式图片只用于原创情境素材；精确角度、长度、坐标、图表和热点由 SVG/HTML 参数控制。
+
+每个年级的 100 道 Writing 题按 Narrative 50、Persuasive 50 配置。完整题面保存在 `stimulus.context`、`stimulus.instructions`、`stimulus.idea_starters` 和 `stimulus.remember`；Year 3、5、7、9 分别使用从具体事件和基础理由到视角控制、反方论证、证据权衡与限定性结论的递进支架。每题的原创配图保存在 `public/assets/writing-prompts/year-{year}/`，并通过 `stimulus.image` 与题目一一绑定。
 
 ## 使用
 
