@@ -26,6 +26,8 @@ The Windows desktop shell must stay frameless and edge-to-edge: do not show the 
 
 Treat multilingual reflow as a release requirement: Simplified Chinese, English, Traditional Chinese, and Korean must have no uncontrolled page/card overflow at 1440 px, the medium desktop breakpoint, 390 px, or the 320 px minimum. Keep `/exam` English-only. Preserve safe wrapping for brand copy and quick actions, and keep mobile navigation scrolling inside its own strip rather than widening the page.
 
+Dashboard cards with translated summaries, especially the warm-home latest-news card, must grow with their content; never use a fixed grid row that lets the final item or action arrow cross the card boundary.
+
 Treat the “考试指南” / NAPLAN guide as the canonical parent-facing introduction and official-resource hub. Keep its test dates, official durations, tailored-test explanation, proficiency descriptions, and outbound links aligned with current NAP or ACARA sources in all four interface languages. Never present practice scores as official NAPLAN scaled scores.
 
 Dashboard and full-page schedules must show only official NAPLAN test windows that have not ended as of the viewer's current date. Derive the countdown from the next future window, never retain an already completed test year as a static dashboard milestone, and link future dates to the NAP key-dates page.
