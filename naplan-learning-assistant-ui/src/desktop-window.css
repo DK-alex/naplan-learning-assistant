@@ -171,6 +171,7 @@
 .desktop-app-canvas .warm-header img {
   width: 156px;
   height: 76px;
+  margin-top: 28px;
   margin-right: 10px;
 }
 
@@ -187,8 +188,13 @@
 }
 
 .desktop-app-canvas .warm-grid .progress-list {
-  gap: 9px;
-  padding: 2px 20px 10px;
+  gap: 8px;
+  padding: 2px 20px 8px;
+}
+
+.desktop-app-canvas .warm-grid .progress-source-note {
+  margin-top: -5px;
+  margin-bottom: 8px;
 }
 
 .desktop-app-canvas .warm-grid .quick-card {

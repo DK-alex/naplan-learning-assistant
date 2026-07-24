@@ -272,6 +272,32 @@ export function scorePracticeTest(questions, answers) {
   };
 }
 
+function summariseRows(rows) {
+  const total = rows.reduce((sum, row) => sum + (Number(row.maxPoints) || 0), 0);
+  const correct = rows.reduce((sum, row) => sum + (Number(row.points) || 0), 0);
+  return {
+    correct,
+    total,
+    percentage: total > 0 ? Math.round((correct / total) * 100) : null,
+  };
+}
+
+function buildScoreBreakdown(domain, result) {
+  if (!result?.rows?.length) return null;
+  if (domain === "Reading" || domain === "Numeracy") {
+    return { [domain]: summariseRows(result.rows) };
+  }
+  if (domain === "Conventions of language") {
+    return {
+      Spelling: summariseRows(result.rows.filter((row) => row.subdomain === "spelling")),
+      "Grammar & Punctuation": summariseRows(
+        result.rows.filter((row) => ["grammar", "punctuation"].includes(row.subdomain)),
+      ),
+    };
+  }
+  return null;
+}
+
 export function savePracticeSubmission({
   year,
   domain,
@@ -295,6 +321,7 @@ export function savePracticeSubmission({
     correct: result?.correct ?? null,
     percentage: result ? Math.round((result.correct / result.total) * 100) : null,
     unanswered: result?.unanswered ?? null,
+    score_breakdown: buildScoreBreakdown(domain, result),
     writing: writingItem
       ? {
           prompt_id: writingItem.id,

@@ -94,6 +94,65 @@ test("results and mistakes are persisted only when the test is submitted", () =>
   delete globalThis.window;
 });
 
+test("submitted conventions tests store real spelling and grammar breakdowns", () => {
+  const storage = memoryStorage();
+  globalThis.window = { localStorage: storage };
+  const questions = [
+    {
+      id: "spell-1",
+      prompt: "Spell the word.",
+      subdomain: "spelling",
+      item_type: "text_entry",
+      options: [],
+      answer: { type: "text", accepted: ["because"], display: "because" },
+      explanation: "The word is because.",
+      difficulty: "easy",
+      skill: "spelling",
+    },
+    {
+      id: "grammar-1",
+      prompt: "Choose the verb.",
+      subdomain: "grammar",
+      item_type: "multiple_choice",
+      options: [{ id: "A", text: "is" }, { id: "B", text: "are" }],
+      answer: { type: "single_choice", value: "A", display: "is" },
+      explanation: "The singular verb is required.",
+      difficulty: "easy",
+      skill: "agreement",
+    },
+    {
+      id: "punctuation-1",
+      prompt: "Choose the punctuation.",
+      subdomain: "punctuation",
+      item_type: "multiple_choice",
+      options: [{ id: "A", text: "." }, { id: "B", text: "?" }],
+      answer: { type: "single_choice", value: "B", display: "?" },
+      explanation: "This is a question.",
+      difficulty: "easy",
+      skill: "question marks",
+    },
+  ];
+  const result = scorePracticeTest(questions, {
+    1: "becuse",
+    2: "A",
+    3: "A",
+  });
+  const record = savePracticeSubmission({
+    year: 5,
+    domain: "Conventions of language",
+    questions,
+    result,
+    writingResponse: "",
+  });
+
+  assert.deepEqual(record.score_breakdown, {
+    Spelling: { correct: 0, total: 1, percentage: 0 },
+    "Grammar & Punctuation": { correct: 1, total: 2, percentage: 50 },
+  });
+
+  delete globalThis.window;
+});
+
 test("scoring supports the rebuilt interactive response types", () => {
   const questions = [
     {

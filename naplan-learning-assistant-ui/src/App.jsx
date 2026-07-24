@@ -60,6 +60,7 @@ import {
   saveLearningGoal,
   splitLearningDuration,
 } from "./data/learning-goals.js";
+import { calculateDomainProgress } from "./data/domain-progress.js";
 import {
   getCountdownParts,
   getFutureNaplanWindows,
@@ -97,11 +98,11 @@ const navItems = [
 ];
 
 const progressItems = [
-  { label: "阅读", en: "Reading", value: 76, warmValue: 65, color: "#16b66a", icon: BookOpen },
-  { label: "写作", en: "Writing", value: 65, warmValue: 78, color: "#ff9418", icon: NotePencil },
-  { label: "语言", en: "Spelling", value: 70, warmValue: 70, color: "#7058e8", icon: ListChecks },
-  { label: "语法", en: "Grammar & Punctuation", value: 62, warmValue: 62, color: "#ff6847", icon: Megaphone },
-  { label: "数学", en: "Numeracy", value: 78, warmValue: 76, color: "#19b9b6", icon: TrendUp },
+  { label: "阅读", en: "Reading", color: "#16b66a", icon: BookOpen },
+  { label: "写作", en: "Writing", color: "#ff9418", icon: NotePencil },
+  { label: "语言", en: "Spelling", color: "#7058e8", icon: ListChecks },
+  { label: "语法", en: "Grammar & Punctuation", color: "#ff6847", icon: Megaphone },
+  { label: "数学", en: "Numeracy", color: "#19b9b6", icon: TrendUp },
 ];
 
 const quickItems = [
@@ -313,9 +314,10 @@ function Timeline({ variant, onOpen }) {
   );
 }
 
-function ProgressCard({ variant, onOpen }) {
+function ProgressCard({ variant, onOpen, history }) {
   const warm = variant === "warm";
   const { t } = useI18n();
+  const progress = calculateDomainProgress(history, readWritingReports());
   const items = warm
     ? [progressItems[1], progressItems[0], ...progressItems.slice(2)]
     : progressItems;
@@ -327,10 +329,11 @@ function ProgressCard({ variant, onOpen }) {
         {warm && <button type="button" className="mini-action" onClick={() => onOpen("编辑学习目标")}>{t("编辑目标")}</button>}
       </div>
       <div className="progress-list">
-        {items.map(({ label, en, value, warmValue, color, icon: Icon }) => {
-          const display = warm ? warmValue : value;
+        {items.map(({ label, en, color, icon: Icon }) => {
+          const display = progress[en];
+          const hasData = display !== null;
           return (
-            <div className="progress-row" key={en}>
+            <div className={`progress-row ${hasData ? "" : "no-data"}`} key={en}>
               <span className="subject-icon" style={{ "--subject-color": color }}>
                 <Icon size={16} weight="fill" />
               </span>
@@ -338,14 +341,23 @@ function ProgressCard({ variant, onOpen }) {
                 <strong>{t(label)}</strong>
                 <small>{en}</small>
               </div>
-              <div className="progress-track" aria-label={`${t(label)} ${display}%`}>
-                <span style={{ width: `${display}%`, backgroundColor: color }} />
+              <div
+                className="progress-track"
+                role="progressbar"
+                aria-label={hasData ? `${t(label)} ${display}%` : `${t(label)} ${t("暂无真实成绩")}`}
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow={hasData ? display : undefined}
+                title={hasData ? t("最近一次真实成绩：{value}%", { value: display }) : t("暂无真实成绩")}
+              >
+                <span style={{ width: `${display ?? 0}%`, backgroundColor: color }} />
               </div>
-              <b>{display}%</b>
+              <b>{hasData ? `${display}%` : "—"}</b>
             </div>
           );
         })}
       </div>
+      <small className="progress-source-note">{t("显示各领域最近一次真实成绩")}</small>
     </section>
   );
 }
@@ -610,7 +622,7 @@ function WarmDashboard({ onOpen, studentName, goal, history, onEditGoal }) {
       <div className="warm-grid">
         <Countdown variant="warm" onOpen={onOpen} />
         <Timeline variant="warm" onOpen={onOpen} />
-        <ProgressCard variant="warm" onOpen={onOpen} />
+        <ProgressCard variant="warm" onOpen={onOpen} history={history} />
         <QuickEntry variant="warm" onOpen={onOpen} />
         <NewsCard variant="warm" onOpen={onOpen} />
         <GoalCard goal={goal} history={history} onEdit={onEditGoal} />
@@ -624,7 +636,7 @@ function WarmDashboard({ onOpen, studentName, goal, history, onEditGoal }) {
   );
 }
 
-function ProfessionalDashboard({ onOpen, notificationOpen, setNotificationOpen, studentName }) {
+function ProfessionalDashboard({ onOpen, notificationOpen, setNotificationOpen, studentName, history }) {
   const { t, locale } = useI18n();
   const todayLabel = new Intl.DateTimeFormat(locale, {
     year: "numeric",
@@ -661,7 +673,7 @@ function ProfessionalDashboard({ onOpen, notificationOpen, setNotificationOpen, 
       <div className="pro-grid">
         <Countdown variant="professional" onOpen={onOpen} />
         <Timeline variant="professional" onOpen={onOpen} />
-        <ProgressCard variant="professional" onOpen={onOpen} />
+        <ProgressCard variant="professional" onOpen={onOpen} history={history} />
         <QuickEntry variant="professional" onOpen={onOpen} />
         <NewsCard variant="professional" onOpen={onOpen} />
         <LearningAdvice onOpen={onOpen} />
@@ -1779,6 +1791,7 @@ function LocalizedApp({ settings, onUpdateSettings }) {
             notificationOpen={notificationOpen}
             setNotificationOpen={setNotificationOpen}
             studentName={settings.studentName}
+            history={history}
           />
         )}
       </section>

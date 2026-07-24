@@ -626,6 +626,22 @@ html[lang^="zh"] .warm-shell .brand-copy small {
   color: #41464e;
 }
 
+.progress-row.no-data .progress-track {
+  background: #eceef1;
+}
+
+.progress-row.no-data b {
+  color: #8a9098;
+}
+
+.progress-source-note {
+  display: block;
+  margin: -9px 20px 12px;
+  color: #8a9098;
+  font-size: 10px;
+  text-align: right;
+}
+
 .quick-card {
   grid-column: 1 / 3;
 }
