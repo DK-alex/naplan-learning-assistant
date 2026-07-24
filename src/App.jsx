@@ -67,10 +67,6 @@ import {
   NAPLAN_KEY_DATES_URL,
 } from "./data/naplan-schedule.js";
 import {
-  LIVE_MISTAKES_EVENT,
-  readLivePracticeMistakes,
-} from "../../naplan-ui-clone/src/practiceSession.js";
-import {
   AI_PROVIDERS,
   createDefaultAiSettings,
   getAiProvider,
@@ -1197,7 +1193,7 @@ function FocusWorkspace({ history, onStartPractice }) {
       <section className="feature-card practice-cta">
         <Target size={52} weight="fill" />
         <h2>{t("从真实错题开始")}</h2>
-        <p>{t("下一套试卷会按年级加载题库，并自动记录答案、标记与错题。")}</p>
+        <p>{t("下一套试卷会按年级加载题库，考试中只记录答案和标记；提交后再生成结果与错题。")}</p>
         <button type="button" className="feature-primary" onClick={onStartPractice}>{t("开始模拟练习")} <ArrowRight size={18} /></button>
       </section>
     </div>
@@ -1235,11 +1231,8 @@ function RecordsWorkspace({ history, onStartPractice, onDeleteRecord }) {
   );
 }
 
-function MistakesWorkspace({ history, liveMistakes, onStartPractice }) {
-  const mistakes = [
-    ...liveMistakes,
-    ...history.flatMap((record) => record.mistakes || []),
-  ].filter((mistake, index, all) => (
+function MistakesWorkspace({ history, onStartPractice }) {
+  const mistakes = history.flatMap((record) => record.mistakes || []).filter((mistake, index, all) => (
     all.findIndex((item) => (
       item.id === mistake.id
       && item.year_level === mistake.year_level
@@ -1254,12 +1247,12 @@ function MistakesWorkspace({ history, liveMistakes, onStartPractice }) {
         <button type="button" className="feature-primary" onClick={onStartPractice}>{t("再练一套")}</button>
       </div>
       {mistakes.length === 0 ? (
-        <div className="empty-workspace"><Books size={44} /><strong>{t("错题本是空的")}</strong><p>{t("作答后会立即批改，答错的题会连同解析一起保存。")}</p></div>
+        <div className="empty-workspace"><Books size={44} /><strong>{t("错题本是空的")}</strong><p>{t("模拟考试结束并提交后，答错的题会连同正确答案和解析保存到错题本。")}</p></div>
       ) : (
         <div className="mistake-list">
           {mistakes.map((mistake, index) => (
             <details key={`${mistake.id}-${index}`}>
-              <summary><b>Year {mistake.year_level}</b><span>{mistake.skill}</span><small>{t(mistake.live ? "即时错题" : "答错")}</small></summary>
+              <summary><b>Year {mistake.year_level}</b><span>{mistake.skill}</span><small>{t("答错")}</small></summary>
               <div><strong>{mistake.prompt}</strong><p>{t("你的答案：")}{mistake.responseDisplay}</p><p>{t("正确答案：")}{mistake.answer}</p><em>{mistake.explanation}</em></div>
             </details>
           ))}
@@ -1516,7 +1509,6 @@ function FeatureWorkspace({
   settings,
   onUpdateSettings,
   history,
-  liveMistakes,
 }) {
   const descriptions = {
     "时间表 & 倒计时": "把学校安排、模拟练习和家庭复习节奏放在同一条时间线上。",
@@ -1526,7 +1518,7 @@ function FeatureWorkspace({
     "复习重点": "根据模拟练习的错题自动识别优先能力。",
     "AI 批改 & 报告": "接收 Writing 模拟作答，并准备生成逐项批改报告。",
     "学习记录": "所有已提交模拟卷的成绩和作文记录。",
-    "错题本": "即时保存答错题目、正确答案和解析；改对后会自动移除。",
+    "错题本": "模拟考试结束后统一保存答错题目、正确答案和解析。",
     "设置": "管理学生年级、称呼、界面语言和作文报告语言。",
   };
   return (
@@ -1539,7 +1531,7 @@ function FeatureWorkspace({
       {active === "复习重点" && <FocusWorkspace history={history} onStartPractice={onStartPractice} />}
       {active === "AI 批改 & 报告" && <AiReportWorkspace history={history} onStartWriting={onStartWriting} onNavigate={onNavigate} settings={settings} />}
       {active === "学习记录" && <RecordsWorkspace history={history} onStartPractice={onStartPractice} onDeleteRecord={onDeletePracticeRecord} />}
-      {active === "错题本" && <MistakesWorkspace history={history} liveMistakes={liveMistakes} onStartPractice={onStartPractice} />}
+      {active === "错题本" && <MistakesWorkspace history={history} onStartPractice={onStartPractice} />}
       {active === "设置" && <SettingsWorkspace settings={settings} onUpdateSettings={onUpdateSettings} />}
     </div>
   );
@@ -1705,7 +1697,6 @@ function LocalizedApp({ settings, onUpdateSettings }) {
   const [goalEditorOpen, setGoalEditorOpen] = useState(false);
   const [goal, setGoal] = useState(() => readLearningGoal());
   const [history, setHistory] = useState(() => readPracticeHistory());
-  const [liveMistakes, setLiveMistakes] = useState(() => readLivePracticeMistakes());
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -1715,19 +1706,15 @@ function LocalizedApp({ settings, onUpdateSettings }) {
   useEffect(() => {
     const refreshHistory = () => {
       setHistory(readPracticeHistory());
-      setLiveMistakes(readLivePracticeMistakes());
     };
     const handleStorage = (event) => {
       if (event.key === "naplan-practice-history") refreshHistory();
-      if (event.key === "naplan-live-practice-mistakes") setLiveMistakes(readLivePracticeMistakes());
     };
     window.addEventListener("focus", refreshHistory);
     window.addEventListener("storage", handleStorage);
-    window.addEventListener(LIVE_MISTAKES_EVENT, refreshHistory);
     return () => {
       window.removeEventListener("focus", refreshHistory);
       window.removeEventListener("storage", handleStorage);
-      window.removeEventListener(LIVE_MISTAKES_EVENT, refreshHistory);
     };
   }, []);
 
@@ -1777,7 +1764,6 @@ function LocalizedApp({ settings, onUpdateSettings }) {
             settings={settings}
             onUpdateSettings={onUpdateSettings}
             history={history}
-            liveMistakes={liveMistakes}
           />
         ) : variant === "warm" ? (
           <WarmDashboard
