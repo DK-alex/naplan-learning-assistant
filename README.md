@@ -6,15 +6,16 @@
 
 ## 下载最新版
 
-当前版本：**v1.0.18**
+当前版本：**v1.0.20**
 
-- [Windows 安装版（推荐）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.18/NAPLAN-Learning-Assistant-Setup-1.0.18-x64.exe)
-- [Windows 免安装版](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.18/NAPLAN-Learning-Assistant-Portable-1.0.18-x64.exe)
+- [Windows 安装版（推荐）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.20/NAPLAN-Learning-Assistant-Setup-1.0.20-x64.exe)
+- [Windows ZIP 绿色版（Win10 推荐）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.20/NAPLAN-Learning-Assistant-Green-1.0.20-x64.zip)
+- [Windows 自解压免安装版](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.20/NAPLAN-Learning-Assistant-Portable-1.0.20-x64.exe)
 - [所有版本与 SHA-256 校验值](https://github.com/DK-alex/naplan-learning-assistant/releases)
 
 系统要求：Windows 10/11，x64。
 
-安装版下载后运行安装程序；免安装版下载后可直接双击运行。软件和学习记录保存在本机，不需要把题库部署到服务器。
+安装版下载后运行安装程序；ZIP 绿色版解压到独立文件夹后，运行 `NAPLAN Learning Assistant.exe`。软件和学习记录保存在本机，不需要把题库部署到服务器。
 
 ### Windows 安全提示
 
