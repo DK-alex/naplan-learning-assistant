@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { getLatestWritingReportSummary } from "../src/data/writing-report-summary.js";
+
+const stylesPath = fileURLToPath(new URL("../src/styles.css", import.meta.url));
 
 function reportRecord({
   id,
@@ -65,4 +69,13 @@ test("comparison is omitted when the previous report uses another rubric maximum
 test("empty or invalid report collections return no summary", () => {
   assert.equal(getLatestWritingReportSummary([]), null);
   assert.equal(getLatestWritingReportSummary([{ generated_at: "2026-07-24T10:00:00Z" }]), null);
+});
+
+test("dashboard writing report action keeps breathing room above the card edge", () => {
+  const styles = readFileSync(stylesPath, "utf8");
+
+  assert.match(
+    styles,
+    /\.report-card-footer \.report-action\s*\{\s*margin-bottom:\s*12px;\s*\}/,
+  );
 });

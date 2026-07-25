@@ -19,7 +19,10 @@ export function DesktopAppCanvas({ children }) {
     return () => window.removeEventListener("resize", updateViewport);
   }, []);
 
-  const scale = Math.min(viewport.width / DESIGN_WIDTH, viewport.height / DESIGN_HEIGHT);
+  // The desktop window is constrained to 16:9 when restored. Cover scaling also
+  // removes any visible frame if Windows reports a slightly different fullscreen
+  // viewport (for example on a non-16:9 display).
+  const scale = Math.max(viewport.width / DESIGN_WIDTH, viewport.height / DESIGN_HEIGHT);
   const frameWidth = DESIGN_WIDTH * scale;
   const frameHeight = DESIGN_HEIGHT * scale;
 

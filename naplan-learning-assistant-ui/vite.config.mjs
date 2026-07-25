@@ -51,7 +51,7 @@ export default defineConfig({
     host: "0.0.0.0",
     allowedHosts: ["terminal.local"],
     fs: {
-      allow: [path.resolve(projectRoot, "..")],
+      allow: [projectRoot],
     },
     warmup: {
       clientFiles: ["./src/main.jsx"],

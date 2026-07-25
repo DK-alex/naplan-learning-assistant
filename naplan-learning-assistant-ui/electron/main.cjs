@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain, Menu, screen, shell } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, Menu, shell } = require("electron");
 const { createReadStream, promises: fs } = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
@@ -9,7 +9,7 @@ const {
   DEFAULT_WINDOW_WIDTH,
   MINIMUM_WINDOW_HEIGHT,
   MINIMUM_WINDOW_WIDTH,
-  fitAspectRatioWithin,
+  toggleFullscreenWindow,
 } = require("./window-layout.cjs");
 const {
   classifyOfficialPdfPolicy,
@@ -42,8 +42,6 @@ const CONTENT_TYPES = {
 let mainWindow;
 let localServer;
 let aiHandlerPromise;
-let restoredMainWindowBounds;
-let isAspectMaximized = false;
 
 function getAiHandler() {
   if (!aiHandlerPromise) {
@@ -356,21 +354,7 @@ ipcMain.on("desktop-window:minimize", (event) => {
 ipcMain.on("desktop-window:toggle-maximize", (event) => {
   const targetWindow = BrowserWindow.fromWebContents(event.sender);
   if (!targetWindow) return;
-  if (targetWindow.isFullScreen()) {
-    targetWindow.setFullScreen(false);
-    return;
-  }
-  if (isAspectMaximized && restoredMainWindowBounds) {
-    targetWindow.setBounds(restoredMainWindowBounds, true);
-    restoredMainWindowBounds = undefined;
-    isAspectMaximized = false;
-    return;
-  }
-
-  restoredMainWindowBounds = targetWindow.getBounds();
-  const display = screen.getDisplayMatching(restoredMainWindowBounds);
-  targetWindow.setBounds(fitAspectRatioWithin(display.workArea), true);
-  isAspectMaximized = true;
+  toggleFullscreenWindow(targetWindow);
 });
 
 ipcMain.on("desktop-window:set-exam-mode", (event, enabled) => {
