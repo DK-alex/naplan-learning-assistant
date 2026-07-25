@@ -6,11 +6,11 @@
 
 ## 下载最新版
 
-当前版本：**v1.0.20**
+当前版本：**v1.0.22**
 
-- [Windows 安装版（推荐）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.20/NAPLAN-Learning-Assistant-Setup-1.0.20-x64.exe)
-- [Windows ZIP 绿色版（Win10 推荐）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.20/NAPLAN-Learning-Assistant-Green-1.0.20-x64.zip)
-- [Windows 自解压免安装版](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.20/NAPLAN-Learning-Assistant-Portable-1.0.20-x64.exe)
+- [Windows 安装版（推荐）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.22/NAPLAN-Learning-Assistant-Setup-1.0.22-x64.exe)
+- [Windows ZIP 绿色版（Win10 免安装首选）](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.22/NAPLAN-Learning-Assistant-Green-1.0.22-x64.zip)
+- [Windows 自解压免安装版](https://github.com/DK-alex/naplan-learning-assistant/releases/download/v1.0.22/NAPLAN-Learning-Assistant-Portable-1.0.22-x64.exe)
 - [所有版本与 SHA-256 校验值](https://github.com/DK-alex/naplan-learning-assistant/releases)
 
 系统要求：Windows 10/11，x64。
@@ -27,6 +27,7 @@
 - 选择、填空、排序、拖拽、连线、测量等多种答题形式
 - 图片题与写作刺激材料
 - 模拟考试、自动保存、考试结束后统一回顾
+- 使用 Windows 内置 Microsoft 英语语音朗读题目，播放器显示真实时长和进度
 - 错题自动加入错题本
 - 学习目标、领域进度和学习记录
 - 本地保存的作文批改历史

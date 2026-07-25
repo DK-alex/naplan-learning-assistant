@@ -25,6 +25,7 @@ import {
   LockKeyhole,
   Menu,
   PenLine,
+  Pause,
   Play,
   Redo2,
   RotateCcw,
@@ -49,6 +50,7 @@ import {
   readActivePracticeSession,
   saveActivePracticeSession,
 } from './practiceSession.js';
+import { formatAudioTime, useMicrosoftTts } from './useMicrosoftTts.js';
 
 const DOMAINS = {
   3: ['Writing', 'Reading', 'Conventions of language', 'Numeracy'],
@@ -321,15 +323,43 @@ function Dashboard({ grade, domain, onStart }) {
   );
 }
 
-function AudioBar({ playing, onToggle, compact = false }) {
+function AudioBar({ playback, compact = false }) {
+  const playing = playback.status === 'playing';
+  const loading = playback.status === 'loading';
+  const progress = Math.round(Math.min(1, Math.max(0, playback.progress || 0)) * 100);
   return (
     <div className={`audio-bar ${compact ? 'audio-bar-compact' : ''}`}>
-      <button aria-label={playing ? 'Pause' : 'Play'} onClick={onToggle}>
-        <Play size={compact ? 17 : 21} fill="currentColor" />
+      <button
+        aria-label={loading ? 'Preparing Microsoft voice' : playing ? 'Pause' : 'Play'}
+        aria-busy={loading}
+        disabled={loading}
+        onClick={playback.toggle}
+      >
+        {playing
+          ? <Pause size={compact ? 17 : 21} fill="currentColor" />
+          : <Play size={compact ? 17 : 21} fill="currentColor" />}
       </button>
       <Volume2 size={compact ? 17 : 22} />
-      <div className={`audio-track ${playing ? 'playing' : ''}`}><i /></div>
-      <span>{playing ? '0:04' : '0:00'} &nbsp;/&nbsp; {compact ? '0:09' : '0:42'}</span>
+      <div
+        className="audio-track"
+        role="progressbar"
+        aria-label="Question audio progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow={progress}
+      >
+        <i style={{ width: `${progress}%` }} />
+      </div>
+      <span>
+        {formatAudioTime(playback.currentTime, '0:00')}
+        {' / '}
+        {formatAudioTime(playback.duration)}
+      </span>
+      <span className="sr-status" aria-live="polite">
+        {loading
+          ? 'Preparing Microsoft Windows voice.'
+          : playback.error || (playback.voiceName ? `Voice: ${playback.voiceName}.` : '')}
+      </span>
     </div>
   );
 }
@@ -924,10 +954,10 @@ function StimulusTable({ stimulus }) {
   );
 }
 
-function NumeracyQuestion({ item, answer, setAnswer }) {
+function NumeracyQuestion({ item, answer, setAnswer, audioPlayback }) {
   return (
     <section className="single-question numeracy-question">
-      <button className="speak-question" aria-label="Read question aloud"><Volume2 size={20} /></button>
+      <button className="speak-question" aria-label="Read question aloud" onClick={audioPlayback.toggle}><Volume2 size={20} /></button>
       <StimulusTable stimulus={item.stimulus} />
       <MeasurementVisual stimulus={item.stimulus} />
       <p className="question-text">{item.prompt}</p>
@@ -936,7 +966,7 @@ function NumeracyQuestion({ item, answer, setAnswer }) {
   );
 }
 
-function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudio }) {
+function ConventionsQuestion({ item, answer, setAnswer, audioPlayback }) {
   const spelling = item.item_type === 'text_entry';
   const displayText = item.stimulus?.display_text ?? item.stimulus?.text;
   return (
@@ -947,7 +977,7 @@ function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudi
           {item.skill === 'audio_dictation' && (
             <>
               <p>Click on the play button to hear the missing word.</p>
-              <AudioBar playing={audioPlaying} onToggle={toggleAudio} compact />
+              <AudioBar playback={audioPlayback} compact />
             </>
           )}
           <p>{item.prompt}</p>
@@ -968,7 +998,7 @@ function ConventionsQuestion({ item, answer, setAnswer, audioPlaying, toggleAudi
   );
 }
 
-function WritingPrompt({ item, audioVisible, audioPlaying, toggleAudio, onStart, paperMode = false }) {
+function WritingPrompt({ item, audioVisible, audioPlayback, onStart, paperMode = false }) {
   const narrative = item.subdomain === 'narrative';
   const ideaStarters = item.stimulus?.idea_starters ?? [
     narrative ? 'the characters and setting' : 'your position and intended audience',
@@ -983,7 +1013,7 @@ function WritingPrompt({ item, audioVisible, audioPlaying, toggleAudio, onStart,
   const stimulusImage = item.stimulus?.image;
   return (
     <div className="writing-prompt-screen">
-      {audioVisible && <AudioBar playing={audioPlaying} onToggle={toggleAudio} />}
+      {audioVisible && <AudioBar playback={audioPlayback} />}
       <div className="writing-prompt-body">
         <div className="writing-copy">
           {paperMode && (
@@ -1433,7 +1463,6 @@ function Player({
   const [writingResponse, setWritingResponse] = useState(saved.writingResponse ?? '');
   const [timeHidden, setTimeHidden] = useState(false);
   const [audioVisible, setAudioVisible] = useState(domain === 'Writing' || domain === 'Numeracy');
-  const [audioPlaying, setAudioPlaying] = useState(false);
   const [tools, setTools] = useState({ ruler: false, protractor: false, calculator: false });
   const [calculatorSection, setCalculatorSection] = useState(saved.calculatorSection ?? !sectionBreakAfter);
   const [endDialogOpen, setEndDialogOpen] = useState(false);
@@ -1444,6 +1473,24 @@ function Player({
     : 2 * 60 * 60;
   const [remainingSeconds, setRemainingSeconds] = useState(() => Math.max(0, timeLimitSeconds - elapsedSeconds.current));
   const currentItem = questions[question - 1];
+  const audioText = useMemo(() => {
+    const scripted = currentItem?.stimulus?.audio_script;
+    if (scripted) return scripted;
+    if (domain === 'Writing') {
+      return [
+        currentItem?.stimulus?.title,
+        currentItem?.prompt,
+        currentItem?.stimulus?.context,
+        currentItem?.stimulus?.instructions,
+      ].filter(Boolean).join('. ');
+    }
+    return currentItem?.prompt || '';
+  }, [currentItem, domain]);
+  const audioPlayback = useMicrosoftTts({
+    text: audioText,
+    playbackKey: currentItem?.id || `${domain}-${question}`,
+  });
+  const audioPlaying = audioPlayback.status === 'playing';
   const toolAvailability = {
     ruler: domain === 'Numeracy' && Boolean(currentItem?.tool_policy?.ruler),
     protractor: domain === 'Numeracy' && Boolean(currentItem?.tool_policy?.protractor),
@@ -1566,16 +1613,7 @@ function Player({
     });
   };
 
-  const toggleAudio = () => {
-    setAudioPlaying((playing) => !playing);
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      if (!audioPlaying) {
-        const text = currentItem.stimulus?.audio_script ?? currentItem.prompt;
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-      }
-    }
-  };
+  const toggleAudio = audioPlayback.toggle;
 
   const toggleTool = (tool) => setTools((current) => ({ ...current, [tool]: !current[tool] }));
 
@@ -1637,8 +1675,7 @@ function Player({
           <WritingPrompt
             item={currentItem}
             audioVisible={audioVisible}
-            audioPlaying={audioPlaying}
-            toggleAudio={toggleAudio}
+            audioPlayback={audioPlayback}
             paperMode={grade === 3}
             onStart={() => setMode(grade === 3 ? 'paper-writing' : 'writing-editor')}
           />
@@ -1662,7 +1699,7 @@ function Player({
         )}
         {mode === 'question' && (
           <>
-            {audioVisible && domain === 'Numeracy' && <AudioBar playing={audioPlaying} onToggle={toggleAudio} />}
+            {audioVisible && domain === 'Numeracy' && <AudioBar playback={audioPlayback} />}
             <div className={`question-content ${audioVisible && domain === 'Numeracy' ? 'with-audio' : ''}`}>
               {domain === 'Reading' && (
                 <ReadingQuestion
@@ -1678,6 +1715,7 @@ function Player({
                   item={currentItem}
                   answer={currentAnswer}
                   setAnswer={setCurrentAnswer}
+                  audioPlayback={audioPlayback}
                 />
               )}
               {domain === 'Conventions of language' && (
@@ -1685,8 +1723,7 @@ function Player({
                   item={currentItem}
                   answer={currentAnswer}
                   setAnswer={setCurrentAnswer}
-                  audioPlaying={audioPlaying}
-                  toggleAudio={toggleAudio}
+                  audioPlayback={audioPlayback}
                 />
               )}
             </div>

@@ -1609,19 +1609,25 @@ select:focus-visible,
 .audio-track {
   position: relative;
   height: 5px;
+  overflow: hidden;
   background: #8ac4dc;
 }
 
 .audio-track i {
   position: absolute;
-  inset: 0 auto 0 0;
-  width: 20%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: 0;
+  transform-origin: left center;
   background: #fff;
+  transition: width 120ms linear;
 }
 
-.audio-track.playing i {
-  width: 62%;
-  transition: width 4s linear;
+.audio-bar button:disabled {
+  cursor: wait;
+  opacity: 0.72;
 }
 
 .audio-bar span {
