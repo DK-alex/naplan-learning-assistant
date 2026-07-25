@@ -9,6 +9,7 @@ const {
   DEFAULT_WINDOW_WIDTH,
   MINIMUM_WINDOW_HEIGHT,
   MINIMUM_WINDOW_WIDTH,
+  syncRoundedWindowShape,
   toggleFullscreenWindow,
 } = require("./window-layout.cjs");
 const {
@@ -316,7 +317,7 @@ function createMainWindow() {
     minHeight: MINIMUM_WINDOW_HEIGHT,
     show: false,
     frame: false,
-    roundedCorners: false,
+    roundedCorners: true,
     autoHideMenuBar: true,
     title: "NAPLAN Learning Assistant",
     icon: ICON_FILE,
@@ -330,7 +331,14 @@ function createMainWindow() {
   });
 
   mainWindow.setAspectRatio(APP_ASPECT_RATIO);
-  mainWindow.once("ready-to-show", () => mainWindow.show());
+  const updateRoundedWindowShape = () => syncRoundedWindowShape(mainWindow);
+  mainWindow.on("resize", updateRoundedWindowShape);
+  mainWindow.on("enter-full-screen", updateRoundedWindowShape);
+  mainWindow.on("leave-full-screen", updateRoundedWindowShape);
+  mainWindow.once("ready-to-show", () => {
+    updateRoundedWindowShape();
+    mainWindow.show();
+  });
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith(APP_ORIGIN)) return { action: "allow" };
     shell.openExternal(url);
