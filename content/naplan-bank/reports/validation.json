@@ -1,169 +1,34 @@
 {
-  "generated_at": "2026-07-24T19:42:26.599Z",
+  "generated_at": "2026-07-25T13:32:25.125Z",
   "result": "passed",
   "years": {
     "3": {
-      "total_items": 2060,
-      "unique_ids": 2060,
-      "unique_item_fingerprints": 2060,
+      "total_items": 1700,
+      "unique_ids": 1700,
+      "unique_item_fingerprints": 1700,
       "reading_passages": 80,
-      "average_reading_words": 71.9,
+      "average_reading_words": 72.2,
       "by_domain": {
         "reading": 560,
         "conventions_of_language": 600,
-        "numeracy": 800,
+        "numeracy": 440,
         "writing": 100
       },
       "by_difficulty": {
-        "easy": 772,
-        "medium": 870,
-        "hard": 318,
+        "easy": 635,
+        "medium": 708,
+        "hard": 257,
         "not_applicable": 100
       },
       "by_item_type": {
-        "multiple_choice": 1323,
+        "multiple_choice": 640,
+        "inline_choice": 120,
+        "multiple_select": 160,
+        "drag_and_drop": 240,
         "hot_text": 32,
-        "inline_choice": 80,
-        "multiple_select": 80,
-        "drag_and_drop": 80,
-        "text_entry": 288,
-        "hotspot": 76,
-        "matrix": 1,
-        "writing_prompt": 100
-      },
-      "conventions_by_subdomain": {
-        "spelling": 288,
-        "grammar": 218,
-        "punctuation": 94
-      },
-      "reading_by_text_type": {
-        "imaginative": 224,
-        "informative": 196,
-        "persuasive": 140
-      },
-      "spelling_by_item_type": {
-        "audio_dictation": 173,
-        "mistake_identified": 58,
-        "mistake_not_identified": 57
-      }
-    },
-    "5": {
-      "total_items": 2060,
-      "unique_ids": 2060,
-      "unique_item_fingerprints": 2060,
-      "reading_passages": 80,
-      "average_reading_words": 128.5,
-      "by_domain": {
-        "reading": 560,
-        "conventions_of_language": 600,
-        "numeracy": 800,
-        "writing": 100
-      },
-      "by_difficulty": {
-        "easy": 608,
-        "medium": 884,
-        "hard": 468,
-        "not_applicable": 100
-      },
-      "by_item_type": {
-        "multiple_choice": 1377,
-        "hot_text": 32,
-        "inline_choice": 80,
-        "multiple_select": 80,
-        "drag_and_drop": 80,
-        "text_entry": 288,
-        "hotspot": 22,
-        "matrix": 1,
-        "writing_prompt": 100
-      },
-      "conventions_by_subdomain": {
-        "spelling": 288,
-        "grammar": 218,
-        "punctuation": 94
-      },
-      "reading_by_text_type": {
-        "imaginative": 224,
-        "persuasive": 140,
-        "informative": 196
-      },
-      "spelling_by_item_type": {
-        "audio_dictation": 173,
-        "mistake_not_identified": 57,
-        "mistake_identified": 58
-      }
-    },
-    "7": {
-      "total_items": 2060,
-      "unique_ids": 2060,
-      "unique_item_fingerprints": 2060,
-      "reading_passages": 80,
-      "average_reading_words": 164.7,
-      "by_domain": {
-        "reading": 560,
-        "conventions_of_language": 600,
-        "numeracy": 800,
-        "writing": 100
-      },
-      "by_difficulty": {
-        "easy": 458,
-        "medium": 884,
-        "hard": 618,
-        "not_applicable": 100
-      },
-      "by_item_type": {
-        "multiple_choice": 1353,
-        "inline_choice": 80,
-        "multiple_select": 80,
-        "drag_and_drop": 80,
-        "hot_text": 26,
-        "text_entry": 331,
-        "matrix": 1,
-        "hotspot": 9,
-        "writing_prompt": 100
-      },
-      "conventions_by_subdomain": {
-        "spelling": 288,
-        "grammar": 218,
-        "punctuation": 94
-      },
-      "reading_by_text_type": {
-        "persuasive": 189,
-        "informative": 189,
-        "imaginative": 182
-      },
-      "spelling_by_item_type": {
-        "mistake_identified": 58,
-        "audio_dictation": 173,
-        "mistake_not_identified": 57
-      }
-    },
-    "9": {
-      "total_items": 2060,
-      "unique_ids": 2060,
-      "unique_item_fingerprints": 2060,
-      "reading_passages": 80,
-      "average_reading_words": 186.3,
-      "by_domain": {
-        "reading": 560,
-        "conventions_of_language": 600,
-        "numeracy": 800,
-        "writing": 100
-      },
-      "by_difficulty": {
-        "easy": 388,
-        "medium": 790,
-        "hard": 782,
-        "not_applicable": 100
-      },
-      "by_item_type": {
-        "multiple_choice": 1326,
-        "inline_choice": 80,
-        "multiple_select": 80,
-        "drag_and_drop": 80,
-        "hot_text": 26,
-        "text_entry": 352,
-        "matrix": 1,
-        "hotspot": 15,
+        "text_entry": 328,
+        "matrix": 40,
+        "hotspot": 40,
         "writing_prompt": 100
       },
       "conventions_by_subdomain": {
@@ -172,14 +37,209 @@
         "grammar": 218
       },
       "reading_by_text_type": {
-        "persuasive": 189,
-        "informative": 189,
-        "imaginative": 182
+        "informative": 196,
+        "imaginative": 224,
+        "persuasive": 140
       },
       "spelling_by_item_type": {
         "audio_dictation": 173,
         "mistake_identified": 58,
         "mistake_not_identified": 57
+      },
+      "numeracy_by_demo_type": {
+        "Y3-01-picture-subtraction": 40,
+        "Y3-02-recognise-halves": 40,
+        "Y3-03-missing-addend-story": 40,
+        "Y3-04-order-lengths-visual": 40,
+        "Y3-05-threshold-classification-matrix": 40,
+        "Y3-06-match-collections-to-numbers": 40,
+        "Y3-07-addition-equation-drag": 40,
+        "Y3-08-compare-lengths-uniform-units": 40,
+        "Y3-09-select-collection-by-cardinality": 40,
+        "Y3-10-identify-shapes-in-composite": 40,
+        "Y3-11-pair-complements-to-target": 40
+      }
+    },
+    "5": {
+      "total_items": 1780,
+      "unique_ids": 1780,
+      "unique_item_fingerprints": 1780,
+      "reading_passages": 80,
+      "average_reading_words": 128.6,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 520,
+        "writing": 100
+      },
+      "by_difficulty": {
+        "easy": 518,
+        "medium": 755,
+        "hard": 407,
+        "not_applicable": 100
+      },
+      "by_item_type": {
+        "multiple_choice": 640,
+        "inline_choice": 120,
+        "multiple_select": 160,
+        "drag_and_drop": 240,
+        "hot_text": 32,
+        "text_entry": 368,
+        "hotspot": 80,
+        "matrix": 40,
+        "writing_prompt": 100
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "informative": 196,
+        "imaginative": 224,
+        "persuasive": 140
+      },
+      "spelling_by_item_type": {
+        "audio_dictation": 173,
+        "mistake_identified": 58,
+        "mistake_not_identified": 57
+      },
+      "numeracy_by_demo_type": {
+        "Y5-01-half-of-visual-collection": 40,
+        "Y5-02-possible-die-outcomes": 40,
+        "Y5-03-sum-category-counts": 40,
+        "Y5-04-repeated-spending-budget": 40,
+        "Y5-05-order-lengths-visual": 40,
+        "Y5-06-compare-measures-to-benchmark": 40,
+        "Y5-07-match-polygons-to-vertex-count": 40,
+        "Y5-08-addition-equation-drag": 40,
+        "Y5-09-measure-image-with-online-ruler": 40,
+        "Y5-10-complete-subtraction-equation": 40,
+        "Y5-11-greatest-value-mixed-representations-table": 40,
+        "Y5-12-select-two-banknotes-for-total": 40,
+        "Y5-13-pair-complements-to-target": 40
+      }
+    },
+    "7": {
+      "total_items": 1820,
+      "unique_ids": 1820,
+      "unique_item_fingerprints": 1820,
+      "reading_passages": 80,
+      "average_reading_words": 163.9,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 560,
+        "writing": 100
+      },
+      "by_difficulty": {
+        "easy": 393,
+        "medium": 774,
+        "hard": 553,
+        "not_applicable": 100
+      },
+      "by_item_type": {
+        "multiple_choice": 686,
+        "inline_choice": 120,
+        "multiple_select": 160,
+        "drag_and_drop": 240,
+        "hot_text": 26,
+        "text_entry": 408,
+        "matrix": 40,
+        "hotspot": 40,
+        "writing_prompt": 100
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "informative": 189,
+        "imaginative": 182,
+        "persuasive": 189
+      },
+      "spelling_by_item_type": {
+        "audio_dictation": 173,
+        "mistake_identified": 58,
+        "mistake_not_identified": 57
+      },
+      "numeracy_by_demo_type": {
+        "Y7-01-equal-groups-plus-remainder": 40,
+        "Y7-02-redistribute-equal-groups": 40,
+        "Y7-03-fraction-to-decimal-power-of-ten": 40,
+        "Y7-04-fundamental-counting-principle": 40,
+        "Y7-05-classify-event-probability": 40,
+        "Y7-06-order-reflex-and-nonreflex-angles": 40,
+        "Y7-07-match-measurement-attribute-to-unit": 40,
+        "Y7-08-compare-areas-on-grid-floorplan": 40,
+        "Y7-09-select-two-banknotes-for-total": 40,
+        "Y7-10-multi-rate-profit-or-loss": 40,
+        "Y7-11-measure-image-to-half-centimetre": 40,
+        "Y7-12-measure-angle-with-protractor": 40,
+        "Y7-13-complete-visual-growing-pattern": 40,
+        "Y7-14-pair-equivalent-fraction-decimal-percent": 40
+      }
+    },
+    "9": {
+      "total_items": 1820,
+      "unique_ids": 1820,
+      "unique_item_fingerprints": 1820,
+      "reading_passages": 80,
+      "average_reading_words": 186.5,
+      "by_domain": {
+        "reading": 560,
+        "conventions_of_language": 600,
+        "numeracy": 560,
+        "writing": 100
+      },
+      "by_difficulty": {
+        "easy": 335,
+        "medium": 682,
+        "hard": 703,
+        "not_applicable": 100
+      },
+      "by_item_type": {
+        "multiple_choice": 686,
+        "inline_choice": 120,
+        "multiple_select": 160,
+        "drag_and_drop": 240,
+        "hot_text": 26,
+        "text_entry": 408,
+        "hotspot": 40,
+        "matrix": 40,
+        "writing_prompt": 100
+      },
+      "conventions_by_subdomain": {
+        "spelling": 288,
+        "grammar": 218,
+        "punctuation": 94
+      },
+      "reading_by_text_type": {
+        "informative": 189,
+        "persuasive": 189,
+        "imaginative": 182
+      },
+      "spelling_by_item_type": {
+        "mistake_not_identified": 57,
+        "audio_dictation": 173,
+        "mistake_identified": 58
+      },
+      "numeracy_by_demo_type": {
+        "Y9-01-subtract-unlike-fractions": 40,
+        "Y9-02-subtract-currency-decimals": 40,
+        "Y9-03-whole-groups-from-division": 40,
+        "Y9-04-place-value-digit-constraints": 40,
+        "Y9-05-equal-area-grid-shapes": 40,
+        "Y9-06-calendar-weekday-date": 40,
+        "Y9-07-read-analogue-scales-and-order": 40,
+        "Y9-08-match-nets-to-solids": 40,
+        "Y9-09-match-polygons-to-vertex-count": 40,
+        "Y9-10-measure-image-to-half-centimetre": 40,
+        "Y9-11-measure-angle-with-protractor": 40,
+        "Y9-12-multi-rate-profit-or-loss": 40,
+        "Y9-13-complete-two-set-venn-diagram": 40,
+        "Y9-14-pair-equivalent-fraction-decimal-percent": 40
       }
     }
   },

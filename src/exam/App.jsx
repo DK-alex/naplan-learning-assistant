@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlignCenter,
   AlignLeft,
@@ -31,7 +31,6 @@ import {
   RotateCcw,
   Ruler,
   Scissors,
-  Search,
   Square,
   Underline,
   Undo2,
@@ -39,6 +38,7 @@ import {
   VolumeX,
   X,
   XCircle,
+  ZoomIn,
 } from 'lucide-react';
 import { loadPracticeTest, savePracticeSubmission, scorePracticeTest } from './questionBank.js';
 import {
@@ -110,14 +110,13 @@ function LogoHeader({ zoomOpen, setZoomOpen, onZoom }) {
         aria-label="Change zoom level"
         onClick={() => setZoomOpen((open) => !open)}
       >
-        <Search size={30} strokeWidth={3} />
-        <span className="zoom-dot">+</span>
+        <ZoomIn size={32} strokeWidth={2.8} />
       </button>
       <div className="brand-logo brand-logo-acara">
-        <img src="/assets/acara.png" alt="ACARA Australian Curriculum Assessment and Reporting Authority" />
+        <img src="/assets/lumora-learning-logo.png?v=2" alt="Lumora Learning Studio" />
       </div>
       <div className="brand-logo brand-logo-nap">
-        <img src="/assets/nap.png" alt="National Assessment Program" />
+        <img src="/assets/skillspring-logo.png?v=2" alt="SkillSpring Practice Program" />
       </div>
       {zoomOpen && <ZoomMenu onZoom={onZoom} />}
     </header>
@@ -147,11 +146,11 @@ function LogoFooter({ onRestart }) {
     <footer className="logo-footer">
       <div className="footer-left">
         <span>© Copyright</span>
-        <img src="/assets/australian-government.png" alt="Australian Government Department of Education" />
+        <img src="/assets/independent-learning-logo.png?v=2" alt="Independent Learning Project" />
       </div>
       <div className="footer-right">
-        <img src="/assets/esa.png" alt="Education Services Australia" />
-        <button className="link-button">Terms of use</button>
+        <img src="/assets/brightpath-tools-logo.png?v=2" alt="BrightPath Tools" />
+        <button className="link-button">Use &amp; privacy</button>
         <button className="close-button" aria-label="Close application" onClick={() => window.location.assign('/')}>
           <X size={25} />
         </button>
@@ -421,8 +420,7 @@ function PlayerToolbar({
           aria-expanded={zoomOpen}
           onClick={() => setZoomOpen((open) => !open)}
         >
-          <Search size={27} strokeWidth={3} />
-          <span>+</span>
+          <ZoomIn size={31} strokeWidth={2.8} />
         </button>
         <div className="timer">
           {displayTime ? (
@@ -561,7 +559,233 @@ function MultipleSelectList({ items, selected, onSelect, maxSelections = 2 }) {
   );
 }
 
+const COMPOSITE_PUZZLE_LAYOUTS = {
+  rocket: [
+    { points: '160,18 112,82 208,82', label: [160,58] },
+    { points: '112,174 68,236 132,216', label: [105,211] },
+    { points: '208,174 252,236 188,216', label: [215,211] },
+    { points: '126,214 160,292 174,214', label: [151,245] },
+    { points: '166,214 196,292 208,214', label: [190,245] },
+    { points: '120,86 200,86 200,166 120,166', label: [160,131] },
+    { points: '110,166 210,166 190,214 90,214', label: [151,194] },
+  ],
+  sailboat: [
+    { points: '154,32 154,164 62,164', label: [125,126] },
+    { points: '166,52 246,164 166,164', label: [190,129] },
+    { points: '154,32 108,48 154,68', label: [139,51] },
+    { points: '54,230 108,190 142,230', label: [102,217] },
+    { points: '178,230 224,190 276,230', label: [226,217] },
+    { points: '130,168 190,168 190,228 130,228', label: [160,203] },
+    { points: '66,232 278,232 244,270 32,270', label: [158,255] },
+  ],
+  house: [
+    { points: '40,128 160,26 160,128', label: [119,101] },
+    { points: '160,26 280,128 160,128', label: [201,101] },
+    { points: '38,248 86,188 124,248', label: [83,229] },
+    { points: '196,248 234,188 282,248', label: [238,229] },
+    { points: '126,250 194,250 160,302', label: [160,273] },
+    { points: '100,130 220,130 220,248 100,248', label: [160,194] },
+    { points: '204,66 242,66 224,122 186,122', label: [214,99] },
+  ],
+  bird: [
+    { points: '62,148 14,112 78,164', label: [51,143] },
+    { points: '62,190 10,226 82,206', label: [52,207] },
+    { points: '112,138 192,146 144,204', label: [148,164] },
+    { points: '264,88 304,101 264,114', label: [276,102] },
+    { points: '132,210 170,210 150,270', label: [151,236] },
+    { points: '214,74 264,74 264,124 214,124', label: [239,104] },
+    { points: '98,128 222,128 180,210 56,210', label: [139,179] },
+  ],
+};
+
+function CompositePuzzleResponse({ item, answer, setAnswer }) {
+  const values = Array.isArray(answer) ? answer : [];
+  const visual = item.stimulus.visual;
+  const layout = COMPOSITE_PUZZLE_LAYOUTS[visual.parameters.layout] ?? COMPOSITE_PUZZLE_LAYOUTS.rocket;
+  const palette = ['#ef7772', '#68c2d8', '#f5bf4e', '#7cc581', '#9a7cda', '#f09a54', '#4ca7b8'];
+  const toggle = (optionId) => {
+    if (values.includes(optionId)) {
+      setAnswer(values.filter((value) => value !== optionId));
+      return;
+    }
+    if (values.length < item.interaction.max_selections) setAnswer([...values, optionId]);
+  };
+
+  return (
+    <div className="composite-puzzle-response">
+      <p><strong>Seven pieces:</strong> 5 triangles · 1 square · 1 parallelogram</p>
+      <svg viewBox="0 0 320 320" role="group" aria-label={visual.alt_text}>
+        <rect x="5" y="5" width="310" height="310" rx="18" className="puzzle-board" />
+        {visual.parameters.pieces.map((piece, index) => {
+          const option = item.options.find((entry) => entry.text === piece.label);
+          const selected = option && values.includes(option.id);
+          const geometry = layout[index];
+          return (
+            <g
+              key={piece.id}
+              role="checkbox"
+              aria-label={`${piece.label}, ${piece.shape}`}
+              aria-checked={selected}
+              tabIndex="0"
+              className={`puzzle-piece ${selected ? 'selected' : ''}`}
+              onClick={() => option && toggle(option.id)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  if (option) toggle(option.id);
+                }
+              }}
+            >
+              <polygon points={geometry.points} style={{ '--piece-colour': palette[(index + visual.parameters.palette_shift) % palette.length] }} />
+              <text x={geometry.label[0]} y={geometry.label[1]}>{piece.id}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <small>{values.length} of {item.interaction.max_selections} pieces selected</small>
+    </div>
+  );
+}
+
+const DICE_PIPS = {
+  1: [[2, 2]],
+  2: [[1, 1], [3, 3]],
+  3: [[1, 1], [2, 2], [3, 3]],
+  4: [[1, 1], [1, 3], [3, 1], [3, 3]],
+  5: [[1, 1], [1, 3], [2, 2], [3, 1], [3, 3]],
+  6: [[1, 1], [1, 3], [2, 1], [2, 3], [3, 1], [3, 3]],
+};
+
+function DiceFace({ value, compact = false }) {
+  return (
+    <span className={`dice-face ${compact ? 'compact' : ''}`} aria-hidden="true">
+      {DICE_PIPS[value].map(([row, column]) => (
+        <i key={`${row}-${column}`} style={{ gridRow: row, gridColumn: column }} />
+      ))}
+    </span>
+  );
+}
+
+function DicePairingResponse({ item, answer, setAnswer }) {
+  const [activeOption, setActiveOption] = useState(null);
+  const values = answer && typeof answer === 'object' && !Array.isArray(answer) ? answer : {};
+  const placed = new Set(Object.values(values));
+  const optionById = new Map(item.options.map((option) => [option.id, option]));
+  const place = (targetId, optionId) => {
+    const next = Object.fromEntries(Object.entries(values).filter(([, value]) => value !== optionId));
+    next[targetId] = optionId;
+    setAnswer(next);
+    setActiveOption(null);
+  };
+  const activateTarget = (targetId) => {
+    if (activeOption) {
+      place(targetId, activeOption);
+      return;
+    }
+    if (values[targetId]) {
+      const next = { ...values };
+      const optionId = next[targetId];
+      delete next[targetId];
+      setAnswer(next);
+      setActiveOption(optionId);
+    }
+  };
+
+  return (
+    <div className="dice-pairing-response">
+      <div className="dice-bank" aria-label="Draggable dice">
+        {item.options.map((option) => (
+          <button
+            key={option.id}
+            draggable
+            aria-pressed={activeOption === option.id}
+            className={`${activeOption === option.id ? 'selected' : ''} ${placed.has(option.id) ? 'placed' : ''}`}
+            onClick={() => setActiveOption(activeOption === option.id ? null : option.id)}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', option.id);
+              setActiveOption(option.id);
+            }}
+          >
+            <DiceFace value={Number(option.text)} />
+            <span className="sr-only">Die showing {option.text}</span>
+          </button>
+        ))}
+      </div>
+      <div className="dice-pair-rows">
+        {[0, 1, 2].map((pairIndex) => {
+          const leftTarget = item.answer.targets[pairIndex * 2];
+          const rightTarget = item.answer.targets[pairIndex * 2 + 1];
+          return (
+            <div className="dice-pair-row" key={pairIndex}>
+              {[leftTarget, rightTarget].map((target, targetIndex) => {
+                const option = optionById.get(values[target.id]);
+                return (
+                  <Fragment key={target.id}>
+                    <button
+                      className={`dice-drop-slot ${option ? 'filled' : ''} ${activeOption ? 'ready' : ''}`}
+                      aria-label={`${target.label}: ${option ? `die showing ${option.text}` : 'empty'}`}
+                      onClick={() => activateTarget(target.id)}
+                      onDragOver={(event) => event.preventDefault()}
+                      onDrop={(event) => {
+                        event.preventDefault();
+                        const optionId = event.dataTransfer.getData('text/plain') || activeOption;
+                        if (optionId) place(target.id, optionId);
+                      }}
+                    >
+                      {option ? <DiceFace value={Number(option.text)} compact /> : <span>Drop a die here</span>}
+                    </button>
+                    {targetIndex === 0 && <b>+</b>}
+                  </Fragment>
+                );
+              })}
+              <strong>= 7</strong>
+            </div>
+          );
+        })}
+      </div>
+      <small>Select or drag each die into a pair. Every row must total 7.</small>
+    </div>
+  );
+}
+
 function InlineChoice({ item, selected, onSelect }) {
+  const targets = item.answer?.type === 'drag_drop' ? item.answer.targets ?? [] : [];
+  const comparison = item.tags?.includes('Y3-08-compare-lengths-uniform-units');
+  if (comparison) {
+    const parameters = item.stimulus?.visual?.parameters ?? {};
+    return (
+      <label className="inline-choice-control comparison-inline-choice">
+        <span className="comparison-sentence">
+          <strong>{parameters.left_label ?? 'The first object'}</strong>
+          <span>is</span>
+          <select value={selected ?? ''} onChange={(event) => onSelect(event.target.value)} aria-label="Choose the length comparison">
+            <option value="" disabled>Select…</option>
+            {item.options.map((option) => <option key={option.id} value={option.id}>{option.text}</option>)}
+          </select>
+          <strong>{parameters.right_label ?? 'the second object'}.</strong>
+        </span>
+      </label>
+    );
+  }
+  if (targets.length > 1) {
+    const values = selected && typeof selected === 'object' && !Array.isArray(selected) ? selected : {};
+    return (
+      <div className="multi-inline-choice" aria-label="Complete both blanks">
+        {targets.map((target) => (
+          <label key={target.id} className="inline-choice-control">
+            <span>{target.label}</span>
+            <select
+              value={values[target.id] ?? ''}
+              onChange={(event) => onSelect({ ...values, [target.id]: event.target.value })}
+            >
+              <option value="" disabled>Select…</option>
+              {item.options.map((option) => <option key={option.id} value={option.id}>{option.text}</option>)}
+            </select>
+          </label>
+        ))}
+      </div>
+    );
+  }
   return (
     <label className="inline-choice-control">
       <span>Choose the best answer</span>
@@ -776,11 +1000,336 @@ function HotspotResponse({ item, answer, setAnswer }) {
   if (item.stimulus?.visual?.kind === 'shape_hotspot_set') {
     return <ShapeHotspot item={item} answer={answer} setAnswer={setAnswer} />;
   }
-  return <AngleHotspot item={item} answer={answer} setAnswer={setAnswer} />;
+  if (item.stimulus?.visual?.kind === 'angle_hotspot_set') {
+    return <AngleHotspot item={item} answer={answer} setAnswer={setAnswer} />;
+  }
+  return (
+    <div className="generic-hotspot-options" role="radiogroup" aria-label="Selectable visual regions">
+      {(item.options ?? []).map((option) => (
+        <button
+          key={option.id}
+          role="radio"
+          aria-checked={answer === option.id}
+          className={answer === option.id ? 'selected' : ''}
+          onClick={() => setAnswer(option.id)}
+        >
+          {option.text}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SceneDots({ count, crossed = 0, colour = '#27a9df' }) {
+  return (
+    <div className="scene-dots">
+      {Array.from({ length: Math.min(60, Number(count) || 0) }, (_, index) => (
+        <i
+          key={index}
+          className={index >= count - crossed ? 'crossed' : ''}
+          style={{ '--scene-dot': colour }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ScenePictogram({ kind, colour }) {
+  const common = { style: { '--pictogram-colour': colour }, 'aria-hidden': true };
+  if (kind === 'butterfly') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><ellipse cx="20" cy="17" rx="12" ry="13" /><ellipse cx="40" cy="17" rx="12" ry="13" /><ellipse cx="21" cy="34" rx="9" ry="10" /><ellipse cx="39" cy="34" rx="9" ry="10" /><rect x="27" y="8" width="6" height="33" rx="3" /></svg>;
+  }
+  if (kind === 'fish') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><ellipse cx="31" cy="24" rx="20" ry="14" /><path d="M12 24 2 12v24z" /><circle className="pictogram-cutout" cx="42" cy="20" r="2.4" /></svg>;
+  }
+  if (kind === 'flower') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><circle cx="30" cy="10" r="9" /><circle cx="19" cy="18" r="9" /><circle cx="41" cy="18" r="9" /><circle cx="23" cy="31" r="9" /><circle cx="37" cy="31" r="9" /><circle className="pictogram-accent" cx="30" cy="22" r="8" /></svg>;
+  }
+  if (kind === 'boat') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><path d="M8 31h45l-9 12H18z" /><path d="M29 5v26H12z" /><path className="pictogram-accent" d="M33 8v21h18z" /></svg>;
+  }
+  if (kind === 'kite') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><path d="M30 3 49 19 30 36 11 19z" /><path className="pictogram-line" d="M30 36q12 4 4 10" /><path className="pictogram-line" d="M28 40l8 3" /></svg>;
+  }
+  if (kind === 'apple') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><path d="M30 15c-11-10-24 0-21 14 4 19 18 17 21 12 4 5 18 7 22-12 3-14-10-24-22-14z" /><path className="pictogram-line" d="M30 15c0-7 3-10 7-13" /><ellipse className="pictogram-accent" cx="40" cy="7" rx="7" ry="4" transform="rotate(-24 40 7)" /></svg>;
+  }
+  if (kind === 'ladybird') {
+    return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><ellipse cx="31" cy="27" rx="19" ry="17" /><circle className="pictogram-dark" cx="31" cy="9" r="8" /><path className="pictogram-line" d="M31 11v32" /><circle className="pictogram-cutout" cx="23" cy="23" r="3" /><circle className="pictogram-cutout" cx="39" cy="23" r="3" /><circle className="pictogram-cutout" cx="23" cy="34" r="3" /><circle className="pictogram-cutout" cx="39" cy="34" r="3" /></svg>;
+  }
+  return <svg {...common} className="scene-pictogram" viewBox="0 0 60 48"><ellipse cx="30" cy="25" rx="19" ry="14" /><circle cx="51" cy="22" r="7" /><circle cx="14" cy="39" r="5" /><circle cx="27" cy="41" r="5" /><circle cx="40" cy="40" r="5" /><path className="pictogram-accent" d="M18 25q12-16 24 0-12 15-24 0z" /></svg>;
+}
+
+function GeneratedNumeracyScene({ visual }) {
+  if (visual?.kind !== 'generated_numeracy_scene') return null;
+  const p = visual.parameters ?? {};
+  const type = p.scene;
+
+  if (type === 'partitioned_shapes') {
+    return (
+      <div className="generated-numeracy-scene partition-scene" role="img" aria-label={visual.alt_text}>
+        {p.option_visuals.map((shape, index) => {
+          const split = shape.parts[0];
+          const clipId = `${visual.asset_id}-${index}`;
+          return (
+            <figure key={shape.label}>
+              <svg viewBox="0 0 100 100">
+                <defs><clipPath id={clipId}><circle cx="50" cy="50" r="40" /></clipPath></defs>
+                <circle cx="50" cy="50" r="40" className="scene-shape-base" />
+                <rect x="10" y="10" width={80 * split / 100} height="80" clipPath={`url(#${clipId})`} className="scene-shape-fill" />
+                <path d={`M${10 + 80 * split / 100} 11 V89`} className="scene-shape-line" />
+              </svg>
+              <figcaption>{shape.label}</figcaption>
+            </figure>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (['collection', 'part_whole', 'group_motif', 'full_containers', 'collection_rows', 'option_collections', 'shelves'].includes(type)) {
+    let rows = [];
+    if (type === 'collection_rows') rows = p.counts.map((count, index) => ({ label: `Collection ${'ABCD'[index]}`, count }));
+    if (type === 'option_collections') rows = p.option_visuals;
+    if (type === 'shelves') rows = Array.from({ length: p.shelves }, (_, index) => ({ label: `Shelf ${index + 1}`, count: p.each }));
+    return (
+      <div className={`generated-numeracy-scene collection-scene ${type}`} role="img" aria-label={visual.alt_text}>
+        {type === 'full_containers' ? (
+          <div className="scene-container-row">
+            {Array.from({ length: p.groups }, (_, index) => <span key={index}><strong>{p.capacity}</strong><small>full</small></span>)}
+            <span className="loose"><strong>+{p.leftover}</strong><small>loose</small></span>
+          </div>
+        ) : rows.length ? rows.map((row, index) => (
+          <figure key={row.label}>
+            <figcaption>{row.label}</figcaption>
+            {type === 'collection_rows' && p.row_objects?.[index] ? (
+              <div className="scene-pictogram-row">
+                {Array.from({ length: row.count }, (_, pictureIndex) => (
+                  <ScenePictogram
+                    key={pictureIndex}
+                    kind={p.row_objects[index]}
+                    colour={['#2e9fca', '#e36f5d', '#6cbf72', '#8a70d6'][index % 4]}
+                  />
+                ))}
+              </div>
+            ) : (
+              <SceneDots count={row.count} colour={['#1fb98a', '#6676ea', '#f39a20', '#ef685a'][index % 4]} />
+            )}
+          </figure>
+        )) : (
+          <SceneDots count={p.total ?? p.start ?? p.groupSize} crossed={p.crossed_out ?? 0} />
+        )}
+        {type === 'part_whole' && <div className="part-whole-strip"><span>{p.start}</span><span>?</span><strong>{p.total}</strong></div>}
+        {type === 'group_motif' && <strong>One group: {p.groupSize} · Available: {p.total}</strong>}
+      </div>
+    );
+  }
+
+  if (type === 'length_cards' || type === 'informal_units') {
+    const rows = type === 'length_cards'
+      ? p.cards.map((card) => ({ label: card.label, length: card.length }))
+      : [
+        { label: p.left_label ?? 'Object A', units: p.a },
+        { label: p.right_label ?? 'Object B', units: p.b },
+      ];
+    return (
+      <div className={`generated-numeracy-scene length-scene ${type === 'informal_units' ? 'informal-units-scene' : ''}`} role="img" aria-label={visual.alt_text}>
+        {rows.map((row, index) => (
+          <figure key={row.label}>
+            {type === 'informal_units' ? (
+              <>
+                <figcaption>{row.label}</figcaption>
+                <div className="informal-measure-track" style={{ '--unit-count': row.units }}>
+                  <svg viewBox="0 0 360 44" preserveAspectRatio="none" aria-hidden="true">
+                    <path className={`measured-object-line measured-object-${index}`} d="M8 24 C70 8 116 37 176 20 S286 10 352 23" />
+                  </svg>
+                  <div className={`scene-unit-strip unit-${p.unit}`}>
+                    {Array.from({ length: row.units }, (_, unit) => <i key={unit} />)}
+                  </div>
+                </div>
+                <small>{row.units} equal {p.unit}</small>
+              </>
+            ) : (
+              <>
+                <div className={`scene-length-object object-${index}`} style={{ width: `${Math.min(96, row.length)}%` }} />
+                <figcaption>{row.label}</figcaption>
+              </>
+            )}
+          </figure>
+        ))}
+      </div>
+    );
+  }
+
+  if (type === 'equation_story' || type === 'equation_blanks') {
+    return (
+      <div className="generated-numeracy-scene equation-scene" role="img" aria-label={visual.alt_text}>
+        {type === 'equation_story'
+          ? <><SceneDots count={p.left} /><b>+</b><SceneDots count={p.right} /><b>=</b><em>?</em></>
+          : <><em>?</em><b>{p.operator}</b><strong>{p.fixed}</strong><b>=</b><em>?</em></>}
+      </div>
+    );
+  }
+
+  if (type === 'composite_polygon' || type === 'polygon_logos') {
+    const shapes = type === 'polygon_logos'
+      ? p.polygons
+      : p.regions.map((shape, index) => ({ label: `Region ${'ABCDE'[index]}`, points: shape === 'triangle' ? 3 : shape === 'quadrilateral' ? 4 : 5 }));
+    const pointSets = { 3: '50,8 92,80 8,80', 4: '10,20 90,10 68,82 38,48', 5: '50,7 94,38 77,84 23,84 6,38' };
+    return (
+      <div className="generated-numeracy-scene polygon-scene" role="img" aria-label={visual.alt_text}>
+        {shapes.map((shape, index) => (
+          <figure key={shape.label}>
+            <svg viewBox="0 0 100 90"><polygon points={pointSets[shape.points]} className={`polygon-fill polygon-${index}`} /></svg>
+            <figcaption>{shape.label}</figcaption>
+          </figure>
+        ))}
+      </div>
+    );
+  }
+
+  if (type === 'angle_fans') {
+    return (
+      <div className="generated-numeracy-scene angle-scene" role="img" aria-label={visual.alt_text}>
+        {p.cards.map((card) => {
+          const radians = card.angle * Math.PI / 180;
+          const x = 50 + Math.cos(-radians) * 40;
+          const y = 62 + Math.sin(-radians) * 40;
+          return (
+            <figure key={card.label}>
+              <svg viewBox="0 0 100 78"><path d="M50 62 H94" /><path d={`M50 62 L${x} ${y}`} /><circle cx="50" cy="62" r="3" /></svg>
+              <figcaption>{card.label}</figcaption>
+            </figure>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (type === 'fraction_strips' || type === 'proportion_grid') {
+    const denominator = p.denominator;
+    const numerator = p.numerator ?? p.largeNumerator;
+    return (
+      <div className="generated-numeracy-scene fraction-scene" role="img" aria-label={visual.alt_text}>
+        <div className="scene-fraction-strip">
+          {Array.from({ length: Math.min(100, denominator) }, (_, index) => <i key={index} className={index < numerator ? 'filled' : ''} />)}
+        </div>
+        <strong>{numerator}/{denominator}</strong>
+        {type === 'fraction_strips' && <span>− {p.smallNumerator}/{p.smallDenominator}</span>}
+      </div>
+    );
+  }
+
+  if (type === 'practice_banknotes') {
+    return (
+      <div className="generated-numeracy-scene banknote-scene" role="img" aria-label={visual.alt_text}>
+        {p.denominations.map((value, index) => (
+          <div key={value} className={`practice-note practice-note-${index}`}>
+            <small>PRACTICE</small><strong>${value}</strong><span>Not legal tender</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (type === 'grid_floorplan') {
+    return (
+      <div className="generated-numeracy-scene floorplan-scene" role="img" aria-label={visual.alt_text}>
+        {p.rooms.map((room, index) => (
+          <div key={room.label} style={{ gridColumn: `span ${1 + index % 2}`, minHeight: `${48 + room.area * 2}px` }}>
+            <strong>{room.label}</strong><small>{room.area} square units</small>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (type === 'grid_shapes') {
+    return (
+      <div className="generated-numeracy-scene grid-shape-scene" role="img" aria-label={visual.alt_text}>
+        <figure><div className="cell-shape" style={{ '--cell-count': p.reference_area }} /><figcaption>Reference</figcaption></figure>
+        {p.shapes.map((shape) => <figure key={shape.label}><div className="cell-shape" style={{ '--cell-count': shape.area }} /><figcaption>{shape.label}</figcaption></figure>)}
+      </div>
+    );
+  }
+
+  if (type === 'calendar') {
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return (
+      <div className="generated-numeracy-scene calendar-scene" role="img" aria-label={visual.alt_text}>
+        {weekdays.map((day) => <strong key={day}>{day}</strong>)}
+        {Array.from({ length: p.first_weekday }, (_, index) => <span key={`empty-${index}`} />)}
+        {Array.from({ length: p.days }, (_, index) => <span key={index} className={index + 1 === p.target ? 'target' : ''}>{index + 1}</span>)}
+      </div>
+    );
+  }
+
+  if (type === 'dial_scales') {
+    return (
+      <div className="generated-numeracy-scene scale-scene" role="img" aria-label={visual.alt_text}>
+        {p.scales.map((scale) => {
+          const angle = -125 + scale.value / scale.maximum * 250;
+          return (
+            <figure key={scale.label}>
+              <div className="scene-dial"><i style={{ transform: `rotate(${angle}deg)` }} /></div>
+              <figcaption>{scale.label}</figcaption>
+            </figure>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (type === 'dot_pattern') {
+    return (
+      <div className="generated-numeracy-scene pattern-scene" role="img" aria-label={visual.alt_text}>
+        {p.sequence.map((count, index) => (
+          <figure key={index}>
+            {p.missing.includes(index) ? <em>?</em> : <SceneDots count={count} />}
+            <figcaption>Term {index + 1}</figcaption>
+          </figure>
+        ))}
+      </div>
+    );
+  }
+
+  if (type === 'venn') {
+    return (
+      <div className="generated-numeracy-scene venn-scene" role="img" aria-label={visual.alt_text}>
+        <div className="venn-circle venn-a"><strong>Set A</strong><span>?</span></div>
+        <div className="venn-circle venn-b"><strong>Set B</strong><span>?</span></div>
+        <em className="venn-overlap">?</em><small>Neither: ?</small>
+      </div>
+    );
+  }
+
+  if (type === 'nets_and_solids') {
+    return (
+      <div className="generated-numeracy-scene nets-scene" role="img" aria-label={visual.alt_text}>
+        <div>{p.nets.map((value) => <span key={value}>{value.replaceAll('_', ' ')}</span>)}</div>
+        <strong>fold →</strong>
+        <div>{p.solids.map((value) => <span key={value}>{value}</span>)}</div>
+      </div>
+    );
+  }
+
+  const values = p.values
+    ?? p.option_visuals?.map((entry) => `${entry.label}: ${entry.count}`)
+    ?? p.categories?.map((value, index) => `${p.labels[index]}: ${value}`)
+    ?? p.rows?.map((row) => `${row.label}: ${row.value}`)
+    ?? Object.entries(p)
+      .filter(([key, value]) => !['scene', 'variant'].includes(key) && ['string', 'number'].includes(typeof value))
+      .map(([key, value]) => `${key.replaceAll('_', ' ')}: ${value}`);
+  return (
+    <div className="generated-numeracy-scene scene-card-grid" role="img" aria-label={visual.alt_text}>
+      {values.map((value, index) => <span key={`${value}-${index}`}>{value}</span>)}
+    </div>
+  );
 }
 
 function MeasurementVisual({ stimulus }) {
   const visual = stimulus?.visual;
+  if (visual?.kind === 'generated_numeracy_scene') return <GeneratedNumeracyScene visual={visual} />;
   if (!visual || !['ruler_measurement', 'protractor_measurement', 'analog_clock', 'direction_map'].includes(visual.kind)) return null;
   if (visual.kind === 'analog_clock') {
     const { hour, minute } = visual.parameters;
@@ -955,13 +1504,20 @@ function StimulusTable({ stimulus }) {
 }
 
 function NumeracyQuestion({ item, answer, setAnswer, audioPlayback }) {
+  const pictureCountMatching = item.tags?.includes('Y3-06-match-collections-to-numbers');
+  const compositePuzzle = item.tags?.includes('Y3-10-identify-shapes-in-composite');
+  const dicePairing = item.tags?.includes('Y3-11-pair-complements-to-target');
   return (
-    <section className="single-question numeracy-question">
+    <section className={`single-question numeracy-question ${pictureCountMatching ? 'pictogram-matching-question' : ''}`}>
       <button className="speak-question" aria-label="Read question aloud" onClick={audioPlayback.toggle}><Volume2 size={20} /></button>
       <StimulusTable stimulus={item.stimulus} />
-      <MeasurementVisual stimulus={item.stimulus} />
+      {!compositePuzzle && !dicePairing && <MeasurementVisual stimulus={item.stimulus} />}
       <p className="question-text">{item.prompt}</p>
-      <ResponseControl item={item} answer={answer} setAnswer={setAnswer} />
+      {compositePuzzle
+        ? <CompositePuzzleResponse item={item} answer={answer} setAnswer={setAnswer} />
+        : dicePairing
+          ? <DicePairingResponse item={item} answer={answer} setAnswer={setAnswer} />
+          : <ResponseControl item={item} answer={answer} setAnswer={setAnswer} />}
     </section>
   );
 }

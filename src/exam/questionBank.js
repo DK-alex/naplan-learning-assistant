@@ -27,10 +27,10 @@ const yearDifficultyMix = {
 };
 
 const numeracyStrandTargets = {
-  3: { number: 14, algebra: 4, measurement: 7, space: 5, statistics: 4, probability: 2 },
-  5: { number: 17, algebra: 4, measurement: 8, space: 6, statistics: 5, probability: 2 },
-  7: { number: 19, algebra: 5, measurement: 10, space: 7, statistics: 5, probability: 2 },
-  9: { number: 17, algebra: 7, measurement: 10, space: 7, statistics: 5, probability: 2 },
+  3: { number: 26, measurement: 7, space: 3 },
+  5: { number: 26, measurement: 10, space: 3, probability: 3 },
+  7: { number: 20, measurement: 10, space: 7, probability: 7, algebra: 4 },
+  9: { number: 20, measurement: 14, space: 10, statistics: 4 },
 };
 
 const cache = new Map();
@@ -53,6 +53,65 @@ function seededShuffle(values, seed) {
   return output;
 }
 
+function demoTypeOf(item) {
+  return item.tags?.find((tag) => /^Y[3579]-\d{2}-/.test(tag)) ?? item.skill ?? item.id;
+}
+
+function diversePick(items, count, seed) {
+  const groups = new Map();
+  for (const item of seededShuffle(items, seed)) {
+    const key = demoTypeOf(item);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  }
+
+  const queues = seededShuffle([...groups.values()], seed + 19);
+  const selected = [];
+  let cursor = 0;
+  while (selected.length < count && queues.some((queue) => queue.length > 0)) {
+    const queue = queues[cursor % queues.length];
+    if (queue.length > 0) selected.push(queue.shift());
+    cursor += 1;
+  }
+  return selected;
+}
+
+export function spreadNumeracyDemoTypes(items, seed) {
+  const groups = new Map();
+  for (const item of seededShuffle(items, seed)) {
+    const key = demoTypeOf(item);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  }
+
+  let activeGroups = seededShuffle(
+    [...groups.entries()].map(([key, queue]) => ({ key, queue })),
+    seed + 13,
+  );
+  const ordered = [];
+  let previousType = null;
+  let round = 0;
+
+  while (activeGroups.length > 0) {
+    let roundGroups = seededShuffle(activeGroups, seed + 101 + round * 37);
+    if (roundGroups.length > 1 && roundGroups[0].key === previousType) {
+      roundGroups = [...roundGroups.slice(1), roundGroups[0]];
+    }
+
+    for (const group of roundGroups) {
+      const next = group.queue.shift();
+      if (!next) continue;
+      ordered.push(next);
+      previousType = group.key;
+    }
+
+    activeGroups = activeGroups.filter((group) => group.queue.length > 0);
+    round += 1;
+  }
+
+  return ordered;
+}
+
 function balancedPick(items, count, seed, year) {
   const mix = yearDifficultyMix[year] ?? yearDifficultyMix[5];
   const targets = {
@@ -63,15 +122,15 @@ function balancedPick(items, count, seed, year) {
 
   const selected = [];
   for (const [difficulty, target] of Object.entries(targets)) {
-    selected.push(...seededShuffle(items.filter((item) => item.difficulty === difficulty), seed + target).slice(0, target));
+    selected.push(...diversePick(items.filter((item) => item.difficulty === difficulty), target, seed + target));
   }
 
   if (selected.length < count) {
     const selectedIds = new Set(selected.map((item) => item.id));
-    selected.push(...seededShuffle(items.filter((item) => !selectedIds.has(item.id)), seed + 97).slice(0, count - selected.length));
+    selected.push(...diversePick(items.filter((item) => !selectedIds.has(item.id)), count - selected.length, seed + 97));
   }
 
-  return seededShuffle(selected, seed + 211);
+  return spreadNumeracyDemoTypes(selected, seed + 211);
 }
 
 function pickReading(items, count, seed) {
@@ -119,7 +178,7 @@ function pickNumeracy(items, year, count, seed) {
       const missing = Object.values(strandTargets).reduce((sum, value) => sum + value, 0) - selected.length;
       selected.push(...balancedPick(pool.filter((item) => !selectedIds.has(item.id)), missing, strandSeed + 701, year));
     }
-    return seededShuffle(selected, strandSeed + 809);
+    return spreadNumeracyDemoTypes(selected, strandSeed + 809);
   };
 
   if (year < 7) {
@@ -130,7 +189,9 @@ function pickNumeracy(items, year, count, seed) {
   }
 
   const nonCalculatorCount = 8;
-  const nonCalculatorTargets = { number: 3, algebra: 1, measurement: 2, space: 1, statistics: 1, probability: 0 };
+  const nonCalculatorTargets = year === 7
+    ? { number: 6, probability: 2 }
+    : { number: 8 };
   const nonCalculator = stratifiedPick(
     items.filter((item) => item.calculator === "not_allowed"),
     nonCalculatorTargets,

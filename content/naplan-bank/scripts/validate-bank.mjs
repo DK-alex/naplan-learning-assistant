@@ -8,15 +8,15 @@ const REPORTS = path.join(ROOT, "reports");
 const YEARS = [3, 5, 7, 9];
 
 const EXPECTED = {
-  domain: { reading: 560, conventions_of_language: 600, numeracy: 800, writing: 100 },
+  numeracy: { 3: 440, 5: 520, 7: 560, 9: 560 },
   conventions: { spelling: 288, grammar: 218, punctuation: 94 },
   readingYoung: { imaginative: 224, informative: 196, persuasive: 140 },
   readingSenior: { imaginative: 182, informative: 189, persuasive: 189 },
   difficulty: {
-    3: { easy: 772, medium: 870, hard: 318, not_applicable: 100 },
-    5: { easy: 608, medium: 884, hard: 468, not_applicable: 100 },
-    7: { easy: 458, medium: 884, hard: 618, not_applicable: 100 },
-    9: { easy: 388, medium: 790, hard: 782, not_applicable: 100 },
+    3: { easy: 635, medium: 708, hard: 257, not_applicable: 100 },
+    5: { easy: 518, medium: 755, hard: 407, not_applicable: 100 },
+    7: { easy: 393, medium: 774, hard: 553, not_applicable: 100 },
+    9: { easy: 335, medium: 682, hard: 703, not_applicable: 100 },
   },
   absoluteComplexity: {
     3: { easy: 1, medium: 2, hard: 3 },
@@ -32,7 +32,7 @@ const EXPECTED = {
   },
 };
 
-const SINGLE_RESPONSE_TYPES = new Set(["multiple_choice", "hot_text", "inline_choice", "hotspot"]);
+const SINGLE_RESPONSE_TYPES = new Set(["multiple_choice", "hot_text", "hotspot"]);
 const REQUIRED_INTERACTIONS = {
   3: ["multiple_choice", "hot_text", "inline_choice", "multiple_select", "drag_and_drop", "matrix", "hotspot", "text_entry", "writing_prompt"],
   5: ["multiple_choice", "hot_text", "inline_choice", "multiple_select", "drag_and_drop", "matrix", "hotspot", "text_entry", "writing_prompt"],
@@ -137,7 +137,7 @@ for (const year of YEARS) {
     if (item.review?.psychometric !== "uncalibrated") report.errors.push(`${item.id}: generated items must remain explicitly uncalibrated`);
 
     if (SINGLE_RESPONSE_TYPES.has(item.item_type)) {
-      if (!Array.isArray(item.options) || item.options.length !== 4) report.errors.push(`${item.id}: choice item must have 4 options`);
+      if (!Array.isArray(item.options) || item.options.length < 2) report.errors.push(`${item.id}: choice item must have at least 2 options`);
       const optionIds = new Set((item.options ?? []).map((option) => option.id));
       const optionTexts = new Set((item.options ?? []).map((option) => option.text));
       if (item.answer?.type !== "single_choice") report.errors.push(`${item.id}: single-response item has the wrong answer type`);
@@ -148,11 +148,35 @@ for (const year of YEARS) {
       if (selected && String(selected.text) !== String(item.answer?.display)) report.errors.push(`${item.id}: answer display does not match selected option`);
     }
 
+    if (item.item_type === "inline_choice") {
+      const optionIds = new Set((item.options ?? []).map((option) => option.id));
+      if (!Array.isArray(item.options) || item.options.length < 2) report.errors.push(`${item.id}: inline choice must have at least 2 options`);
+      if (item.answer?.type === "single_choice") {
+        if (!optionIds.has(item.answer.value)) report.errors.push(`${item.id}: inline-choice answer does not match an option`);
+      } else if (item.answer?.type === "drag_drop") {
+        const targets = item.answer.targets ?? [];
+        const placements = item.answer.placements ?? {};
+        if (targets.length < 2 || Object.keys(placements).length !== targets.length) {
+          report.errors.push(`${item.id}: multi-blank inline choice needs a complete target map`);
+        }
+        if (!Object.values(placements).every((value) => optionIds.has(value))) {
+          report.errors.push(`${item.id}: multi-blank inline-choice answer does not match options`);
+        }
+      } else {
+        report.errors.push(`${item.id}: unsupported inline-choice answer type`);
+      }
+    }
+
     if (item.item_type === "multiple_select") {
       const optionIds = new Set((item.options ?? []).map((option) => option.id));
-      if (!Array.isArray(item.options) || item.options.length !== 4) report.errors.push(`${item.id}: multiple select must have 4 options`);
-      if (item.answer?.type !== "multiple_select" || !Array.isArray(item.answer?.values) || item.answer.values.length !== 2) {
-        report.errors.push(`${item.id}: multiple select must have exactly two correct values`);
+      if (!Array.isArray(item.options) || item.options.length < 3) report.errors.push(`${item.id}: multiple select must have at least 3 options`);
+      if (
+        item.answer?.type !== "multiple_select"
+        || !Array.isArray(item.answer?.values)
+        || item.answer.values.length < 2
+        || item.answer.values.length >= item.options.length
+      ) {
+        report.errors.push(`${item.id}: multiple select must have at least two correct values and at least one distractor`);
       }
       if (!(item.answer?.values ?? []).every((value) => optionIds.has(value))) report.errors.push(`${item.id}: multiple-select answer does not match options`);
     }
@@ -165,7 +189,7 @@ for (const year of YEARS) {
       if (!Array.isArray(item.options) || item.options.length < 2) report.errors.push(`${item.id}: drag item must have at least 2 draggable options`);
       if (
         item.answer?.type !== "drag_drop"
-        || targets.length < 2
+        || targets.length < 1
         || Object.keys(placements).length !== targets.length
         || !Object.keys(placements).every((targetId) => targetIds.has(targetId))
       ) report.errors.push(`${item.id}: invalid drag-drop response map`);
@@ -215,6 +239,13 @@ for (const year of YEARS) {
     if ((item.tool_policy?.ruler || item.tool_policy?.protractor) && !item.stimulus?.visual?.answer_critical) {
       report.errors.push(`${item.id}: measurement tool item needs an answer-critical visual specification`);
     }
+    if (item.domain === "numeracy") {
+      const demoType = item.tags?.find((tag) => /^Y[3579]-\d{2}-/.test(tag));
+      if (!demoType) report.errors.push(`${item.id}: missing official-demo structural type tag`);
+      if (!item.stimulus?.visual || !item.media?.some((asset) => asset.answer_critical)) {
+        report.errors.push(`${item.id}: every numeracy item must include an answer-relevant original visual`);
+      }
+    }
   }
 
   const byDomain = countBy(items, "domain");
@@ -223,12 +254,32 @@ for (const year of YEARS) {
   const difficulty = countBy(items, "difficulty");
   const expectedReading = year <= 5 ? EXPECTED.readingYoung : EXPECTED.readingSenior;
 
-  if (items.length !== 2060) report.errors.push(`Year ${year}: expected 2060 items, found ${items.length}`);
-  if (!sameCounts(byDomain, EXPECTED.domain)) report.errors.push(`Year ${year}: domain allocation mismatch`);
+  const expectedDomain = {
+    reading: 560,
+    conventions_of_language: 600,
+    numeracy: EXPECTED.numeracy[year],
+    writing: 100,
+  };
+  const expectedTotal = Object.values(expectedDomain).reduce((sum, value) => sum + value, 0);
+  if (items.length !== expectedTotal) report.errors.push(`Year ${year}: expected ${expectedTotal} items, found ${items.length}`);
+  if (!sameCounts(byDomain, expectedDomain)) report.errors.push(`Year ${year}: domain allocation mismatch`);
   if (!sameCounts(conventions, EXPECTED.conventions)) report.errors.push(`Year ${year}: conventions allocation mismatch`);
   if (!sameCounts(reading, expectedReading)) report.errors.push(`Year ${year}: reading text-type allocation mismatch`);
   if (!sameCounts(difficulty, EXPECTED.difficulty[year])) report.errors.push(`Year ${year}: year-specific difficulty allocation mismatch`);
   if (duplicateContent > 0) report.errors.push(`Year ${year}: ${duplicateContent} exact duplicate item fingerprints`);
+
+  const numeracyTypeCounts = {};
+  for (const item of items.filter((candidate) => candidate.domain === "numeracy")) {
+    const typeId = item.tags?.find((tag) => /^Y[3579]-\d{2}-/.test(tag));
+    if (typeId) numeracyTypeCounts[typeId] = (numeracyTypeCounts[typeId] ?? 0) + 1;
+  }
+  const expectedTypeCount = EXPECTED.numeracy[year] / 40;
+  if (Object.keys(numeracyTypeCounts).length !== expectedTypeCount) {
+    report.errors.push(`Year ${year}: expected ${expectedTypeCount} demo-aligned numeracy types, found ${Object.keys(numeracyTypeCounts).length}`);
+  }
+  for (const [typeId, count] of Object.entries(numeracyTypeCounts)) {
+    if (count !== 40) report.errors.push(`Year ${year}: ${typeId} must have exactly 40 variants, found ${count}`);
+  }
 
   const itemTypes = countBy(items, "item_type");
   for (const requiredType of REQUIRED_INTERACTIONS[year]) {
@@ -269,6 +320,7 @@ for (const year of YEARS) {
     conventions_by_subdomain: conventions,
     reading_by_text_type: reading,
     spelling_by_item_type: spellingTypes,
+    numeracy_by_demo_type: numeracyTypeCounts,
   };
 }
 

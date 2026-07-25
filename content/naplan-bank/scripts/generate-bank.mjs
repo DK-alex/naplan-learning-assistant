@@ -2,6 +2,11 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getWritingPromptCatalog, WRITING_PROMPT_RESEARCH } from "./writing-prompt-catalog.mjs";
+import {
+  NUMERACY_DEMO_TYPE_CATALOG,
+  generateDemoAlignedNumeracy,
+  summariseDemoAlignedNumeracy,
+} from "./numeracy-demo-catalog.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "questions");
@@ -955,20 +960,15 @@ function numeracyProbability({ year, id, difficulty, index, rng }) {
 }
 
 function generateNumeracy(year, rng) {
-  const strands = buildNumeracyStrands(year, rng);
-  const difficulties = difficultySequence(800, rng, year);
-  const seen = new Set();
-  return strands.map((strand, index) => {
-    const factory = (variantIndex) => {
-      const args = { year, id: makeId(year, "NUM", index), difficulty: difficulties[index], index: variantIndex, rng };
-      if (strand === "number") return numeracyNumber(args);
-      if (strand === "algebra") return numeracyAlgebra(args);
-      if (strand === "measurement") return numeracyMeasurement(args);
-      if (strand === "space") return numeracySpace(args);
-      if (strand === "statistics") return numeracyStatistics(args);
-      return numeracyProbability(args);
-    };
-    return makeUniqueItem({ factory, seen, baseIndex: index, label: `Year ${year} numeracy/${strand}` });
+  const typeCount = NUMERACY_DEMO_TYPE_CATALOG.filter((type) => type.year === year).length;
+  const total = typeCount * 40;
+  const difficulties = difficultySequence(total, rng, year);
+  return generateDemoAlignedNumeracy({
+    year,
+    rng,
+    makeId,
+    baseItem,
+    difficultyFor: (index) => difficulties[index],
   });
 }
 
@@ -1377,6 +1377,13 @@ async function main() {
     licence_note: "All questions are original practice materials. They are not official NAPLAN items and are not endorsed by ACARA.",
     difficulty_note: "Difficulty is a year-relative design estimate plus an uncalibrated cross-year absolute complexity index. It is not an official NAPLAN scale score or proficiency level.",
     official_alignment: OFFICIAL_ALIGNMENT,
+    numeracy_demo_research: {
+      source: OFFICIAL_ALIGNMENT.demo,
+      method: "Manual structural review of every standard numeracy demonstration item for Years 3, 5, 7 and 9.",
+      copyright_boundary: "The catalogue stores paraphrased skill, interaction, tool and visual-pattern metadata only. No official question wording or artwork is included.",
+      types: NUMERACY_DEMO_TYPE_CATALOG.length,
+      variants_per_type: 40,
+    },
     writing_prompt_research: WRITING_PROMPT_RESEARCH,
     year_profiles: YEAR_PROFILES,
     year_levels: {},
@@ -1403,11 +1410,43 @@ async function main() {
       machine_scorable_items: items.filter((item) => item.scoring.status === "machine_scorable").length,
       psychometric_status: "uncalibrated",
       numeracy_by_strand: countBy(numeracy, "subdomain"),
+      numeracy_by_demo_type: summariseDemoAlignedNumeracy(numeracy),
       conventions_by_subdomain: countBy(conventions, "subdomain"),
       reading_by_text_type: countBy(reading, "subdomain"),
     };
   }
 
+  await writeFile(
+    path.join(ROOT, "numeracy-demo-type-catalog.json"),
+    `${JSON.stringify({
+      generated_at: new Date().toISOString(),
+      source: OFFICIAL_ALIGNMENT.demo,
+      copyright_note: "Paraphrased structural research only; no official question text or artwork.",
+      total_demo_items_reviewed: NUMERACY_DEMO_TYPE_CATALOG.length,
+      variants_per_type: 40,
+      types: NUMERACY_DEMO_TYPE_CATALOG,
+    }, null, 2)}\n`,
+    "utf8",
+  );
+  const catalogueRows = NUMERACY_DEMO_TYPE_CATALOG.map((type) => (
+    `| ${type.year} | ${type.demo_item} | ${type.type_id} | ${type.strand} | ${type.skill} | ${type.interaction} | ${type.visual_pattern} | ${type.tools.join(", ") || "None"} | ${type.variants_required} |`
+  ));
+  await writeFile(
+    path.join(ROOT, "numeracy-demo-type-catalog.md"),
+    [
+      "# NAPLAN public demonstration numeracy structure catalogue",
+      "",
+      "This catalogue records a paraphrased structural analysis only. It does not reproduce official question wording, answer data or artwork.",
+      "",
+      `Source: ${OFFICIAL_ALIGNMENT.demo}`,
+      "",
+      "| Year | Demo item | Type ID | Strand | Assessed direction | Interaction | Visual pattern | Tools | Original variants |",
+      "| --- | ---: | --- | --- | --- | --- | --- | --- | ---: |",
+      ...catalogueRows,
+      "",
+    ].join("\n"),
+    "utf8",
+  );
   await writeFile(path.join(ROOT, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   await writeFile(path.join(REPORTS, "generation.log"), `${JSON.stringify(manifest.year_levels, null, 2)}\n`, "utf8");
   process.stdout.write(`${JSON.stringify(manifest.year_levels, null, 2)}\n`);
