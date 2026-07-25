@@ -1,57 +1,56 @@
-# Design QA — Year 3 writing prompt header
+# Design QA — remove redundant “Back to home”
 
 ## Source and implementation
 
-- Source visual truth: `C:\Users\alex3\AppData\Local\Temp\codex-clipboard-7acd4a62-ffb2-45d0-9dec-1b2a743265eb.png`
-- Browser-rendered implementation: `C:\Users\alex3\Documents\NAPLAN\naplan-learning-assistant-ui\artifacts\design-qa\year3-writing-layout-fixed-1920x1080.png`
-- Focused combined comparison: `C:\Users\alex3\Documents\NAPLAN\naplan-learning-assistant-ui\artifacts\design-qa\year3-writing-layout-comparison.png`
-- Secondary 1600 × 900 evidence: `C:\Users\alex3\Documents\NAPLAN\naplan-learning-assistant-ui\artifacts\design-qa\year3-writing-layout-fixed-full.png`
+- Source visual truth: `C:\Users\alex3\AppData\Local\Temp\codex-clipboard-ca8edafb-bc25-4632-aa07-23830e252e78.png`
+- Browser-rendered implementation: `C:\Users\alex3\Documents\NAPLAN\naplan-learning-assistant-ui\artifacts\design-qa\latest-updates-no-back-home.png`
+- Normalized combined comparison: `C:\Users\alex3\Documents\NAPLAN\naplan-learning-assistant-ui\artifacts\design-qa\latest-updates-no-back-home-comparison.png`
 
 ## Viewport, density and state
 
-- Source image: 1618 × 328 physical pixels, a focused crop of the prompt header.
-- Implementation: 1920 × 1080 CSS viewport, device-pixel ratio 1.
-- Fixed exam player: 1280 × 768 CSS pixels, centred at x 320 and y 156.
-- Secondary implementation: 1600 × 900 CSS viewport, device-pixel ratio 1.
-- State: Year 3 Writing → Narrative Task → paper-writing prompt, with the audio bar visible.
+- Source image: 2880 × 1620 physical pixels, representing the fixed 1600 × 900 desktop app canvas at higher display density.
+- Implementation browser viewport: 1600 × 900 CSS pixels, captured as 1264 × 710 physical pixels by the in-app preview surface.
+- Density normalization: the source was downsampled to the implementation capture dimensions before the combined comparison.
+- State: Simplified Chinese warm theme, “最新动向” feature workspace selected in the persistent sidebar.
 
 ## Full-view comparison evidence
 
-- The fixed exam player remains centred and keeps the established NAPLAN-style toolbar, audio bar, writing stimulus grid, footer and separate practice controls.
-- The paper-task notice now appears completely below the audio bar instead of being pulled upward and clipped at the bar boundary.
-- Prompt title, instructions, guidance panels and relevant illustration retain their existing proportions and hierarchy.
+- The redundant orange “← 返回首页” action is absent from the feature header.
+- “最新动向” now starts at the top of the content header, and its description follows with the existing spacing rhythm.
+- Sidebar navigation, official information card, search, filters and update cards retain their original layout and styling.
+- The persistent sidebar continues to provide a visible “首页” destination.
 
 ## Focused comparison evidence
 
-- The combined comparison shows the source notice touching the audio-bar boundary and the fixed implementation preserving a visible separation.
-- Post-fix browser geometry at 1920 × 1080:
-  - audio bar bottom: 270 px
-  - paper-task notice top: 284 px
-  - clear gap: 14 px
-  - intersection: 0 px
-- A focused comparison was required because the defect concerns a small vertical boundary that is less obvious in the full-player screenshot.
+- The combined before/after image clearly shows the removed action and the title moving into the freed header space.
+- Browser DOM verification found zero `.feature-header .feature-back` elements and zero exact “← 返回首页” text matches.
+- Header measurements after the change:
+  - title top: 52 px
+  - description top: 94.86 px
+  - feature header height: 64.86 px
+- A focused comparison was necessary because the requested change concerns one small header control and the resulting vertical rhythm.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: existing families, weights, sizes, underlined prompt heading, line heights and English-only exam copy are unchanged.
-- Spacing and layout rhythm: only the negative top margin on the paper notice was removed; all surrounding grid, padding and footer geometry is preserved.
-- Colors and visual tokens: the blue audio bar, pale-blue paper notice, red narrative accents and neutral exam canvas are unchanged.
-- Image quality and asset fidelity: the original generated writing illustration remains sharp, correctly cropped and undistorted.
-- Copy and content: no task wording, guidance, timing, labels or image captions changed.
+- Fonts and typography: title, description and card typography remain unchanged; only the redundant action text was removed.
+- Spacing and layout rhythm: the title naturally occupies the former first row without artificial blank space; card alignment and maximum content width remain unchanged.
+- Colors and visual tokens: warm background, orange accents, selected sidebar state, borders and neutral text colors are unchanged.
+- Image quality and asset fidelity: app logo and koala artwork remain unchanged, sharp and correctly placed.
+- Copy and content: feature title, description, search/filter labels and official update content are unchanged.
 
 ## Findings and comparison history
 
-1. Baseline finding [P1]: `.paper-mode-inline` used a `-26px` top margin, which moved the notice above the writing-body content box and let the audio layer clip its top region.
-2. Fix: changed the notice to normal document flow with `margin: 0 0 17px`.
-3. Post-fix evidence: the live player reports a 14 px visual gap and zero intersection at both 1600 × 900 and 1920 × 1080.
-4. No actionable P0, P1 or P2 visual differences remain. No P3 follow-up is required for this scoped change.
+1. Baseline finding [P2]: the feature header duplicated the always-visible sidebar’s home navigation and consumed unnecessary vertical space.
+2. Fix: removed the shared feature-header home action and its callback while preserving contextual drill-down actions such as “返回资讯列表”.
+3. Post-fix evidence: no back-home control is rendered, the title moves up cleanly, and no new P0/P1/P2 issue appears.
 
 ## Interaction and runtime checks
 
-- Entered the complete Year 3 narrative paper-writing flow.
-- Hid and restored the audio bar; the notice remained readable and stable in both states.
-- Confirmed the restored audio bar still has a 14 px gap from the notice.
-- Checked browser console warnings and errors: none.
-- Ran the exam-player automated tests and production build successfully.
+- Selected “最新动向” through the persistent sidebar.
+- Returned to the dashboard through the sidebar “首页” button.
+- Reopened “最新动向” and confirmed the feature header remained correct.
+- Browser console warnings and errors: none.
+- Automated tests: 44 passed.
+- Production build: passed.
 
 final result: passed
