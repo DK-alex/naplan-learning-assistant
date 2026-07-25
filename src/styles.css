@@ -1048,6 +1048,10 @@ html[lang^="en"] .rubric-row span small {
   margin: 0;
 }
 
+.report-card-footer .report-action {
+  margin-bottom: 12px;
+}
+
 .report-empty-state {
   min-height: 285px;
   padding: 34px 48px 80px 22px;

@@ -11,8 +11,8 @@ window.desktopWindow?.setExamMode(examMode);
 const appModules = Promise.all(
   examMode
     ? [
-        import("../../naplan-ui-clone/src/App.jsx"),
-        import("../../naplan-ui-clone/src/styles.css"),
+        import("./exam/App.jsx"),
+        import("./exam/styles.css"),
       ]
     : [
         import("./App.jsx"),

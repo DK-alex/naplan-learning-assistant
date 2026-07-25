@@ -4,7 +4,7 @@ Run the local server yourself and open the preview in the browser available to t
 
 Before making substantial visual changes, use the Product Design plugin's `get-context` skill when the visual source is unclear or no longer matches the current goal. When the user gives durable prototype-specific design feedback, preferences, or decisions, record them in `AGENTS.md`.
 
-The dashboard's “模拟练习” and “1:1 模拟做题” entry points must open `/exam`. That route uses the faithful NAPLAN-style test UI from `../naplan-ui-clone` and must load questions from `content/naplan-bank/questions/`, not hard-coded demo questions.
+The dashboard's “模拟练习” and “1:1 模拟做题” entry points must open `/exam`. That route uses the faithful NAPLAN-style test UI from `src/exam/` and must load questions from `content/naplan-bank/questions/`, not hard-coded demo questions.
 
 When implementing from a selected generated mock, treat that image as the source of truth for layout, component anatomy, density, spacing, color, typography, visible content, and hierarchy.
 
@@ -30,7 +30,7 @@ The Windows desktop shell must stay frameless and edge-to-edge: do not show the 
 
 Reserve a clear top-right safe area for the custom desktop window controls. On the warm dashboard, keep the greeting illustration below the minimise, maximise/restore, and close buttons so the character never sits behind the controls.
 
-The Windows learning-assistant shell must render inside a fixed 1600 x 900 (16:9) application canvas that scales uniformly and stays centred in the available window. The desktop window itself must keep the same 16:9 ratio so no letterbox or pillarbox frame appears around that canvas. Default to 1440 x 810, constrain manual resizing to 16:9, and make the maximise control fit the largest centred 16:9 window inside the current display's work area instead of using native maximise. Do not let desktop breakpoints reflow dashboard cards into a webpage-like vertical document, and do not show browser-style scrollbars. Feature workspaces may still scroll with the mouse or keyboard inside the fixed canvas, but their scrollbars must remain hidden.
+The Windows learning-assistant shell must render inside a fixed 1600 x 900 (16:9) application canvas that scales uniformly and stays centred in the available window. The desktop window defaults to 1440 x 810 and constrains manual resizing to 16:9. The custom maximise control must enter true borderless fullscreen, covering the entire display without exposing the desktop, taskbar, letterbox, pillarbox, or any outer frame. In fullscreen, use centred cover scaling if the display is not exactly 16:9; restored mode retains the 16:9 constraint. Do not let desktop breakpoints reflow dashboard cards into a webpage-like vertical document, and do not show browser-style scrollbars. Feature workspaces may still scroll with the mouse or keyboard inside the fixed canvas, but their scrollbars must remain hidden.
 
 Use `William` as the default student name for a fresh profile. Preserve a student name that the user has explicitly saved in settings.
 
