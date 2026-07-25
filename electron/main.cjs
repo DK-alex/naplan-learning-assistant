@@ -17,6 +17,7 @@ const {
   fetchOfficialPdf,
   translateOfficialPdfStrings,
 } = require("./official-pdf.cjs");
+const { synthesizeMicrosoftSpeech } = require("./microsoft-tts.cjs");
 
 const APP_PORT = 37821;
 const APP_ORIGIN = `http://127.0.0.1:${APP_PORT}`;
@@ -37,12 +38,15 @@ const CONTENT_TYPES = {
   ".png": "image/png",
   ".pdf": "application/pdf",
   ".svg": "image/svg+xml; charset=utf-8",
+  ".wav": "audio/wav",
   ".webp": "image/webp",
 };
 
 let mainWindow;
 let localServer;
 let aiHandlerPromise;
+
+app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
 function getAiHandler() {
   if (!aiHandlerPromise) {
@@ -224,6 +228,50 @@ async function serveOfficialPdfTranslation(request, response) {
   }
 }
 
+async function serveTtsAudio(request, response, url) {
+  if (!["GET", "HEAD"].includes(request.method)) {
+    sendJson(response, 405, {
+      error: { code: "METHOD_NOT_ALLOWED", message: "Only GET and HEAD are supported." },
+    });
+    return;
+  }
+  const match = url.pathname.match(/^\/api\/tts-audio\/([a-f0-9]{64})\.wav$/);
+  if (!match) {
+    response.writeHead(404);
+    response.end("Not found");
+    return;
+  }
+
+  const filePath = path.join(app.getPath("userData"), "tts-cache", `${match[1]}.wav`);
+  let stat;
+  try {
+    stat = await fs.stat(filePath);
+    if (!stat.isFile() || stat.size <= 44) throw new Error("INVALID_TTS_AUDIO");
+  } catch {
+    response.writeHead(404);
+    response.end("Not found");
+    return;
+  }
+
+  const rangeMatch = String(request.headers.range || "").match(/^bytes=(\d+)-(\d*)$/);
+  const start = rangeMatch ? Math.min(stat.size - 1, Number(rangeMatch[1])) : 0;
+  const requestedEnd = rangeMatch?.[2] ? Number(rangeMatch[2]) : stat.size - 1;
+  const end = Math.min(stat.size - 1, Math.max(start, requestedEnd));
+  const partial = Boolean(rangeMatch);
+  response.writeHead(partial ? 206 : 200, {
+    "content-type": "audio/wav",
+    "content-length": end - start + 1,
+    "accept-ranges": "bytes",
+    "cache-control": "private, max-age=31536000, immutable",
+    ...(partial ? { "content-range": `bytes ${start}-${end}/${stat.size}` } : {}),
+  });
+  if (request.method === "HEAD") {
+    response.end();
+    return;
+  }
+  createReadStream(filePath, { start, end }).pipe(response);
+}
+
 function resolveStaticFile(pathname) {
   let decodedPath;
   try {
@@ -291,6 +339,10 @@ async function handleLocalRequest(request, response) {
   }
   if (url.pathname === "/api/official-pdf") {
     await serveOfficialPdf(request, response, url);
+    return;
+  }
+  if (url.pathname.startsWith("/api/tts-audio/")) {
+    await serveTtsAudio(request, response, url);
     return;
   }
   await serveStaticRequest(request, response, url);
@@ -373,6 +425,20 @@ ipcMain.on("desktop-window:set-exam-mode", (event, enabled) => {
 
 ipcMain.on("desktop-window:close", (event) => {
   BrowserWindow.fromWebContents(event.sender)?.close();
+});
+
+ipcMain.handle("desktop-tts:synthesize", async (_event, payload) => {
+  const result = await synthesizeMicrosoftSpeech({
+    text: payload?.text,
+    cacheDir: path.join(app.getPath("userData"), "tts-cache"),
+  });
+  return {
+    audioUrl: `${APP_ORIGIN}/api/tts-audio/${result.cacheKey}.wav`,
+    voiceName: result.voiceName,
+    locale: result.locale,
+    engine: result.engine,
+    durationSeconds: result.durationSeconds,
+  };
 });
 
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
