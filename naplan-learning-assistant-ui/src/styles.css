@@ -4221,6 +4221,22 @@ html[lang^="en"] .rubric-row span small {
   font-weight: 800;
 }
 
+.history-count-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.history-template-count {
+  padding: 6px 10px;
+  color: #9a5c12;
+  background: #fff4dd;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .writing-report-history-list {
   display: grid;
   gap: 9px;
@@ -4241,6 +4257,10 @@ html[lang^="en"] .rubric-row span small {
 .writing-report-history-list article.active {
   background: var(--workspace-accent-soft);
   border-color: color-mix(in srgb, var(--workspace-accent) 34%, #d9e3eb);
+}
+
+.writing-report-history-list article.template {
+  border-style: dashed;
 }
 
 .history-report-score {
@@ -4277,6 +4297,20 @@ html[lang^="en"] .rubric-row span small {
 .history-report-copy strong {
   color: #273443;
   font-size: 13px;
+}
+
+.history-report-copy strong em,
+.report-template-badge {
+  display: inline-flex;
+  margin-left: 8px;
+  padding: 3px 7px;
+  color: #9a5c12;
+  background: #fff0d1;
+  border-radius: 999px;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 850;
+  vertical-align: middle;
 }
 
 .history-report-copy span {
