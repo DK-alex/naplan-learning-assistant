@@ -12,6 +12,8 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 Keep every sidebar and dashboard shortcut functional. Practice submissions from `/exam` must sync into the assistant's learning records, mistake book, and AI report views through the shared local practice history.
 
+Feature workspaces use the persistent sidebar as their route back to the home dashboard. Do not render a redundant “Back to home” action above the feature title; keep narrower context actions such as “Back to updates list” inside drill-down views.
+
 The learning-assistant UI must support Simplified Chinese, English, Traditional Chinese, and Korean. Keep `/exam` and all practice-test content in English. Store the writing-review output language separately from the interface language, with the same four options.
 
 Official-update content must come from NAP or ACARA URLs, be stored with fetch metadata and CC BY attribution, and provide summaries in all four UI languages. Full HTML page text may be mirrored for licensed general information pages; keep PDFs and ACARA-excluded materials such as demonstration tests, example questions, prompts, marking guides, SSSR guides, and example ISRs as official links only.

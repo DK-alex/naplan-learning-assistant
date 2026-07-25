@@ -687,12 +687,11 @@ function ProfessionalDashboard({ onOpen, notificationOpen, setNotificationOpen, 
   );
 }
 
-function FeatureHeader({ title, description, onHome }) {
+function FeatureHeader({ title, description }) {
   const { t } = useI18n();
   return (
     <header className="feature-header">
       <div>
-        <button type="button" className="feature-back" onClick={onHome}>{t("← 返回首页")}</button>
         <h1>{t(title)}</h1>
         <p>{t(description)}</p>
       </div>
@@ -1713,7 +1712,7 @@ function FeatureWorkspace({
   };
   return (
     <div className={`feature-workspace ${variant}`}>
-      <FeatureHeader title={active} description={descriptions[active]} onHome={() => onNavigate("首页")} />
+      <FeatureHeader title={active} description={descriptions[active]} />
       {active === "时间表 & 倒计时" && <ScheduleWorkspace />}
       {active === "最新动向" && <NewsWorkspace />}
       {active === "考试指南" && <ExamGuideWorkspace onStartPractice={onStartPractice} />}
