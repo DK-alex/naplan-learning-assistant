@@ -1,7 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 import { savePracticeSubmission } from "../src/questionBank.js";
+
+const stylesPath = fileURLToPath(new URL("../src/styles.css", import.meta.url));
 
 function createStorage() {
   const values = new Map();
@@ -60,4 +64,12 @@ test("Online writing in later year levels remains student typed", () => {
   });
 
   assert.equal(record.writing.entry_method, "student_typed");
+});
+
+test("Year 3 paper-task notice stays below the audio bar", () => {
+  const styles = readFileSync(stylesPath, "utf8");
+  const noticeRule = styles.match(/\.paper-mode-inline\s*\{([^}]*)\}/)?.[1] ?? "";
+
+  assert.match(noticeRule, /margin:\s*0\s+0\s+17px\s*;/);
+  assert.doesNotMatch(noticeRule, /margin:\s*-\d/);
 });

@@ -1774,7 +1774,7 @@ select:focus-visible,
 }
 
 .paper-mode-inline {
-  margin: -26px 0 17px;
+  margin: 0 0 17px;
   padding: 10px 12px;
   display: flex;
   align-items: flex-start;
