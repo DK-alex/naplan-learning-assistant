@@ -55,6 +55,11 @@ import { getExamGuide } from "./data/exam-guide.js";
 import { getWritingRubricGuide } from "./data/writing-rubric-guide.js";
 import { getLatestWritingReportSummary } from "./data/writing-report-summary.js";
 import {
+  getWritingReportTemplateById,
+  WRITING_REPORT_TEMPLATE_ASSET,
+  WRITING_REPORT_TEMPLATE_RECORD,
+} from "./data/writing-report-template.js";
+import {
   calculateLearningProgress,
   LEARNING_GOAL_DOMAINS,
   normaliseLearningGoal,
@@ -1342,6 +1347,7 @@ function MistakesWorkspace({ history, onStartPractice }) {
 
 function WritingReportHistory({ reports, currentReportId, onOpen }) {
   const { t, locale } = useI18n();
+  const savedReportCount = reports.filter((record) => !record.is_template).length;
   return (
     <section className="feature-card writing-report-history" id="writing-report-history">
       <div className="workspace-title-row">
@@ -1349,7 +1355,10 @@ function WritingReportHistory({ reports, currentReportId, onOpen }) {
           <span className="feature-kicker">{t("仅保存在本机")}</span>
           <h2>{t("历史批改记录")}</h2>
         </div>
-        <span className="history-count">{t("共 {count} 份", { count: reports.length })}</span>
+        <div className="history-count-group">
+          <span className="history-count">{t("共 {count} 份", { count: savedReportCount })}</span>
+          <span className="history-template-count">{t("含 1 份内置范本")}</span>
+        </div>
       </div>
       {reports.length === 0 ? (
         <div className="empty-workspace compact">
@@ -1370,13 +1379,22 @@ function WritingReportHistory({ reports, currentReportId, onOpen }) {
               minute: "2-digit",
             }).format(new Date(record.generated_at));
             return (
-              <article className={record.id === currentReportId ? "active" : ""} key={record.id}>
+              <article
+                className={[
+                  record.id === currentReportId ? "active" : "",
+                  record.is_template ? "template" : "",
+                ].filter(Boolean).join(" ")}
+                key={record.id}
+              >
                 <div className="history-report-score">
                   <strong>{report.total_score ?? "—"}</strong>
                   <span>/{report.maximum_score}</span>
                 </div>
                 <div className="history-report-copy">
-                  <strong>{record.prompt_title}</strong>
+                  <strong>
+                    {record.prompt_title}
+                    {record.is_template && <em>{t("范本报告")}</em>}
+                  </strong>
                   <span>Year {record.year_level} · {report.genre} · {generatedAt}</span>
                   <small>{record.provider} · {record.model}</small>
                 </div>
@@ -1384,7 +1402,7 @@ function WritingReportHistory({ reports, currentReportId, onOpen }) {
                   {languages.map((language) => <span key={language}>{getLanguageLabel(language)}</span>)}
                 </div>
                 <button type="button" className="feature-secondary" onClick={() => onOpen(record.id)}>
-                  {t("打开报告")} <ArrowRight size={15} />
+                  {record.is_template ? t("查看范本") : t("打开报告")} <ArrowRight size={15} />
                 </button>
               </article>
             );
@@ -1398,7 +1416,7 @@ function WritingReportHistory({ reports, currentReportId, onOpen }) {
 function AiReportWorkspace({ history, onStartWriting, onNavigate, settings }) {
   const writingRecords = history.filter((record) => record.writing);
   const initialReports = readWritingReports();
-  const latestSavedReport = initialReports[0] || null;
+  const latestSavedReport = initialReports[0] || WRITING_REPORT_TEMPLATE_RECORD;
   const initialWritingId = writingRecords.some((record) => record.id === latestSavedReport?.practice_id)
     ? latestSavedReport.practice_id
     : writingRecords[0]?.id || "";
@@ -1494,6 +1512,15 @@ function AiReportWorkspace({ history, onStartWriting, onNavigate, settings }) {
     setExportingLanguage(reportLanguage);
     setError("");
     try {
+      if (reportRecord.is_template && reportLanguage === "zh-CN") {
+        const anchor = document.createElement("a");
+        anchor.href = WRITING_REPORT_TEMPLATE_ASSET;
+        anchor.download = "NAPLAN-Writing-Report-Example-zh-CN.docx";
+        document.body.append(anchor);
+        anchor.click();
+        anchor.remove();
+        return;
+      }
       const version = await ensureReportLanguage(reportRecord, reportLanguage);
       const { downloadWritingReportWord } = await import("./word-export.js");
       await downloadWritingReportWord({
@@ -1510,7 +1537,7 @@ function AiReportWorkspace({ history, onStartWriting, onNavigate, settings }) {
   };
 
   const openHistoricalReport = (reportId) => {
-    const selected = getWritingReportById(reportId);
+    const selected = getWritingReportTemplateById(reportId) || getWritingReportById(reportId);
     if (!selected) return;
     setReportRecord(selected);
     if (writingRecords.some((record) => record.id === selected.practice_id)) {
@@ -1531,21 +1558,23 @@ function AiReportWorkspace({ history, onStartWriting, onNavigate, settings }) {
           studentName={reportRecord.student_name || settings.studentName}
           preferredLanguage={settings.reportLanguage}
           exportingLanguage={exportingLanguage}
-          historyCount={savedReports.length}
+          historyCount={savedReports.length + 1}
           onExportLanguage={exportReport}
           onShowHistory={() => document.getElementById("writing-report-history")?.scrollIntoView({ behavior: "smooth" })}
-          onRegenerate={() => {
-            if (!sourceWritingRecord) {
-              setError(t("原作文记录已不存在，无法重新批改。"));
-              return;
-            }
-            generateReport(sourceWritingRecord);
-          }}
+          onRegenerate={reportRecord.is_template
+            ? null
+            : () => {
+                if (!sourceWritingRecord) {
+                  setError(t("原作文记录已不存在，无法重新批改。"));
+                  return;
+                }
+                generateReport(sourceWritingRecord);
+              }}
         />
         {generating && <div className="report-generation-status"><Clock />{t("正在生成主要语言和英文两个版本…")}</div>}
         {error && <div className="ai-request-error report-error"><X weight="bold" />{error}</div>}
         <WritingReportHistory
-          reports={savedReports}
+          reports={[...savedReports, WRITING_REPORT_TEMPLATE_RECORD]}
           currentReportId={reportRecord.id}
           onOpen={openHistoricalReport}
         />

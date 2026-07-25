@@ -93,15 +93,20 @@ export function WritingReport({
     <div className="writing-report-shell">
       <div className="report-toolbar no-print">
         <div>
-          <strong>{t("作文批改报告")}</strong>
+          <strong>
+            {t("作文批改报告")}
+            {reportRecord.is_template && <em className="report-template-badge">{t("范本报告")}</em>}
+          </strong>
           <span>{provider.name} · {reportRecord.model} · {generatedAt}</span>
         </div>
         <button type="button" className="feature-secondary" onClick={onShowHistory}>
           <ListBullets />{t("历史批改")} ({historyCount})
         </button>
-        <button type="button" className="feature-secondary" onClick={onRegenerate}>
-          <ArrowClockwise />{t("重新批改")}
-        </button>
+        {onRegenerate && (
+          <button type="button" className="feature-secondary" onClick={onRegenerate}>
+            <ArrowClockwise />{t("重新批改")}
+          </button>
+        )}
         <button
           type="button"
           className="feature-primary"
