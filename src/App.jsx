@@ -50,6 +50,7 @@ import {
 import officialPages from "./data/official-pages.json";
 import officialUpdates from "./data/official-updates.json";
 import OfficialDocument, { getOfficialDocumentCharacterCount } from "./OfficialDocument.jsx";
+import OfficialPdfReader from "./OfficialPdfReader.jsx";
 import { getExamGuide } from "./data/exam-guide.js";
 import { getWritingRubricGuide } from "./data/writing-rubric-guide.js";
 import { getLatestWritingReportSummary } from "./data/writing-report-summary.js";
@@ -929,6 +930,7 @@ function NewsWorkspace() {
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
   const [selectedUrl, setSelectedUrl] = useState("");
+  const [selectedPdf, setSelectedPdf] = useState(null);
   const [readerLanguage, setReaderLanguage] = useState(language);
   const [pageTranslations, setPageTranslations] = useState({ pages: [] });
   const categories = [
@@ -971,7 +973,17 @@ function NewsWorkspace() {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.querySelector(".feature-workspace")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
     document.querySelector(".official-document")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [selectedUrl, readerLanguage]);
+  }, [selectedUrl, readerLanguage, selectedPdf?.sourceUrl]);
+
+  if (selectedPdf) {
+    return (
+      <OfficialPdfReader
+        onBack={() => setSelectedPdf(null)}
+        sourceUrl={selectedPdf.sourceUrl}
+        title={selectedPdf.title}
+      />
+    );
+  }
 
   if (selectedPage && selectedItem) {
     const translatedStrings = selectedTranslation?.strings || {};
@@ -1031,6 +1043,7 @@ function NewsWorkspace() {
               <OfficialDocument
                 document={selectedPage.document}
                 language={documentLanguage}
+                onOpenPdf={setSelectedPdf}
                 translations={translatedStrings}
               />
             ) : (
@@ -1072,6 +1085,15 @@ function NewsWorkspace() {
       <div className="official-news-list">
         {items.map((item) => {
           const page = officialPages.pages.find((candidate) => candidate.url === item.url);
+          const isPdf =
+            page?.content_type === "application/pdf" ||
+            /\.pdf(?:$|[?#])/i.test(item.url);
+          const pdfActionLabel = {
+            "zh-CN": "在软件内阅读 PDF",
+            "zh-TW": "在軟體內閱讀 PDF",
+            ko: "앱에서 PDF 읽기",
+            en: "Read PDF in app",
+          }[language] || "Read PDF in app";
           return (
             <article key={item.id} className={item.featured ? "featured" : ""}>
               <div className="official-news-meta">
@@ -1084,7 +1106,26 @@ function NewsWorkspace() {
                 <p>{item.summary[language] || item.summary.en}</p>
               </div>
               <div className="official-news-actions">
-                <button type="button" onClick={() => setSelectedUrl(item.url)} disabled={!page}>{page?.status === "stored" ? t("读取完整正文") : t("查看资源说明")}</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isPdf) {
+                      setSelectedPdf({
+                        sourceUrl: item.url,
+                        title: item.title[language] || item.title.en,
+                      });
+                    } else {
+                      setSelectedUrl(item.url);
+                    }
+                  }}
+                  disabled={!page}
+                >
+                  {isPdf
+                    ? pdfActionLabel
+                    : page?.status === "stored"
+                      ? t("读取完整正文")
+                      : t("查看资源说明")}
+                </button>
                 <button type="button" onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}>{t("官网原文")} <ArrowRight size={16} /></button>
               </div>
             </article>
