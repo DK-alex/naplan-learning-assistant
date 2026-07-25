@@ -14,3 +14,9 @@ contextBridge.exposeInMainWorld("desktopWindow", {
     ipcRenderer.send("desktop-window:close");
   },
 });
+
+contextBridge.exposeInMainWorld("desktopTts", {
+  synthesize(payload) {
+    return ipcRenderer.invoke("desktop-tts:synthesize", payload);
+  },
+});
