@@ -8,42 +8,92 @@ const pagesPath = path.join(root, "src", "data", "official-pages.json");
 const translationsPath = path.join(root, "src", "data", "official-page-translations.json");
 const pages = JSON.parse(await readFile(pagesPath, "utf8"));
 const targets = ["zh-CN", "zh-TW", "ko"];
-const maxChunkLength = 3_500;
+const maxBatchLength = 3_200;
 const concurrency = 4;
+const generatorRevision = 2;
+const preferredTranslations = {
+  Domain: { "zh-CN": "领域", "zh-TW": "領域", ko: "영역" },
+  Developing: { "zh-CN": "发展中", "zh-TW": "發展中", ko: "발달 중" },
+  Exceeding: { "zh-CN": "超出标准", "zh-TW": "超出標準", ko: "기대 초과" },
+  "Grammar and Punctuation": { "zh-CN": "语法与标点", "zh-TW": "文法與標點", ko: "문법 및 구두점" },
+  "Needs additional support": { "zh-CN": "需要额外支持", "zh-TW": "需要額外支援", ko: "추가 지원 필요" },
+  Numeracy: { "zh-CN": "数学", "zh-TW": "數學", ko: "수리력" },
+  Reading: { "zh-CN": "阅读", "zh-TW": "閱讀", ko: "읽기" },
+  Scales: { "zh-CN": "量表", "zh-TW": "量表", ko: "척도" },
+  Spelling: { "zh-CN": "拼写", "zh-TW": "拼字", ko: "철자" },
+  Strong: { "zh-CN": "达到标准", "zh-TW": "達到標準", ko: "기대 충족" },
+  Writing: { "zh-CN": "写作", "zh-TW": "寫作", ko: "쓰기" },
+  Year: { "zh-CN": "年级", "zh-TW": "年級", ko: "학년" },
+  "transcript (PDF 130 KB)": {
+    "zh-CN": "文字稿（PDF 130 KB）",
+    "zh-TW": "文字稿（PDF 130 KB）",
+    ko: "대본 (PDF 130 KB)",
+  },
+};
 
 let existing = { pages: [] };
 try {
   existing = JSON.parse(await readFile(translationsPath, "utf8"));
 } catch {
-  // The first translation run starts without a cache.
+  // The first structured translation run starts without a cache.
 }
 
-function splitText(text) {
-  const lines = text.split("\n");
-  const chunks = [];
-  let current = "";
-
-  for (const line of lines) {
-    const candidate = current ? `${current}\n${line}` : line;
-    if (candidate.length <= maxChunkLength) {
-      current = candidate;
-      continue;
-    }
-
-    if (current) chunks.push(current);
-    if (line.length <= maxChunkLength) {
-      current = line;
-      continue;
-    }
-
-    for (let index = 0; index < line.length; index += maxChunkLength) {
-      chunks.push(line.slice(index, index + maxChunkLength));
-    }
-    current = "";
+function collectRuns(block, output) {
+  for (const key of ["runs", "title_runs", "caption_runs", "summary_runs", "term_runs"]) {
+    if (Array.isArray(block[key])) output.push(...block[key]);
   }
+  if (Array.isArray(block.description_runs)) {
+    for (const runs of block.description_runs) output.push(...runs);
+  }
+  if (Array.isArray(block.items)) {
+    for (const item of block.items) {
+      output.push(...(item.runs || []));
+      for (const child of item.children || []) collectRuns(child, output);
+    }
+  }
+  if (Array.isArray(block.rows)) {
+    for (const row of block.rows) {
+      for (const cell of row) output.push(...(cell.runs || []));
+    }
+  }
+  if (Array.isArray(block.entries)) {
+    for (const entry of block.entries) {
+      output.push(...(entry.term_runs || []));
+      for (const runs of entry.description_runs || []) output.push(...runs);
+    }
+  }
+  for (const child of block.blocks || []) collectRuns(child, output);
+}
 
-  if (current) chunks.push(current);
-  return chunks;
+function getSourceStrings(page) {
+  const runs = [];
+  for (const block of page.document?.blocks || []) collectRuns(block, runs);
+  return runs
+    .filter((run) => run.id && run.text?.trim())
+    .map((run) => ({ id: run.id, text: run.text }));
+}
+
+function marker(id) {
+  return `[[[${id}]]]`;
+}
+
+function createBatches(units) {
+  const batches = [];
+  let current = [];
+  let currentLength = 0;
+
+  for (const unit of units) {
+    const encodedLength = marker(unit.id).length + unit.text.length + 2;
+    if (current.length && currentLength + encodedLength > maxBatchLength) {
+      batches.push(current);
+      current = [];
+      currentLength = 0;
+    }
+    current.push(unit);
+    currentLength += encodedLength;
+  }
+  if (current.length) batches.push(current);
+  return batches;
 }
 
 async function translateChunk(chunk, target) {
@@ -74,54 +124,84 @@ async function translateChunk(chunk, target) {
   throw lastError;
 }
 
-async function translateText(text, target) {
-  const chunks = splitText(text);
-  const output = [];
-  for (const chunk of chunks) output.push(await translateChunk(chunk, target));
-  return output.join("\n");
+function parseTranslatedBatch(translated, batch) {
+  const expectedIds = new Set(batch.map((unit) => unit.id));
+  const values = {};
+  const expression = /\[\[\[(s\d{5})\]\]\]\s*([\s\S]*?)(?=\[\[\[s\d{5}\]\]\]|$)/g;
+  for (const match of translated.matchAll(expression)) {
+    if (!expectedIds.has(match[1])) continue;
+    const value = match[2].trim();
+    if (value) values[match[1]] = value;
+  }
+  return values;
 }
 
-function applyEditorialCorrections(text, target) {
-  const replacements = {
-    "zh-CN": [
-      ["## NAPLAN 测试将于 2026 年结束", "## 2026 年 NAPLAN 测试顺利结束"],
-      ["读写和算数技能", "读写与计算能力"],
-    ],
-    "zh-TW": [
-      ["## NAPLAN 測試將於 2026 年結束", "## 2026 年 NAPLAN 測試順利結束"],
-      ["讀寫和算數技能", "讀寫與計算能力"],
-    ],
-    ko: [
-      ["## NAPLAN 테스트는 2026년에 종료됩니다", "## 2026년 NAPLAN 시험 종료"],
-    ],
-  };
+async function translateBatch(batch, target) {
+  const input = batch.map((unit) => `${marker(unit.id)}\n${unit.text}`).join("\n");
+  const translated = await translateChunk(input, target);
+  const parsed = parseTranslatedBatch(translated, batch);
 
-  return (replacements[target] || []).reduce(
-    (output, [source, replacement]) => output.replaceAll(source, replacement),
-    text,
+  for (const unit of batch) {
+    if (parsed[unit.id]) continue;
+    parsed[unit.id] = (await translateChunk(unit.text, target)).trim();
+  }
+  return parsed;
+}
+
+async function translateStrings(units, target) {
+  const output = {};
+  const toTranslate = [];
+  for (const unit of units) {
+    const preferred = preferredTranslations[unit.text]?.[target];
+    if (preferred) {
+      output[unit.id] = preferred;
+    } else if (!/[A-Za-z]/.test(unit.text)) {
+      output[unit.id] = unit.text;
+    } else {
+      toTranslate.push(unit);
+    }
+  }
+  for (const batch of createBatches(toTranslate)) {
+    Object.assign(output, await translateBatch(batch, target));
+  }
+  return output;
+}
+
+function hasCompleteCache(strings, sourceUnits) {
+  return (
+    strings &&
+    sourceUnits.length > 0 &&
+    sourceUnits.every((unit) => typeof strings[unit.id] === "string" && strings[unit.id].trim())
   );
 }
 
 const jobs = [];
 const outputByUrl = new Map();
 for (const page of pages.pages.filter((candidate) => candidate.status === "stored")) {
+  const sourceUnits = getSourceStrings(page);
+  if (!sourceUnits.length) throw new Error(`No translatable strings in ${page.url}`);
+
   const cached = existing.pages?.find(
-    (candidate) => candidate.url === page.url && candidate.source_hash === page.content_hash,
+    (candidate) =>
+      candidate.url === page.url &&
+      candidate.source_hash === page.content_hash &&
+      candidate.generator_revision === generatorRevision,
   );
   const output = {
     url: page.url,
     source_hash: page.content_hash,
+    generator_revision: generatorRevision,
     generated_at: cached?.generated_at || null,
-    text: { ...(cached?.text || {}) },
+    strings: { ...(cached?.strings || {}) },
   };
   outputByUrl.set(page.url, output);
 
   for (const target of targets) {
-    if (output.text[target]?.trim()) continue;
+    if (hasCompleteCache(output.strings[target], sourceUnits)) continue;
     jobs.push(async () => {
-      output.text[target] = await translateText(page.text_en, target);
+      output.strings[target] = await translateStrings(sourceUnits, target);
       output.generated_at = new Date().toISOString();
-      console.log(`Translated ${page.title_en} → ${target}`);
+      console.log(`Translated ${page.title_en} → ${target} (${sourceUnits.length} strings)`);
     });
   }
 }
@@ -141,12 +221,12 @@ const translatedPages = pages.pages
   .filter((page) => page.status === "stored")
   .map((page) => outputByUrl.get(page.url));
 
-for (const page of translatedPages) {
+for (const page of pages.pages.filter((candidate) => candidate.status === "stored")) {
+  const translated = outputByUrl.get(page.url);
+  const sourceUnits = getSourceStrings(page);
   for (const target of targets) {
-    page.text[target] = applyEditorialCorrections(page.text[target], target);
-    const translated = page.text[target];
-    if (!translated || translated.length < 100) {
-      throw new Error(`Missing or unexpectedly short ${target} translation for ${page.url}`);
+    if (!hasCompleteCache(translated.strings[target], sourceUnits)) {
+      throw new Error(`Missing ${target} structured translations for ${page.url}`);
     }
   }
 }
@@ -155,10 +235,12 @@ await writeFile(
   translationsPath,
   `${JSON.stringify(
     {
-      schema_version: 1,
+      schema_version: 2,
+      generator_revision: generatorRevision,
       generated_at: new Date().toISOString(),
       source_snapshot: "official-pages.json",
-      method: "Machine translation generated from the stored English source snapshot.",
+      method:
+        "Machine translation generated for the visible text units in the stored structured English source snapshot. Link targets and remote media URLs are never translated.",
       notice:
         "Translations are provided for convenience. The stored English source and the linked official NAP or ACARA page remain authoritative.",
       languages: targets,
@@ -170,4 +252,4 @@ await writeFile(
   "utf8",
 );
 
-console.log(`Stored translations for ${translatedPages.length} official pages.`);
+console.log(`Stored structured translations for ${translatedPages.length} official pages.`);
