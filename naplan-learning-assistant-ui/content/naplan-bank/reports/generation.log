@@ -1,232 +1,62 @@
 {
   "3": {
     "file": "year-3.jsonl",
-    "total_items": 2060,
+    "total_items": 1700,
     "by_domain": {
       "reading": 560,
       "conventions_of_language": 600,
-      "numeracy": 800,
+      "numeracy": 440,
       "writing": 100
     },
     "by_difficulty": {
-      "easy": 772,
-      "medium": 870,
-      "hard": 318,
+      "easy": 635,
+      "medium": 708,
+      "hard": 257,
       "not_applicable": 100
     },
     "by_absolute_complexity": {
-      "1": 772,
-      "2": 870,
-      "3": 318,
+      "1": 635,
+      "2": 708,
+      "3": 257,
       "not_applicable": 100
     },
     "by_pathway_band": {
-      "lower": 772,
-      "average": 870,
-      "higher": 318,
+      "lower": 635,
+      "average": 708,
+      "higher": 257,
       "not_applicable": 100
     },
     "by_item_type": {
-      "multiple_choice": 1323,
+      "multiple_choice": 640,
+      "inline_choice": 120,
+      "multiple_select": 160,
+      "drag_and_drop": 240,
       "hot_text": 32,
-      "inline_choice": 80,
-      "multiple_select": 80,
-      "drag_and_drop": 80,
-      "text_entry": 288,
-      "hotspot": 76,
-      "matrix": 1,
+      "text_entry": 328,
+      "matrix": 40,
+      "hotspot": 40,
       "writing_prompt": 100
     },
-    "answer_critical_media_items": 391,
-    "machine_scorable_items": 1960,
+    "answer_critical_media_items": 613,
+    "machine_scorable_items": 1600,
     "psychometric_status": "uncalibrated",
     "numeracy_by_strand": {
       "number": 320,
-      "probability": 40,
-      "algebra": 80,
-      "measurement": 184,
-      "statistics": 64,
-      "space": 112
+      "measurement": 80,
+      "space": 40
     },
-    "conventions_by_subdomain": {
-      "spelling": 288,
-      "grammar": 218,
-      "punctuation": 94
-    },
-    "reading_by_text_type": {
-      "imaginative": 224,
-      "informative": 196,
-      "persuasive": 140
-    }
-  },
-  "5": {
-    "file": "year-5.jsonl",
-    "total_items": 2060,
-    "by_domain": {
-      "reading": 560,
-      "conventions_of_language": 600,
-      "numeracy": 800,
-      "writing": 100
-    },
-    "by_difficulty": {
-      "easy": 608,
-      "medium": 884,
-      "hard": 468,
-      "not_applicable": 100
-    },
-    "by_absolute_complexity": {
-      "3": 608,
-      "4": 884,
-      "5": 468,
-      "not_applicable": 100
-    },
-    "by_pathway_band": {
-      "lower": 608,
-      "average": 884,
-      "higher": 468,
-      "not_applicable": 100
-    },
-    "by_item_type": {
-      "multiple_choice": 1377,
-      "hot_text": 32,
-      "inline_choice": 80,
-      "multiple_select": 80,
-      "drag_and_drop": 80,
-      "text_entry": 288,
-      "hotspot": 22,
-      "matrix": 1,
-      "writing_prompt": 100
-    },
-    "answer_critical_media_items": 319,
-    "machine_scorable_items": 1960,
-    "psychometric_status": "uncalibrated",
-    "numeracy_by_strand": {
-      "space": 112,
-      "statistics": 88,
-      "number": 320,
-      "algebra": 80,
-      "measurement": 160,
-      "probability": 40
-    },
-    "conventions_by_subdomain": {
-      "spelling": 288,
-      "grammar": 218,
-      "punctuation": 94
-    },
-    "reading_by_text_type": {
-      "imaginative": 224,
-      "persuasive": 140,
-      "informative": 196
-    }
-  },
-  "7": {
-    "file": "year-7.jsonl",
-    "total_items": 2060,
-    "by_domain": {
-      "reading": 560,
-      "conventions_of_language": 600,
-      "numeracy": 800,
-      "writing": 100
-    },
-    "by_difficulty": {
-      "easy": 458,
-      "medium": 884,
-      "hard": 618,
-      "not_applicable": 100
-    },
-    "by_absolute_complexity": {
-      "5": 458,
-      "6": 884,
-      "7": 618,
-      "not_applicable": 100
-    },
-    "by_pathway_band": {
-      "lower": 458,
-      "average": 884,
-      "higher": 618,
-      "not_applicable": 100
-    },
-    "by_item_type": {
-      "multiple_choice": 1353,
-      "inline_choice": 80,
-      "multiple_select": 80,
-      "drag_and_drop": 80,
-      "hot_text": 26,
-      "text_entry": 331,
-      "matrix": 1,
-      "hotspot": 9,
-      "writing_prompt": 100
-    },
-    "answer_critical_media_items": 313,
-    "machine_scorable_items": 1960,
-    "psychometric_status": "uncalibrated",
-    "numeracy_by_strand": {
-      "probability": 40,
-      "number": 320,
-      "algebra": 80,
-      "statistics": 88,
-      "space": 112,
-      "measurement": 160
-    },
-    "conventions_by_subdomain": {
-      "spelling": 288,
-      "grammar": 218,
-      "punctuation": 94
-    },
-    "reading_by_text_type": {
-      "persuasive": 189,
-      "informative": 189,
-      "imaginative": 182
-    }
-  },
-  "9": {
-    "file": "year-9.jsonl",
-    "total_items": 2060,
-    "by_domain": {
-      "reading": 560,
-      "conventions_of_language": 600,
-      "numeracy": 800,
-      "writing": 100
-    },
-    "by_difficulty": {
-      "easy": 388,
-      "medium": 790,
-      "hard": 782,
-      "not_applicable": 100
-    },
-    "by_absolute_complexity": {
-      "7": 388,
-      "8": 790,
-      "9": 782,
-      "not_applicable": 100
-    },
-    "by_pathway_band": {
-      "lower": 388,
-      "average": 790,
-      "higher": 782,
-      "not_applicable": 100
-    },
-    "by_item_type": {
-      "multiple_choice": 1326,
-      "inline_choice": 80,
-      "multiple_select": 80,
-      "drag_and_drop": 80,
-      "hot_text": 26,
-      "text_entry": 352,
-      "matrix": 1,
-      "hotspot": 15,
-      "writing_prompt": 100
-    },
-    "answer_critical_media_items": 340,
-    "machine_scorable_items": 1960,
-    "psychometric_status": "uncalibrated",
-    "numeracy_by_strand": {
-      "algebra": 120,
-      "space": 112,
-      "statistics": 88,
-      "number": 280,
-      "measurement": 160,
-      "probability": 40
+    "numeracy_by_demo_type": {
+      "Y3-01-picture-subtraction": 40,
+      "Y3-02-recognise-halves": 40,
+      "Y3-03-missing-addend-story": 40,
+      "Y3-04-order-lengths-visual": 40,
+      "Y3-05-threshold-classification-matrix": 40,
+      "Y3-06-match-collections-to-numbers": 40,
+      "Y3-07-addition-equation-drag": 40,
+      "Y3-08-compare-lengths-uniform-units": 40,
+      "Y3-09-select-collection-by-cardinality": 40,
+      "Y3-10-identify-shapes-in-composite": 40,
+      "Y3-11-pair-complements-to-target": 40
     },
     "conventions_by_subdomain": {
       "spelling": 288,
@@ -234,8 +64,230 @@
       "grammar": 218
     },
     "reading_by_text_type": {
-      "persuasive": 189,
+      "informative": 196,
+      "imaginative": 224,
+      "persuasive": 140
+    }
+  },
+  "5": {
+    "file": "year-5.jsonl",
+    "total_items": 1780,
+    "by_domain": {
+      "reading": 560,
+      "conventions_of_language": 600,
+      "numeracy": 520,
+      "writing": 100
+    },
+    "by_difficulty": {
+      "easy": 518,
+      "medium": 755,
+      "hard": 407,
+      "not_applicable": 100
+    },
+    "by_absolute_complexity": {
+      "3": 518,
+      "4": 755,
+      "5": 407,
+      "not_applicable": 100
+    },
+    "by_pathway_band": {
+      "lower": 518,
+      "average": 755,
+      "higher": 407,
+      "not_applicable": 100
+    },
+    "by_item_type": {
+      "multiple_choice": 640,
+      "inline_choice": 120,
+      "multiple_select": 160,
+      "drag_and_drop": 240,
+      "hot_text": 32,
+      "text_entry": 368,
+      "hotspot": 80,
+      "matrix": 40,
+      "writing_prompt": 100
+    },
+    "answer_critical_media_items": 693,
+    "machine_scorable_items": 1680,
+    "psychometric_status": "uncalibrated",
+    "numeracy_by_strand": {
+      "number": 320,
+      "probability": 40,
+      "measurement": 120,
+      "space": 40
+    },
+    "numeracy_by_demo_type": {
+      "Y5-01-half-of-visual-collection": 40,
+      "Y5-02-possible-die-outcomes": 40,
+      "Y5-03-sum-category-counts": 40,
+      "Y5-04-repeated-spending-budget": 40,
+      "Y5-05-order-lengths-visual": 40,
+      "Y5-06-compare-measures-to-benchmark": 40,
+      "Y5-07-match-polygons-to-vertex-count": 40,
+      "Y5-08-addition-equation-drag": 40,
+      "Y5-09-measure-image-with-online-ruler": 40,
+      "Y5-10-complete-subtraction-equation": 40,
+      "Y5-11-greatest-value-mixed-representations-table": 40,
+      "Y5-12-select-two-banknotes-for-total": 40,
+      "Y5-13-pair-complements-to-target": 40
+    },
+    "conventions_by_subdomain": {
+      "spelling": 288,
+      "grammar": 218,
+      "punctuation": 94
+    },
+    "reading_by_text_type": {
+      "informative": 196,
+      "imaginative": 224,
+      "persuasive": 140
+    }
+  },
+  "7": {
+    "file": "year-7.jsonl",
+    "total_items": 1820,
+    "by_domain": {
+      "reading": 560,
+      "conventions_of_language": 600,
+      "numeracy": 560,
+      "writing": 100
+    },
+    "by_difficulty": {
+      "easy": 393,
+      "medium": 774,
+      "hard": 553,
+      "not_applicable": 100
+    },
+    "by_absolute_complexity": {
+      "5": 393,
+      "6": 774,
+      "7": 553,
+      "not_applicable": 100
+    },
+    "by_pathway_band": {
+      "lower": 393,
+      "average": 774,
+      "higher": 553,
+      "not_applicable": 100
+    },
+    "by_item_type": {
+      "multiple_choice": 686,
+      "inline_choice": 120,
+      "multiple_select": 160,
+      "drag_and_drop": 240,
+      "hot_text": 26,
+      "text_entry": 408,
+      "matrix": 40,
+      "hotspot": 40,
+      "writing_prompt": 100
+    },
+    "answer_critical_media_items": 733,
+    "machine_scorable_items": 1720,
+    "psychometric_status": "uncalibrated",
+    "numeracy_by_strand": {
+      "number": 240,
+      "probability": 80,
+      "space": 80,
+      "measurement": 120,
+      "algebra": 40
+    },
+    "numeracy_by_demo_type": {
+      "Y7-01-equal-groups-plus-remainder": 40,
+      "Y7-02-redistribute-equal-groups": 40,
+      "Y7-03-fraction-to-decimal-power-of-ten": 40,
+      "Y7-04-fundamental-counting-principle": 40,
+      "Y7-05-classify-event-probability": 40,
+      "Y7-06-order-reflex-and-nonreflex-angles": 40,
+      "Y7-07-match-measurement-attribute-to-unit": 40,
+      "Y7-08-compare-areas-on-grid-floorplan": 40,
+      "Y7-09-select-two-banknotes-for-total": 40,
+      "Y7-10-multi-rate-profit-or-loss": 40,
+      "Y7-11-measure-image-to-half-centimetre": 40,
+      "Y7-12-measure-angle-with-protractor": 40,
+      "Y7-13-complete-visual-growing-pattern": 40,
+      "Y7-14-pair-equivalent-fraction-decimal-percent": 40
+    },
+    "conventions_by_subdomain": {
+      "spelling": 288,
+      "grammar": 218,
+      "punctuation": 94
+    },
+    "reading_by_text_type": {
       "informative": 189,
+      "imaginative": 182,
+      "persuasive": 189
+    }
+  },
+  "9": {
+    "file": "year-9.jsonl",
+    "total_items": 1820,
+    "by_domain": {
+      "reading": 560,
+      "conventions_of_language": 600,
+      "numeracy": 560,
+      "writing": 100
+    },
+    "by_difficulty": {
+      "easy": 335,
+      "medium": 682,
+      "hard": 703,
+      "not_applicable": 100
+    },
+    "by_absolute_complexity": {
+      "7": 335,
+      "8": 682,
+      "9": 703,
+      "not_applicable": 100
+    },
+    "by_pathway_band": {
+      "lower": 335,
+      "average": 682,
+      "higher": 703,
+      "not_applicable": 100
+    },
+    "by_item_type": {
+      "multiple_choice": 686,
+      "inline_choice": 120,
+      "multiple_select": 160,
+      "drag_and_drop": 240,
+      "hot_text": 26,
+      "text_entry": 408,
+      "hotspot": 40,
+      "matrix": 40,
+      "writing_prompt": 100
+    },
+    "answer_critical_media_items": 733,
+    "machine_scorable_items": 1720,
+    "psychometric_status": "uncalibrated",
+    "numeracy_by_strand": {
+      "number": 240,
+      "measurement": 160,
+      "space": 120,
+      "statistics": 40
+    },
+    "numeracy_by_demo_type": {
+      "Y9-01-subtract-unlike-fractions": 40,
+      "Y9-02-subtract-currency-decimals": 40,
+      "Y9-03-whole-groups-from-division": 40,
+      "Y9-04-place-value-digit-constraints": 40,
+      "Y9-05-equal-area-grid-shapes": 40,
+      "Y9-06-calendar-weekday-date": 40,
+      "Y9-07-read-analogue-scales-and-order": 40,
+      "Y9-08-match-nets-to-solids": 40,
+      "Y9-09-match-polygons-to-vertex-count": 40,
+      "Y9-10-measure-image-to-half-centimetre": 40,
+      "Y9-11-measure-angle-with-protractor": 40,
+      "Y9-12-multi-rate-profit-or-loss": 40,
+      "Y9-13-complete-two-set-venn-diagram": 40,
+      "Y9-14-pair-equivalent-fraction-decimal-percent": 40
+    },
+    "conventions_by_subdomain": {
+      "spelling": 288,
+      "grammar": 218,
+      "punctuation": 94
+    },
+    "reading_by_text_type": {
+      "informative": 189,
+      "persuasive": 189,
       "imaginative": 182
     }
   }

@@ -427,6 +427,19 @@ const english = {
   "以下为 AI 针对同一题目新写的高分示例，不是学生原文，也不应当作唯一答案。": "This is a new high-scoring AI example for the same prompt. It is not the student's writing and is not the only possible answer.",
   "为什么这是满分示范": "Why this is a full-mark exemplar",
   "报告边界": "Report limitations",
+  "关于作者": "About the author",
+  "William 爸爸的话": "A note from William’s dad",
+  "William 和爸爸的温馨合影": "A warm portrait of William and his dad",
+  "William 和爸爸": "William and Dad",
+  "你好，我是 William 的爸爸，也是这款学习软件的作者。": "Hello, I’m William’s dad and the creator of this learning app.",
+  "最初制作这个软件，是因为 William 即将参加考试。我希望为他准备一个更容易使用、更贴近实际学习需要的练习工具，让他能够按照自己的节奏学习，在练习中发现不足，也在一点点进步中建立信心。": "I first built this app because William was getting ready for his test. I wanted to give him a practice tool that was easy to use and genuinely useful, so he could learn at his own pace, notice what needed work and build confidence one small step at a time.",
+  "在陪伴 William 学习的过程中，我发现许多澳洲家庭可能也有类似的需要。因此，我决定把这款软件分享出来，希望它不仅能帮助 William，也能为更多正在认真学习和准备考试的小朋友提供一些支持。": "While learning alongside William, I realised that many Australian families may have similar needs. I decided to share the app in the hope that it can support not only William, but more children who are studying hard and preparing for their tests.",
+  "这是一位普通爸爸为孩子做的小小项目。软件或许还不完美，但其中的每一道题、每一次改进，都承载着一位父亲对孩子成长的关心与期待。": "This is a small project made by an ordinary dad for his child. It may not be perfect, but every question and every improvement carries a father’s care and hopes for his child’s growth.",
+  "愿每一位使用这款软件的小朋友保持好奇，遇到困难时不轻易放弃；不因为一次答错而失去信心，也不因为一次考试而否定自己。相信每天进步一点点，时间终会让努力开花结果。": "May every child who uses this app stay curious and keep going when learning feels difficult. One wrong answer should never take away your confidence, and one test should never define you. A little progress each day will help your hard work bloom.",
+  "也祝愿所有陪伴孩子成长的家长，多一些从容，少一些焦虑。考试固然重要，但孩子的健康、快乐、勇气和对世界的好奇心同样珍贵。": "To every parent walking beside a child: may there be more calm and less worry. Tests matter, but a child’s health, happiness, courage and curiosity are just as precious.",
+  "愿每个孩子都能按照自己的节奏成长，带着信心走进考场，带着笑容奔向更广阔的未来。": "May every child grow at their own pace, enter the test room with confidence and move towards a wider future with a smile.",
+  "—— William 的爸爸": "— William’s dad",
+  "独立开发的学习辅助软件，希望用技术和陪伴，让学习变得更轻松一些。": "An independently developed learning companion, created to make study a little easier through technology and encouragement.",
 };
 
 const traditional = {
@@ -834,6 +847,19 @@ const traditional = {
   "以下为 AI 针对同一题目新写的高分示例，不是学生原文，也不应当作唯一答案。": "以下為 AI 針對同一題目新寫的高分示例，不是學生原文，也不應視為唯一答案。",
   "为什么这是满分示范": "為什麼這是滿分示範",
   "报告边界": "報告界線",
+  "关于作者": "關於作者",
+  "William 爸爸的话": "William 爸爸的話",
+  "William 和爸爸的温馨合影": "William 和爸爸的溫馨合影",
+  "William 和爸爸": "William 和爸爸",
+  "你好，我是 William 的爸爸，也是这款学习软件的作者。": "你好，我是 William 的爸爸，也是這款學習軟體的作者。",
+  "最初制作这个软件，是因为 William 即将参加考试。我希望为他准备一个更容易使用、更贴近实际学习需要的练习工具，让他能够按照自己的节奏学习，在练习中发现不足，也在一点点进步中建立信心。": "最初製作這個軟體，是因為 William 即將參加考試。我希望為他準備一個更容易使用、更貼近實際學習需要的練習工具，讓他能按照自己的節奏學習，在練習中發現不足，也在一點點進步中建立信心。",
+  "在陪伴 William 学习的过程中，我发现许多澳洲家庭可能也有类似的需要。因此，我决定把这款软件分享出来，希望它不仅能帮助 William，也能为更多正在认真学习和准备考试的小朋友提供一些支持。": "在陪伴 William 學習的過程中，我發現許多澳洲家庭可能也有類似的需要。因此，我決定把這款軟體分享出來，希望它不僅能幫助 William，也能為更多正在認真學習和準備考試的小朋友提供一些支持。",
+  "这是一位普通爸爸为孩子做的小小项目。软件或许还不完美，但其中的每一道题、每一次改进，都承载着一位父亲对孩子成长的关心与期待。": "這是一位普通爸爸為孩子做的小小專案。軟體或許還不完美，但其中的每一道題、每一次改進，都承載著一位父親對孩子成長的關心與期待。",
+  "愿每一位使用这款软件的小朋友保持好奇，遇到困难时不轻易放弃；不因为一次答错而失去信心，也不因为一次考试而否定自己。相信每天进步一点点，时间终会让努力开花结果。": "願每一位使用這款軟體的小朋友保持好奇，遇到困難時不輕易放棄；不因為一次答錯而失去信心，也不因為一次考試而否定自己。相信每天進步一點點，時間終會讓努力開花結果。",
+  "也祝愿所有陪伴孩子成长的家长，多一些从容，少一些焦虑。考试固然重要，但孩子的健康、快乐、勇气和对世界的好奇心同样珍贵。": "也祝願所有陪伴孩子成長的家長，多一些從容，少一些焦慮。考試固然重要，但孩子的健康、快樂、勇氣和對世界的好奇心同樣珍貴。",
+  "愿每个孩子都能按照自己的节奏成长，带着信心走进考场，带着笑容奔向更广阔的未来。": "願每個孩子都能按照自己的節奏成長，帶著信心走進考場，帶著笑容奔向更廣闊的未來。",
+  "—— William 的爸爸": "—— William 的爸爸",
+  "独立开发的学习辅助软件，希望用技术和陪伴，让学习变得更轻松一些。": "獨立開發的學習輔助軟體，希望用技術和陪伴，讓學習變得更輕鬆一些。",
 };
 
 const korean = {
@@ -1241,6 +1267,19 @@ const korean = {
   "以下为 AI 针对同一题目新写的高分示例，不是学生原文，也不应当作唯一答案。": "다음 글은 같은 주제로 AI가 새로 작성한 고득점 예시입니다. 학생 원문이 아니며 유일한 정답도 아닙니다.",
   "为什么这是满分示范": "만점 예시인 이유",
   "报告边界": "보고서 한계",
+  "关于作者": "작가 소개",
+  "William 爸爸的话": "William 아빠의 이야기",
+  "William 和爸爸的温馨合影": "William과 아빠의 따뜻한 사진",
+  "William 和爸爸": "William과 아빠",
+  "你好，我是 William 的爸爸，也是这款学习软件的作者。": "안녕하세요. 저는 William의 아빠이자 이 학습 앱을 만든 사람입니다.",
+  "最初制作这个软件，是因为 William 即将参加考试。我希望为他准备一个更容易使用、更贴近实际学习需要的练习工具，让他能够按照自己的节奏学习，在练习中发现不足，也在一点点进步中建立信心。": "William이 시험을 앞두고 있어 이 앱을 만들기 시작했습니다. 아이가 자신의 속도에 맞춰 공부하고, 연습을 통해 부족한 부분을 발견하며, 작은 발전 속에서 자신감을 키울 수 있는 쉽고 실용적인 도구를 주고 싶었습니다.",
+  "在陪伴 William 学习的过程中，我发现许多澳洲家庭可能也有类似的需要。因此，我决定把这款软件分享出来，希望它不仅能帮助 William，也能为更多正在认真学习和准备考试的小朋友提供一些支持。": "William의 공부를 곁에서 돕는 동안 많은 호주 가정에도 비슷한 필요가 있을 수 있다는 것을 알게 됐습니다. 이 앱이 William뿐 아니라 열심히 공부하고 시험을 준비하는 더 많은 아이들에게 도움이 되기를 바라며 공유하기로 했습니다.",
+  "这是一位普通爸爸为孩子做的小小项目。软件或许还不完美，但其中的每一道题、每一次改进，都承载着一位父亲对孩子成长的关心与期待。": "이 앱은 평범한 아빠가 아이를 위해 만든 작은 프로젝트입니다. 아직 완벽하지 않을 수 있지만, 모든 문제와 개선에는 아이의 성장을 향한 아빠의 관심과 기대가 담겨 있습니다.",
+  "愿每一位使用这款软件的小朋友保持好奇，遇到困难时不轻易放弃；不因为一次答错而失去信心，也不因为一次考试而否定自己。相信每天进步一点点，时间终会让努力开花结果。": "이 앱을 사용하는 모든 어린이가 호기심을 간직하고 어려움 앞에서도 쉽게 포기하지 않기를 바랍니다. 한 번의 오답으로 자신감을 잃지 말고, 한 번의 시험으로 자신을 판단하지 마세요. 매일의 작은 발전이 언젠가 노력의 결실로 피어날 것입니다.",
+  "也祝愿所有陪伴孩子成长的家长，多一些从容，少一些焦虑。考试固然重要，但孩子的健康、快乐、勇气和对世界的好奇心同样珍贵。": "아이의 성장을 함께하는 모든 부모님께도 여유는 더하고 걱정은 덜하기를 바랍니다. 시험도 중요하지만 아이의 건강, 행복, 용기와 세상을 향한 호기심도 똑같이 소중합니다.",
+  "愿每个孩子都能按照自己的节奏成长，带着信心走进考场，带着笑容奔向更广阔的未来。": "모든 아이가 자신의 속도로 성장하고, 자신감을 가지고 시험장에 들어가며, 미소와 함께 더 넓은 미래로 나아가기를 바랍니다.",
+  "—— William 的爸爸": "— William 아빠",
+  "独立开发的学习辅助软件，希望用技术和陪伴，让学习变得更轻松一些。": "기술과 응원을 통해 공부를 조금 더 편하게 만들고자 독립적으로 개발한 학습 도우미입니다.",
 };
 
 const dictionaries = {

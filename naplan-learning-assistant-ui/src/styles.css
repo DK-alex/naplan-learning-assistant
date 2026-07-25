@@ -1554,6 +1554,155 @@ html[lang^="en"] .rubric-row span small {
   cursor: pointer;
 }
 
+.author-modal-backdrop {
+  z-index: 150;
+}
+
+.author-modal {
+  position: relative;
+  width: min(940px, 100%);
+  height: min(650px, calc(100vh - 32px));
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+  gap: 24px;
+  overflow: hidden;
+  color: #27303c;
+  background: #fffdf9;
+  border: 1px solid #f0d9bf;
+  border-radius: 24px;
+  box-shadow: 0 26px 75px rgba(38, 29, 20, 0.3);
+}
+
+.author-modal .modal-close {
+  z-index: 3;
+  color: #48515e;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(218, 223, 228, 0.9);
+}
+
+.author-portrait {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: #f4eee4;
+  border-radius: 18px;
+}
+
+.author-portrait img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.author-portrait figcaption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 7px 11px;
+  color: #6c431f;
+  background: rgba(255, 250, 240, 0.9);
+  border: 1px solid rgba(230, 199, 161, 0.86);
+  border-radius: 999px;
+  backdrop-filter: blur(7px);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.author-copy {
+  min-width: 0;
+  padding: 17px 30px 15px 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #e5caaa transparent;
+}
+
+.author-copy h2 {
+  margin: 5px 0 12px;
+  color: #202936;
+  font-size: 28px;
+  line-height: 1.25;
+}
+
+.author-copy > p {
+  margin: 0 0 11px;
+  color: #5d6875;
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.author-copy .author-lead {
+  color: #3d4855;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.author-wishes {
+  margin: 15px 0;
+  padding: 14px 15px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 11px;
+  color: #9a4b25;
+  background: #fff3e6;
+  border: 1px solid #f2d2ae;
+  border-radius: 15px;
+}
+
+.author-wishes svg {
+  margin-top: 2px;
+  color: #e06e3c;
+}
+
+.author-wishes p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.author-copy footer {
+  margin-top: 17px;
+  padding-top: 14px;
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid #eadfce;
+}
+
+.author-copy footer strong {
+  color: #8b461f;
+  font-size: 14px;
+}
+
+.author-copy footer small {
+  color: #7a8490;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+  .author-modal {
+    height: auto;
+    max-height: calc(100vh - 20px);
+    grid-template-columns: 1fr;
+    gap: 16px;
+    overflow-y: auto;
+  }
+
+  .author-portrait {
+    min-height: 260px;
+    max-height: 340px;
+  }
+
+  .author-copy {
+    padding: 2px 8px 10px;
+    overflow: visible;
+  }
+}
+
 .modal-icon {
   color: #18aa66;
 }
@@ -2261,6 +2410,14 @@ html[lang^="en"] .rubric-row span small {
 
 .feature-header {
   margin-bottom: 26px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.feature-header > div:first-child {
+  min-width: 0;
 }
 
 .feature-header h1 {
@@ -2274,6 +2431,35 @@ html[lang^="en"] .rubric-row span small {
   margin: 0;
   color: #697585;
   font-size: 15px;
+}
+
+.feature-header-action {
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 9px 16px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #bf5a1f;
+  background: #fff7eb;
+  border: 1px solid #f1cfaa;
+  border-radius: 13px;
+  box-shadow: 0 5px 14px rgba(126, 76, 35, 0.08);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.feature-header-action:hover {
+  color: #a94814;
+  background: #fff1dc;
+  border-color: #eebd89;
+}
+
+.feature-header-action:focus-visible {
+  outline: 3px solid rgba(234, 124, 36, 0.25);
+  outline-offset: 2px;
 }
 
 .feature-back {
@@ -6101,6 +6287,16 @@ html[lang^="en"] .rubric-row span small {
 @media (max-width: 640px) {
   .feature-workspace {
     padding: 22px 12px 28px;
+  }
+
+  .feature-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .feature-header-action {
+    width: fit-content;
+    margin-top: -6px;
   }
 
   .feature-card {

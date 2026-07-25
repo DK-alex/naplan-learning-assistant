@@ -15,6 +15,7 @@ import {
   FileText,
   Gear,
   HandWaving,
+  HeartStraight,
   House,
   Eye,
   EyeSlash,
@@ -35,6 +36,7 @@ import {
   Translate,
   TrendUp,
   UsersThree,
+  UserCircle,
   ShieldCheck,
   X,
 } from "@phosphor-icons/react";
@@ -696,13 +698,74 @@ function ProfessionalDashboard({ onOpen, notificationOpen, setNotificationOpen, 
 
 function FeatureHeader({ title, description }) {
   const { t } = useI18n();
+  const [aboutAuthorOpen, setAboutAuthorOpen] = useState(false);
   return (
     <header className="feature-header">
       <div>
         <h1>{t(title)}</h1>
         <p>{t(description)}</p>
       </div>
+      {title === "设置" && (
+        <button
+          type="button"
+          className="feature-header-action"
+          onClick={() => setAboutAuthorOpen(true)}
+          aria-haspopup="dialog"
+        >
+          <UserCircle size={22} weight="duotone" />
+          {t("关于作者")}
+        </button>
+      )}
+      {aboutAuthorOpen && <AboutAuthorModal onClose={() => setAboutAuthorOpen(false)} />}
     </header>
+  );
+}
+
+function AboutAuthorModal({ onClose }) {
+  const { t } = useI18n();
+
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [onClose]);
+
+  return (
+    <div className="modal-backdrop author-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <article
+        className="author-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="about-author-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button type="button" className="modal-close" aria-label={t("关闭")} onClick={onClose}><X size={20} /></button>
+        <figure className="author-portrait">
+          <img src="/assets/about-william-and-dad.png" alt={t("William 和爸爸的温馨合影")} />
+          <figcaption>{t("William 和爸爸")}</figcaption>
+        </figure>
+        <div className="author-copy">
+          <span className="feature-kicker">ABOUT THE AUTHOR</span>
+          <h2 id="about-author-title">{t("William 爸爸的话")}</h2>
+          <p className="author-lead">{t("你好，我是 William 的爸爸，也是这款学习软件的作者。")}</p>
+          <p>{t("最初制作这个软件，是因为 William 即将参加考试。我希望为他准备一个更容易使用、更贴近实际学习需要的练习工具，让他能够按照自己的节奏学习，在练习中发现不足，也在一点点进步中建立信心。")}</p>
+          <p>{t("在陪伴 William 学习的过程中，我发现许多澳洲家庭可能也有类似的需要。因此，我决定把这款软件分享出来，希望它不仅能帮助 William，也能为更多正在认真学习和准备考试的小朋友提供一些支持。")}</p>
+          <p>{t("这是一位普通爸爸为孩子做的小小项目。软件或许还不完美，但其中的每一道题、每一次改进，都承载着一位父亲对孩子成长的关心与期待。")}</p>
+          <div className="author-wishes">
+            <HeartStraight size={24} weight="fill" />
+            <p>{t("愿每一位使用这款软件的小朋友保持好奇，遇到困难时不轻易放弃；不因为一次答错而失去信心，也不因为一次考试而否定自己。相信每天进步一点点，时间终会让努力开花结果。")}</p>
+          </div>
+          <p>{t("也祝愿所有陪伴孩子成长的家长，多一些从容，少一些焦虑。考试固然重要，但孩子的健康、快乐、勇气和对世界的好奇心同样珍贵。")}</p>
+          <p>{t("愿每个孩子都能按照自己的节奏成长，带着信心走进考场，带着笑容奔向更广阔的未来。")}</p>
+          <footer>
+            <strong>{t("—— William 的爸爸")}</strong>
+            <small>{t("独立开发的学习辅助软件，希望用技术和陪伴，让学习变得更轻松一些。")}</small>
+          </footer>
+        </div>
+      </article>
+    </div>
   );
 }
 
