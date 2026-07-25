@@ -53,6 +53,21 @@ function isSafeLink(value) {
   }
 }
 
+function isOfficialPdfLink(value) {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+    const officialHost =
+      hostname === "nap.edu.au" ||
+      hostname.endsWith(".nap.edu.au") ||
+      hostname === "acara.edu.au" ||
+      hostname.endsWith(".acara.edu.au");
+    return url.protocol === "https:" && officialHost && /\.pdf$/i.test(url.pathname);
+  } catch {
+    return false;
+  }
+}
+
 function isSafeRemoteMedia(value) {
   try {
     return new URL(value).protocol === "https:";
@@ -90,7 +105,7 @@ function MarkedText({ marks = [], children }) {
   }, children);
 }
 
-function OfficialRuns({ runs = [], language, translations }) {
+function OfficialRuns({ runs = [], language, onOpenPdf, translations }) {
   return runs.map((run, index) => {
     const text = localiseRun(run, language, translations);
     const content = <MarkedText marks={run.marks}>{text}</MarkedText>;
@@ -100,6 +115,11 @@ function OfficialRuns({ runs = [], language, translations }) {
           className="official-inline-link"
           href={run.href}
           key={`${run.id}-${index}`}
+          onClick={(event) => {
+            if (!onOpenPdf || !isOfficialPdfLink(run.href)) return;
+            event.preventDefault();
+            onOpenPdf({ sourceUrl: run.href, title: text });
+          }}
           rel="noreferrer"
           target="_blank"
         >
@@ -112,18 +132,24 @@ function OfficialRuns({ runs = [], language, translations }) {
   });
 }
 
-function OfficialList({ block, language, translations }) {
+function OfficialList({ block, language, onOpenPdf, translations }) {
   const ListTag = block.ordered ? "ol" : "ul";
   return (
     <ListTag className="official-document-list">
       {block.items.map((item, index) => (
         <li key={`${block.id}-${item.id}-${index}`}>
-          <OfficialRuns runs={item.runs} language={language} translations={translations} />
+          <OfficialRuns
+            runs={item.runs}
+            language={language}
+            onOpenPdf={onOpenPdf}
+            translations={translations}
+          />
           {item.children?.map((child) => (
             <OfficialList
               block={child}
               key={child.id}
               language={language}
+              onOpenPdf={onOpenPdf}
               translations={translations}
             />
           ))}
@@ -204,26 +230,56 @@ function OfficialMedia({ block, language, translations }) {
   );
 }
 
-function OfficialBlock({ block, language, translations }) {
+function OfficialBlock({ block, language, onOpenPdf, translations }) {
   if (block.type === "heading") {
     const HeadingTag = `h${Math.min(Math.max(block.level, 1), 6)}`;
     return (
       <HeadingTag id={block.anchor ? `official-${block.anchor}` : undefined}>
-        <OfficialRuns runs={block.runs} language={language} translations={translations} />
+        <OfficialRuns
+          runs={block.runs}
+          language={language}
+          onOpenPdf={onOpenPdf}
+          translations={translations}
+        />
       </HeadingTag>
     );
   }
 
   if (block.type === "paragraph") {
-    return <p><OfficialRuns runs={block.runs} language={language} translations={translations} /></p>;
+    return (
+      <p>
+        <OfficialRuns
+          runs={block.runs}
+          language={language}
+          onOpenPdf={onOpenPdf}
+          translations={translations}
+        />
+      </p>
+    );
   }
 
   if (block.type === "preformatted") {
-    return <pre><OfficialRuns runs={block.runs} language={language} translations={translations} /></pre>;
+    return (
+      <pre>
+        <OfficialRuns
+          runs={block.runs}
+          language={language}
+          onOpenPdf={onOpenPdf}
+          translations={translations}
+        />
+      </pre>
+    );
   }
 
   if (block.type === "list") {
-    return <OfficialList block={block} language={language} translations={translations} />;
+    return (
+      <OfficialList
+        block={block}
+        language={language}
+        onOpenPdf={onOpenPdf}
+        translations={translations}
+      />
+    );
   }
 
   if (block.type === "table") {
@@ -235,6 +291,7 @@ function OfficialBlock({ block, language, translations }) {
               <OfficialRuns
                 runs={block.caption_runs}
                 language={language}
+                onOpenPdf={onOpenPdf}
                 translations={translations}
               />
             </caption>
@@ -254,6 +311,7 @@ function OfficialBlock({ block, language, translations }) {
                       <OfficialRuns
                         runs={cell.runs}
                         language={language}
+                        onOpenPdf={onOpenPdf}
                         translations={translations}
                       />
                     </CellTag>
@@ -275,6 +333,7 @@ function OfficialBlock({ block, language, translations }) {
             block={child}
             key={child.id}
             language={language}
+            onOpenPdf={onOpenPdf}
             translations={translations}
           />
         ))}
@@ -289,6 +348,7 @@ function OfficialBlock({ block, language, translations }) {
           <OfficialRuns
             runs={block.summary_runs}
             language={language}
+            onOpenPdf={onOpenPdf}
             translations={translations}
           />
         </summary>
@@ -297,6 +357,7 @@ function OfficialBlock({ block, language, translations }) {
             block={child}
             key={child.id}
             language={language}
+            onOpenPdf={onOpenPdf}
             translations={translations}
           />
         ))}
@@ -313,12 +374,18 @@ function OfficialBlock({ block, language, translations }) {
               <OfficialRuns
                 runs={entry.term_runs}
                 language={language}
+                onOpenPdf={onOpenPdf}
                 translations={translations}
               />
             </dt>
             {entry.description_runs.map((runs, descriptionIndex) => (
               <dd key={`${block.id}-description-${index}-${descriptionIndex}`}>
-                <OfficialRuns runs={runs} language={language} translations={translations} />
+                <OfficialRuns
+                  runs={runs}
+                  language={language}
+                  onOpenPdf={onOpenPdf}
+                  translations={translations}
+                />
               </dd>
             ))}
           </div>
@@ -363,7 +430,12 @@ export function getOfficialDocumentCharacterCount(document, language, translatio
   );
 }
 
-export default function OfficialDocument({ document, language = "en", translations = {} }) {
+export default function OfficialDocument({
+  document,
+  language = "en",
+  onOpenPdf,
+  translations = {},
+}) {
   return (
     <article className="official-document" lang={language}>
       {document?.blocks?.map((block) => (
@@ -371,6 +443,7 @@ export default function OfficialDocument({ document, language = "en", translatio
           block={block}
           key={block.id}
           language={language}
+          onOpenPdf={onOpenPdf}
           translations={translations}
         />
       ))}

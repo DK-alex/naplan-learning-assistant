@@ -11,6 +11,11 @@ const {
   MINIMUM_WINDOW_WIDTH,
   fitAspectRatioWithin,
 } = require("./window-layout.cjs");
+const {
+  classifyOfficialPdfPolicy,
+  fetchOfficialPdf,
+  translateOfficialPdfStrings,
+} = require("./official-pdf.cjs");
 
 const APP_PORT = 37821;
 const APP_ORIGIN = `http://127.0.0.1:${APP_PORT}`;
@@ -27,7 +32,9 @@ const CONTENT_TYPES = {
   ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".png": "image/png",
+  ".pdf": "application/pdf",
   ".svg": "image/svg+xml; charset=utf-8",
   ".webp": "image/webp",
 };
@@ -104,6 +111,120 @@ async function serveAiRequest(request, response) {
   }
 }
 
+function mapOfficialPdfError(error) {
+  const code = error?.code || error?.message || "PDF_SERVICE_ERROR";
+  if (code === "PDF_TRANSLATION_NOT_PERMITTED") {
+    return {
+      status: 451,
+      payload: {
+        error: {
+          code,
+          message: "This official PDF can be shown in its original form but cannot be adapted or translated.",
+        },
+        policy: error.policy,
+      },
+    };
+  }
+  if (
+    [
+      "INVALID_PDF_URL",
+      "PDF_SOURCE_NOT_ALLOWED",
+      "PDF_SOURCE_NOT_PDF",
+      "TRANSLATION_INPUT_INVALID",
+      "TRANSLATION_INPUT_TOO_LARGE",
+      "TRANSLATION_TARGET_INVALID",
+    ].includes(code)
+  ) {
+    return {
+      status: 400,
+      payload: { error: { code, message: "The official PDF request is invalid." } },
+    };
+  }
+  if (code === "PDF_TOO_LARGE") {
+    return {
+      status: 413,
+      payload: { error: { code, message: "The official PDF is too large to open safely in the app." } },
+    };
+  }
+  return {
+    status: 502,
+    payload: {
+      error: {
+        code,
+        message: "The official PDF could not be retrieved or translated. Check the internet connection and try again.",
+      },
+    },
+  };
+}
+
+async function serveOfficialPdfMeta(response, url) {
+  try {
+    sendJson(response, 200, classifyOfficialPdfPolicy(
+      url.searchParams.get("url") || "",
+      url.searchParams.get("title") || "",
+    ));
+  } catch (error) {
+    const mapped = mapOfficialPdfError(error);
+    sendJson(response, mapped.status, mapped.payload);
+  }
+}
+
+async function serveOfficialPdf(request, response, url) {
+  if (!["GET", "HEAD"].includes(request.method)) {
+    sendJson(response, 405, {
+      error: { code: "METHOD_NOT_ALLOWED", message: "Only GET and HEAD are supported." },
+    });
+    return;
+  }
+  try {
+    const { buffer, sourceUrl } = await fetchOfficialPdf(
+      url.searchParams.get("url") || "",
+    );
+    response.writeHead(200, {
+      "content-type": "application/pdf",
+      "content-length": buffer.length,
+      "content-disposition": "inline",
+      "cache-control": "no-store",
+      "x-content-type-options": "nosniff",
+      "x-naplan-pdf-source": encodeURIComponent(sourceUrl),
+    });
+    if (request.method === "HEAD") response.end();
+    else response.end(buffer);
+  } catch (error) {
+    const mapped = mapOfficialPdfError(error);
+    sendJson(response, mapped.status, mapped.payload);
+  }
+}
+
+async function serveOfficialPdfTranslation(request, response) {
+  if (request.method !== "POST") {
+    sendJson(response, 405, {
+      error: { code: "METHOD_NOT_ALLOWED", message: "Only POST is supported." },
+    });
+    return;
+  }
+
+  let body;
+  try {
+    body = JSON.parse((await readRequestBody(request)).toString("utf8"));
+  } catch (error) {
+    const mapped = mapOfficialPdfError(
+      error?.message === "REQUEST_TOO_LARGE"
+        ? Object.assign(new Error("TRANSLATION_INPUT_TOO_LARGE"), { code: "TRANSLATION_INPUT_TOO_LARGE" })
+        : new Error("TRANSLATION_INPUT_INVALID"),
+    );
+    sendJson(response, mapped.status, mapped.payload);
+    return;
+  }
+
+  try {
+    sendJson(response, 200, await translateOfficialPdfStrings(body));
+  } catch (error) {
+    const mapped = mapOfficialPdfError(error);
+    sendJson(response, mapped.status, mapped.payload);
+  }
+}
+
 function resolveStaticFile(pathname) {
   let decodedPath;
   try {
@@ -159,6 +280,18 @@ async function handleLocalRequest(request, response) {
   const url = new URL(request.url, APP_ORIGIN);
   if (url.pathname === "/api/ai/review") {
     await serveAiRequest(request, response);
+    return;
+  }
+  if (url.pathname === "/api/official-pdf/meta") {
+    await serveOfficialPdfMeta(response, url);
+    return;
+  }
+  if (url.pathname === "/api/official-pdf/translate") {
+    await serveOfficialPdfTranslation(request, response);
+    return;
+  }
+  if (url.pathname === "/api/official-pdf") {
+    await serveOfficialPdf(request, response, url);
     return;
   }
   await serveStaticRequest(request, response, url);
