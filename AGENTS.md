@@ -20,6 +20,8 @@ Official-update content must come from NAP or ACARA URLs, be stored with fetch m
 
 The latest-updates reader must keep the English official-page snapshot separate from convenience translations. Store Simplified Chinese, Traditional Chinese, and Korean machine-assisted full-page translations in `src/data/official-page-translations.json`, bind them to the source snapshot hash, follow the selected interface language by default, and always offer an explicit four-language reader switch plus an official-English-source warning.
 
+Preserve official-page semantics in the latest-updates reader instead of flattening pages into plain text. Store and render headings, paragraphs, nested lists, tables, emphasis, link labels and their original resolved targets as structured blocks. Translate only visible text; never translate or rewrite link targets. Embedded video or audio may retain a remote HTTPS playback URL and play on demand inside the app, but media files must never be downloaded or stored locally.
+
 Use `/assets/naplan-app-icon.png` as the learning assistant's favicon, touch icon, and sidebar app mark. It comes from the user-provided `E:/2323.png`. Keep the NAPLAN-style exam player's own in-product logo treatment separate from this software branding.
 
 Desktop packaging uses two distinct icon families under `packaging/icons/`: `app-icon.*` is the installed application/shortcut icon, while `installer-icon.*` is the installer and uninstaller artwork supplied by the user as `E:/ouyhkjhw.png`. Do not show the installer artwork inside the running application UI.

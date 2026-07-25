@@ -49,6 +49,7 @@ import {
 } from "./i18n.jsx";
 import officialPages from "./data/official-pages.json";
 import officialUpdates from "./data/official-updates.json";
+import OfficialDocument, { getOfficialDocumentCharacterCount } from "./OfficialDocument.jsx";
 import { getExamGuide } from "./data/exam-guide.js";
 import { getWritingRubricGuide } from "./data/writing-rubric-guide.js";
 import { getLatestWritingReportSummary } from "./data/writing-report-summary.js";
@@ -966,11 +967,23 @@ function NewsWorkspace() {
     setReaderLanguage(language);
   }, [language, selectedUrl]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.querySelector(".feature-workspace")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.querySelector(".official-document")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [selectedUrl, readerLanguage]);
+
   if (selectedPage && selectedItem) {
-    const translatedText = selectedTranslation?.text?.[readerLanguage];
-    const fullText = readerLanguage === "en" ? selectedPage.text_en : translatedText || selectedPage.text_en;
-    const showingTranslation = readerLanguage !== "en" && Boolean(translatedText);
-    const translationMissing = readerLanguage !== "en" && !translatedText;
+    const translatedStrings = selectedTranslation?.strings || {};
+    const hasSelectedTranslation =
+      readerLanguage !== "en" &&
+      Object.keys(translatedStrings[readerLanguage] || {}).length > 0;
+    const documentLanguage = readerLanguage === "en" || hasSelectedTranslation ? readerLanguage : "en";
+    const showingTranslation = documentLanguage !== "en";
+    const translationMissing = readerLanguage !== "en" && !hasSelectedTranslation;
+    const characterCount = selectedPage.document
+      ? getOfficialDocumentCharacterCount(selectedPage.document, documentLanguage, translatedStrings)
+      : selectedPage.character_count || selectedPage.text_en?.length || 0;
     const fetchedAt = selectedPage.fetched_at
       ? new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(selectedPage.fetched_at))
       : t("未保存正文");
@@ -987,7 +1000,7 @@ function NewsWorkspace() {
         </div>
         <div className="official-reader-meta">
           <span>{t("抓取时间")}：{fetchedAt}</span>
-          <span>{t("正文字符")}：{(fullText?.length || 0).toLocaleString(locale)}</span>
+          <span>{t("正文字符")}：{characterCount.toLocaleString(locale)}</span>
           <span>SHA-256：{selectedPage.content_hash?.slice(0, 12) || "—"}</span>
         </div>
         {selectedPage.status === "stored" ? (
@@ -1014,7 +1027,15 @@ function NewsWorkspace() {
                 <small>{t(translationMissing ? "此页面暂无所选语言译文，已回退到英文原文。" : showingTranslation ? "译文用于理解，内容核对请以官网英文原文为准。" : "英文正文来自已保存的官网页面快照。")}</small>
               </span>
             </div>
-            <pre className="official-full-text" lang={readerLanguage}>{fullText}</pre>
+            {selectedPage.document ? (
+              <OfficialDocument
+                document={selectedPage.document}
+                language={documentLanguage}
+                translations={translatedStrings}
+              />
+            ) : (
+              <pre className="official-full-text" lang="en">{selectedPage.text_en}</pre>
+            )}
           </>
         ) : (
           <div className="empty-workspace compact"><FileText size={42} /><strong>{t("此资源仅保留官方链接")}</strong><p>{t("PDF 或排除材料不会在软件中镜像。")}</p></div>

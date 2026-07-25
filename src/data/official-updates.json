@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "synced_at": "2026-07-23T14:05:58.905Z",
+  "synced_at": "2026-07-25T01:22:41.675Z",
   "sources": [
     "https://www.nap.edu.au/naplan",
     "https://www.acara.edu.au/news-and-media"
@@ -27,11 +27,14 @@
       },
       "source_snapshot": {
         "status": "stored",
-        "title_en": "ACARA news, March 2026",
-        "fetched_at": "2026-07-23T14:05:57.087Z",
+        "title_en": "NAPLAN 2026 Update",
+        "fetched_at": "2026-07-25T01:22:39.730Z",
         "last_modified": null,
-        "content_hash": "feac4c3a2777b1eb9966e38318670c22380fd3f401400f13a4b120c852e87ae5",
-        "character_count": 6726
+        "content_hash": "57292378e5cc7ac60fbd04d228ef83677588fd56b48610cdcec8a4178f3a3bf1",
+        "character_count": 734,
+        "block_count": 8,
+        "link_count": 1,
+        "media_count": 0
       }
     },
     {
@@ -56,10 +59,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Results and reports",
-        "fetched_at": "2026-07-23T14:05:57.210Z",
+        "fetched_at": "2026-07-25T01:22:39.891Z",
         "last_modified": null,
-        "content_hash": "845bc48ae69cb877e66a938f2402ac7adba926efee7a58f09d988df053b0ab3a",
-        "character_count": 11331
+        "content_hash": "0d25315b8bd36246bf507d50b8781c7010315dd7520cef680ed2a1d5eccb0f1c",
+        "character_count": 11292,
+        "block_count": 78,
+        "link_count": 75,
+        "media_count": 1
       }
     },
     {
@@ -83,11 +89,14 @@
       },
       "source_snapshot": {
         "status": "stored",
-        "title_en": "ACARA news, March 2026",
-        "fetched_at": "2026-07-23T14:05:57.087Z",
+        "title_en": "NAPLAN 2026 Update",
+        "fetched_at": "2026-07-25T01:22:39.730Z",
         "last_modified": null,
-        "content_hash": "feac4c3a2777b1eb9966e38318670c22380fd3f401400f13a4b120c852e87ae5",
-        "character_count": 6726
+        "content_hash": "57292378e5cc7ac60fbd04d228ef83677588fd56b48610cdcec8a4178f3a3bf1",
+        "character_count": 734,
+        "block_count": 8,
+        "link_count": 1,
+        "media_count": 0
       }
     },
     {
@@ -111,11 +120,14 @@
       },
       "source_snapshot": {
         "status": "stored",
-        "title_en": "ACARA news, March 2026",
-        "fetched_at": "2026-07-23T14:05:57.087Z",
+        "title_en": "NAPLAN 2026 Update",
+        "fetched_at": "2026-07-25T01:22:39.730Z",
         "last_modified": null,
-        "content_hash": "feac4c3a2777b1eb9966e38318670c22380fd3f401400f13a4b120c852e87ae5",
-        "character_count": 6726
+        "content_hash": "57292378e5cc7ac60fbd04d228ef83677588fd56b48610cdcec8a4178f3a3bf1",
+        "character_count": 734,
+        "block_count": 8,
+        "link_count": 1,
+        "media_count": 0
       }
     },
     {
@@ -140,10 +152,13 @@
       "source_snapshot": {
         "status": "linked-not-mirrored",
         "title_en": null,
-        "fetched_at": "2026-07-23T14:05:58.905Z",
+        "fetched_at": "2026-07-25T01:22:41.675Z",
         "last_modified": null,
         "content_hash": null,
-        "character_count": null
+        "character_count": null,
+        "block_count": null,
+        "link_count": null,
+        "media_count": null
       }
     },
     {
@@ -168,10 +183,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Key dates",
-        "fetched_at": "2026-07-23T14:05:57.321Z",
+        "fetched_at": "2026-07-25T01:22:40.019Z",
         "last_modified": null,
-        "content_hash": "5403e265132d6c0d59d774dcb5880abb272c67d8ecc92e8a907368e3a27eead7",
-        "character_count": 914
+        "content_hash": "754e0aeb660d5153f7eb3d2c956ffa109765344fb075f1be8375bbcb1f72d8aa",
+        "character_count": 879,
+        "block_count": 2,
+        "link_count": 4,
+        "media_count": 0
       }
     },
     {
@@ -196,10 +214,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "NAPLAN test window",
-        "fetched_at": "2026-07-23T14:05:57.433Z",
+        "fetched_at": "2026-07-25T01:22:40.134Z",
         "last_modified": null,
-        "content_hash": "a017bf69fbd30233b798b6878fdb5ca91a536a8ffd472f2657f84df676e92251",
-        "character_count": 2366
+        "content_hash": "c4afc4fc8e15ee7372094a06166f2a817fc142e6eaedbff95c4c4b0acb97aa27",
+        "character_count": 2351,
+        "block_count": 13,
+        "link_count": 9,
+        "media_count": 0
       }
     },
     {
@@ -224,10 +245,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "What’s in the tests",
-        "fetched_at": "2026-07-23T14:05:57.572Z",
+        "fetched_at": "2026-07-25T01:22:40.258Z",
         "last_modified": null,
-        "content_hash": "250c026d1f2dc2f3581c75a0ebfcee29c75f44161606d7be1944fe75de580978",
-        "character_count": 7520
+        "content_hash": "bf1c7bfe4f2326f5a286a68c289490341bd59568425d869a46d7079f7ddf416a",
+        "character_count": 7626,
+        "block_count": 51,
+        "link_count": 31,
+        "media_count": 5
       }
     },
     {
@@ -252,10 +276,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "NAPLAN – writing test",
-        "fetched_at": "2026-07-23T14:05:57.678Z",
+        "fetched_at": "2026-07-25T01:22:40.415Z",
         "last_modified": null,
-        "content_hash": "9a4021f8de75bb1035800b07bf0dbf53ef7b2317843175166dc2ffaa0c85c09a",
-        "character_count": 6537
+        "content_hash": "277b23461e718e4676ea4182827d30019b92070184ced86e70bc1ad8aabab1af",
+        "character_count": 6530,
+        "block_count": 40,
+        "link_count": 27,
+        "media_count": 0
       }
     },
     {
@@ -280,10 +307,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Understanding online assessment",
-        "fetched_at": "2026-07-23T14:05:57.801Z",
+        "fetched_at": "2026-07-25T01:22:40.542Z",
         "last_modified": null,
-        "content_hash": "82c995f083de9c047a71c7029f588a28ad4a6ab4566bae129b1811a6b56b66bd",
-        "character_count": 5022
+        "content_hash": "b058b331270e89241e26bdd458b631ea23688a35edcde8e65b9c2beabcf93dc8",
+        "character_count": 5018,
+        "block_count": 30,
+        "link_count": 11,
+        "media_count": 0
       }
     },
     {
@@ -308,10 +338,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Tailored tests",
-        "fetched_at": "2026-07-23T14:05:57.930Z",
+        "fetched_at": "2026-07-25T01:22:40.670Z",
         "last_modified": null,
-        "content_hash": "37aade1526fb1c41beb5222b99bb9dcfca5e23125838012768564746de2c8e14",
-        "character_count": 3654
+        "content_hash": "2f949d0564805fe87fd0d5da19ea146b1735590f5f4e6b242590983c71fed104",
+        "character_count": 3654,
+        "block_count": 21,
+        "link_count": 5,
+        "media_count": 0
       }
     },
     {
@@ -336,10 +369,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "For parents and carers",
-        "fetched_at": "2026-07-23T14:05:58.048Z",
+        "fetched_at": "2026-07-25T01:22:40.778Z",
         "last_modified": null,
-        "content_hash": "dcb2527590bd72cdec67e581a184b78f789af1985062960d73dad53bc88ca843",
-        "character_count": 7537
+        "content_hash": "e40642545e41a5398b08d2fc9a4b77dabcd4058063531fdca537d78109d8d7a2",
+        "character_count": 7530,
+        "block_count": 47,
+        "link_count": 38,
+        "media_count": 0
       }
     },
     {
@@ -364,10 +400,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Results and reports",
-        "fetched_at": "2026-07-23T14:05:57.210Z",
+        "fetched_at": "2026-07-25T01:22:39.891Z",
         "last_modified": null,
-        "content_hash": "845bc48ae69cb877e66a938f2402ac7adba926efee7a58f09d988df053b0ab3a",
-        "character_count": 11331
+        "content_hash": "0d25315b8bd36246bf507d50b8781c7010315dd7520cef680ed2a1d5eccb0f1c",
+        "character_count": 11292,
+        "block_count": 78,
+        "link_count": 75,
+        "media_count": 1
       }
     },
     {
@@ -392,10 +431,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Proficiency level descriptions",
-        "fetched_at": "2026-07-23T14:05:58.214Z",
+        "fetched_at": "2026-07-25T01:22:40.969Z",
         "last_modified": null,
-        "content_hash": "e2c9e7d1ef9ff23b4c44f380371c2b4b991e85776d4843cdf94b88c676c48830",
-        "character_count": 67173
+        "content_hash": "38bf6e9c02bf27e284d3c30ba2691ed2881e172aef1b668baabfefdc001d7b30",
+        "character_count": 67151,
+        "block_count": 405,
+        "link_count": 67,
+        "media_count": 0
       }
     },
     {
@@ -420,10 +462,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Accessibility",
-        "fetched_at": "2026-07-23T14:05:58.310Z",
+        "fetched_at": "2026-07-25T01:22:41.069Z",
         "last_modified": null,
-        "content_hash": "022bca0cc57dd1e804070891c4330022c56211112efdc82ed9eacd4412965010",
-        "character_count": 2209
+        "content_hash": "051812312911b65e01f1dc0de0bce0a9bbceda646b8a97cf90894c0d15e030a0",
+        "character_count": 2203,
+        "block_count": 9,
+        "link_count": 15,
+        "media_count": 0
       }
     },
     {
@@ -448,10 +493,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Adjustments for students with disability",
-        "fetched_at": "2026-07-23T14:05:58.414Z",
+        "fetched_at": "2026-07-25T01:22:41.212Z",
         "last_modified": null,
-        "content_hash": "7361ca2f77df6d02f4cbc073afdf4e0a9198e4381c99dcd5bac39c8c0b6daaf1",
-        "character_count": 12415
+        "content_hash": "444a784e620044787221e7d2345c30b3b0d72c81d9de740dc3aab4f3cf340862",
+        "character_count": 12413,
+        "block_count": 62,
+        "link_count": 18,
+        "media_count": 0
       }
     },
     {
@@ -476,10 +524,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Public demonstration site",
-        "fetched_at": "2026-07-23T14:05:58.547Z",
+        "fetched_at": "2026-07-25T01:22:41.337Z",
         "last_modified": null,
-        "content_hash": "8ff4a12cdca2bb54efde646f72b312c907a1f68710009c3ca8c150a834b458f7",
-        "character_count": 2995
+        "content_hash": "daade722a6b6d3ed4c860d54c513ca3354c304143e6e68f4448b487eacaf8f24",
+        "character_count": 2991,
+        "block_count": 10,
+        "link_count": 9,
+        "media_count": 0
       }
     },
     {
@@ -504,10 +555,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "National protocols for test administration",
-        "fetched_at": "2026-07-23T14:05:58.694Z",
+        "fetched_at": "2026-07-25T01:22:41.452Z",
         "last_modified": null,
-        "content_hash": "ece7b24dcda39110ba54508bda647be405fa0e665b86f3734b966f1b07b96dc7",
-        "character_count": 3744
+        "content_hash": "4f1ab1e318e1f6ce0f034bf7e6c4a1410a96e742e342145d71b1e4cbaeab346d",
+        "character_count": 3758,
+        "block_count": 20,
+        "link_count": 8,
+        "media_count": 1
       }
     },
     {
@@ -532,10 +586,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "Catch-ups and rescheduling test sessions",
-        "fetched_at": "2026-07-23T14:05:58.804Z",
+        "fetched_at": "2026-07-25T01:22:41.563Z",
         "last_modified": null,
-        "content_hash": "04a78995c09af25306eaf57e708ba06a0bfc8d4151c6156aece209da7772ae8a",
-        "character_count": 1214
+        "content_hash": "7a8314699f9266e7fa8c15b919b233460f945385f6077e1ab50bb41991739dab",
+        "character_count": 1213,
+        "block_count": 10,
+        "link_count": 3,
+        "media_count": 0
       }
     },
     {
@@ -560,10 +617,13 @@
       "source_snapshot": {
         "status": "stored",
         "title_en": "NAPLAN",
-        "fetched_at": "2026-07-23T14:05:58.905Z",
+        "fetched_at": "2026-07-25T01:22:41.675Z",
         "last_modified": null,
-        "content_hash": "31d0467d5b7246b34c4e4eac425db64e3c085e7e7ce3553539d599dcc6189962",
-        "character_count": 2498
+        "content_hash": "dea9618eb739bbead6e7a4b3c8e9319cb035c08dea95a5bda2976bd421dda075",
+        "character_count": 2497,
+        "block_count": 13,
+        "link_count": 7,
+        "media_count": 0
       }
     }
   ]
